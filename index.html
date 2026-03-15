@@ -3,698 +3,908 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bees City — 3D Lithophane Frames</title>
+  <title>Bees City - Turn Your Photo into a Glowing 3D Lithophane</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Alegreya+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #FBF5F0;
-      --ink:      #1a1a1a;
-      --muted:    #666;
-      --red:      #e5322d;
-      --green:    #27ae60;
-      --gold:     #f5a623;
-      --border:   #e0d4cc;
-      --cream-dk: #EFE0D2;
-      --radius:   50px;
+      --bg:        #0B0B0B;
+      --surface:   #141414;
+      --surface2:  #1E1E1E;
+      --amber:     #F5A623;
+      --amber-dk:  #D4881A;
+      --orange:    #FF6B35;
+      --white:     #FFFFFF;
+      --text:      #E8E8E8;
+      --muted:     #888888;
+      --border:    rgba(255,255,255,0.08);
+      --green:     #22C55E;
+      --red:       #EF4444;
+      --radius-sm: 8px;
+      --radius:    16px;
+      --radius-lg: 28px;
+      --glow:      0 0 40px rgba(245,166,35,0.35), 0 0 80px rgba(245,166,35,0.15);
     }
 
-    body {
-      font-family: 'Alegreya Sans', sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      font-size: 15px;
-      line-height: 1.5;
-    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+    h1,h2,h3,h4 { font-family: 'Playfair Display', serif; line-height: 1.15; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; font-family: 'Inter', sans-serif; }
 
-    /* ── Sale Banner ── */
-    #sale-banner {
-      background: var(--ink);
-      color: #fff;
+    /* ── Announcement ── */
+    #announcement {
+      background: linear-gradient(90deg, var(--amber-dk), var(--amber), var(--orange));
+      color: #000;
       text-align: center;
-      padding: 0.55rem 1rem;
-      font-family: 'Assistant', sans-serif;
-      font-size: 0.78rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
     }
 
-    .countdown {
-      display: flex;
-      gap: 0.35rem;
-      align-items: center;
+    .countdown { display: flex; gap: 0.3rem; align-items: center; }
+    .cd-unit { background: rgba(0,0,0,0.2); border-radius: 5px; padding: 0.15rem 0.45rem; display: flex; flex-direction: column; align-items: center; min-width: 32px; line-height: 1.1; }
+    .cd-unit .n { font-size: 1rem; font-weight: 700; }
+    .cd-unit .l { font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; }
+
+    /* ── Header ── */
+    #header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(11,11,11,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
     }
 
-    .countdown-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: rgba(255,255,255,0.15);
-      border-radius: 5px;
-      padding: 0.2rem 0.45rem;
-      min-width: 34px;
-      line-height: 1.1;
+    .header-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
+      height: 60px; display: flex; align-items: center; justify-content: space-between;
     }
 
-    .countdown-unit .num {
-      font-size: 1.05rem;
-      font-weight: 700;
-    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--white); }
+    .logo span { color: var(--amber); }
 
-    .countdown-unit .lbl {
-      font-size: 0.58rem;
-      opacity: 0.7;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    #cart-btn {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--surface2); border: 1px solid var(--border); color: var(--white);
+      padding: 0.5rem 1.1rem; border-radius: var(--radius-lg);
+      font-size: 0.85rem; font-weight: 500;
+      transition: border-color 0.2s;
     }
+    #cart-btn:hover { border-color: var(--amber); }
 
     /* ── Hero ── */
     #hero {
-      padding: 1.25rem 1rem 0.75rem;
-      max-width: 900px;
-      margin: 0 auto;
+      min-height: 90vh; display: flex; align-items: center;
+      background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(245,166,35,0.07) 0%, transparent 70%), var(--bg);
+      padding: 4rem 1.5rem 3rem; overflow: hidden; position: relative;
     }
 
-    #hero h1 {
-      font-family: 'Assistant', sans-serif;
-      font-size: clamp(1.3rem, 5vw, 2rem);
-      font-weight: 600;
+    #hero::before {
+      content: ''; position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(245,166,35,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(245,166,35,0.12); border: 1px solid rgba(245,166,35,0.3);
+      color: var(--amber); font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.35rem 0.9rem; border-radius: 100px; margin-bottom: 1.5rem;
+    }
+
+    #hero h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); color: var(--white); margin-bottom: 1.25rem; font-weight: 900; }
+    #hero h1 em { font-style: normal; color: var(--amber); }
+
+    .hero-sub { font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.7; max-width: 420px; }
+
+    .hero-rating { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2rem; font-size: 0.9rem; }
+    .stars-amber { color: var(--amber); letter-spacing: 1px; }
+    .rating-text { color: var(--muted); }
+    .rating-text strong { color: var(--white); }
+
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-amber {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: linear-gradient(135deg, var(--amber), var(--orange));
+      color: #000; font-weight: 700; font-size: 0.95rem;
+      padding: 0.85rem 2rem; border-radius: var(--radius-lg); border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,166,35,0.4); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: var(--white); font-weight: 500; font-size: 0.95rem;
+      padding: 0.85rem 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.3); background: var(--surface); }
+
+    .hero-guarantees { display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; }
+    .guarantee { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--muted); }
+    .g-check { width: 15px; height: 15px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; color: #fff; flex-shrink: 0; }
+
+    .hero-visual { display: flex; justify-content: center; align-items: center; position: relative; }
+
+    .hero-product-wrap { position: relative; width: 100%; max-width: 440px; }
+
+    .hero-glow-ring {
+      position: absolute; inset: -30px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,166,35,0.22) 0%, transparent 70%);
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.5; transform: scale(0.96); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    .hero-product-img { width: 100%; aspect-ratio: 1400 / 1910; border-radius: var(--radius); object-fit: cover; position: relative; z-index: 1; box-shadow: var(--glow); }
+    .hero-product-placeholder { width: 100%; aspect-ratio: 1400 / 1910; border-radius: var(--radius); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--muted); position: relative; z-index: 1; border: 1px solid var(--border); box-shadow: var(--glow); }
+
+    .floating-tag { position: absolute; background: rgba(20,20,20,0.9); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 0.75rem; font-size: 0.78rem; font-weight: 500; z-index: 2; backdrop-filter: blur(8px); }
+    .floating-tag.top-left { top: 12%; left: -10%; color: var(--green); border-color: rgba(34,197,94,0.3); }
+    .floating-tag.bottom-right { bottom: 12%; right: -8%; color: var(--amber); border-color: rgba(245,166,35,0.3); }
+
+    /* ── Trust bar ── */
+    #trust-bar { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.1rem 1.5rem; }
+    .trust-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+    .trust-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; white-space: nowrap; }
+    .trust-divider { width: 1px; height: 20px; background: var(--border); }
+
+    /* ── Bees callout ── */
+    #bees-callout {
+      background: rgba(245,166,35,0.07);
+      border-top: 1px solid rgba(245,166,35,0.12);
+      border-bottom: 1px solid rgba(245,166,35,0.12);
+      padding: 1.25rem 1.5rem;
       text-align: center;
-      margin-bottom: 1rem;
-      line-height: 1.25;
-      color: var(--ink);
     }
 
-    .hero-body {
-      display: grid;
-      grid-template-columns: 2fr 3fr;
-      gap: 1rem;
-      align-items: start;
-    }
-
-    .hero-img {
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--cream-dk);
-      aspect-ratio: 1;
-    }
-
-    .hero-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .hero-img .placeholder {
-      width: 100%;
-      height: 100%;
+    .bees-callout-inner {
+      max-width: 700px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #b09080;
-      font-size: 0.75rem;
-      padding: 1rem;
-      text-align: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
 
-    .hero-features { display: flex; flex-direction: column; gap: 0.55rem; }
+    .bees-callout-inner .bee-icon { font-size: 1.4rem; }
 
-    .rating {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.82rem;
-      color: var(--muted);
+    .bees-callout-inner p {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.5;
     }
 
-    .stars { color: var(--gold); letter-spacing: -1px; font-size: 0.9rem; }
+    .bees-callout-inner strong { color: var(--amber); }
 
-    .feature-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
+    /* ── Section shared ── */
+    .section-label { display: block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.75rem; text-align: center; }
+    .section-title { font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--white); text-align: center; margin-bottom: 0.75rem; }
+    .section-sub { text-align: center; color: var(--muted); font-size: 1rem; margin-bottom: 3.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    /* ── How it works ── */
+    #how-it-works { padding: 5rem 1.5rem; }
+
+    .steps { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; position: relative; }
+    .steps::before { content: ''; position: absolute; top: 40px; left: calc(16.6% + 16px); right: calc(16.6% + 16px); height: 1px; background: linear-gradient(90deg, var(--amber), var(--orange)); opacity: 0.35; }
+
+    .step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem 1.5rem; text-align: center; transition: border-color 0.3s, transform 0.3s; }
+    .step:hover { border-color: rgba(245,166,35,0.3); transform: translateY(-4px); }
+    .step-num { width: 52px; height: 52px; background: linear-gradient(135deg, var(--amber), var(--orange)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: #000; margin: 0 auto 1.25rem; position: relative; z-index: 1; }
+    .step h3 { font-size: 1.15rem; color: var(--white); margin-bottom: 0.6rem; }
+    .step p { font-size: 0.9rem; color: var(--muted); }
+
+    /* ── Upload section ── */
+    #upload-section {
+      padding: 5rem 1.5rem;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(245,166,35,0.04) 0%, transparent 70%);
     }
 
-    .feature-list li {
-      font-size: 0.82rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--ink);
-      font-weight: 500;
-    }
+    .upload-inner { max-width: 700px; margin: 0 auto; }
 
-    .feature-list li .icon { font-size: 1rem; flex-shrink: 0; }
-
-    /* ── CTA button ── */
-    .btn-cta {
-      display: block;
-      width: 100%;
-      max-width: 900px;
-      margin: 1rem auto 0;
-      padding: 0.85rem 1rem;
-      background: var(--ink);
-      color: #fff;
-      border: none;
+    #drop-zone {
+      border: 2px dashed rgba(245,166,35,0.35);
       border-radius: var(--radius);
-      font-family: 'Assistant', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
+      background: var(--surface);
+      padding: 3rem 2rem;
       text-align: center;
       cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+      margin-bottom: 1.5rem;
+    }
+
+    #drop-zone:hover, #drop-zone.drag-over { border-color: var(--amber); background: rgba(245,166,35,0.05); }
+    #drop-zone.has-file { border-color: var(--green); border-style: solid; }
+
+    #file-input { display: none; }
+
+    .drop-icon { font-size: 2.75rem; margin-bottom: 1rem; }
+    .drop-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--white); margin-bottom: 0.5rem; }
+    .drop-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.25rem; }
+
+    .btn-pick {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--surface2); border: 1px solid rgba(245,166,35,0.4);
+      color: var(--amber); font-weight: 600; font-size: 0.85rem;
+      padding: 0.6rem 1.4rem; border-radius: var(--radius-lg);
       transition: background 0.2s;
     }
+    .btn-pick:hover { background: rgba(245,166,35,0.1); }
 
-    .btn-cta:hover { background: #333; }
-    .btn-cta:disabled { background: #aaa; cursor: not-allowed; }
+    /* Photo preview (after crop) */
+    #photo-preview-wrap { display: none; margin-bottom: 1.5rem; }
+    #photo-preview-wrap.visible { display: block; }
 
-    /* ── Trust badges ── */
-    #badges {
-      max-width: 900px;
-      margin: 1.1rem auto 0;
-      padding: 0 1rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem 1rem;
-    }
-
-    .badge {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--ink);
-    }
-
-    .badge-check {
-      width: 18px;
-      height: 18px;
-      background: var(--green);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .badge-check svg { width: 11px; height: 11px; }
-
-    /* ── Divider ── */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 1.5rem 1rem;
-    }
-
-    /* ── See the Magic ── */
-    #magic {
-      padding: 0 1rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    #magic h2 {
-      font-family: 'Assistant', sans-serif;
-      font-size: clamp(1.4rem, 5vw, 2rem);
-      font-weight: 400;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .before-after-main {
-      border-radius: 12px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 0;
-      align-items: center;
-      background: var(--cream-dk);
+    .preview-header {
+      display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 0.75rem;
     }
 
-    .ba-side {
-      position: relative;
-      aspect-ratio: 1;
+    .preview-ready-label {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--green);
+    }
+
+    .btn-change-photo {
+      background: none; border: none; color: var(--muted); font-size: 0.8rem;
+      text-decoration: underline; padding: 0;
+      transition: color 0.2s;
+    }
+    .btn-change-photo:hover { color: var(--white); }
+
+    .photo-preview-box {
+      border-radius: var(--radius);
       overflow: hidden;
-      background: #dcc9b8;
+      border: 1px solid rgba(34,197,94,0.25);
+      box-shadow: 0 0 20px rgba(34,197,94,0.1);
+      aspect-ratio: 1400 / 1910;
+      max-width: 280px;
+      margin: 0 auto;
     }
 
-    .ba-side img { width: 100%; height: 100%; object-fit: cover; }
+    /* Cropper.js - red crop box */
+    .cropper-view-box,
+    .cropper-face { border: 2px solid red !important; }
+    .cropper-line { background: red !important; }
+    .cropper-point { background: red !important; }
 
-    .ba-side .ba-label {
-      position: absolute;
-      bottom: 0.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.55);
-      color: #fff;
-      font-size: 0.7rem;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      white-space: nowrap;
-      font-family: 'Assistant', sans-serif;
+    .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .photo-preview-note {
+      text-align: center; margin-top: 0.75rem;
+      font-size: 0.82rem; color: var(--muted);
     }
 
-    .ba-arrow {
-      padding: 0 0.5rem;
-      font-size: 1.4rem;
-      color: var(--muted);
-      flex-shrink: 0;
-    }
-
-    .ba-side .placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      color: #b09080;
-      text-align: center;
-      padding: 0.5rem;
-    }
-
-    .before-after-thumbs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-    }
-
-    .ba-thumb {
-      border-radius: 8px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      background: var(--cream-dk);
-      aspect-ratio: 2/1;
-    }
-
-    .ba-thumb .t-side {
-      height: 100%;
-      overflow: hidden;
-      background: #dcc9b8;
-    }
-
-    .ba-thumb .t-side img { width: 100%; height: 100%; object-fit: cover; }
-    .ba-thumb .t-side .placeholder { width: 100%; height: 100%; background: #dcc9b8; }
-
-    .ba-thumb .t-arrow {
-      font-size: 0.6rem;
-      color: var(--muted);
-      padding: 0 2px;
-      line-height: 1;
-    }
-
-    /* ── Pricing ── */
-    #pricing {
-      max-width: 900px;
-      margin: 1.5rem auto 0;
-      padding: 0 1rem;
-    }
-
-    .price-row {
-      display: flex;
+    /* Upload progress */
+    #upload-progress {
+      display: none;
       align-items: center;
       gap: 0.75rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .price-current {
-      font-family: 'Assistant', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--ink);
-    }
-
-    .price-original {
-      font-family: 'Assistant', sans-serif;
-      font-size: 1.1rem;
-      color: var(--red);
-      text-decoration: line-through;
-    }
-
-    .price-badge {
-      background: var(--red);
-      color: #fff;
-      font-family: 'Assistant', sans-serif;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.1rem;
+      margin-bottom: 1.5rem;
       font-size: 0.85rem;
-      font-weight: 700;
-      padding: 0.2rem 0.6rem;
-      border-radius: 6px;
+      color: var(--text);
     }
 
-    /* ── Cart drawer ── */
-    #cart-overlay {
+    #upload-progress.visible { display: flex; }
+
+    .spinner {
+      width: 18px; height: 18px; border: 2px solid var(--border);
+      border-top-color: var(--amber); border-radius: 50%;
+      animation: spin 0.8s linear infinite; flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #add-to-cart-btn {
+      width: 100%; padding: 1rem;
+      background: linear-gradient(135deg, var(--amber), var(--orange));
+      color: #000; border: none; border-radius: var(--radius-lg);
+      font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+
+    #add-to-cart-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(245,166,35,0.4); }
+    #add-to-cart-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .price-under-btn { text-align: center; margin-top: 0.85rem; font-size: 0.9rem; color: var(--muted); }
+    .price-under-btn .p-current { font-size: 1.4rem; font-weight: 700; color: var(--white); margin-right: 0.5rem; }
+    .price-under-btn .p-original { text-decoration: line-through; color: var(--red); margin-right: 0.4rem; }
+    .price-under-btn .p-badge { background: var(--red); color: #fff; border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.78rem; font-weight: 700; }
+
+    /* ── Crop modal ── */
+    #crop-modal {
       display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(26,26,26,0.45);
-      z-index: 300;
-    }
-
-    #cart-overlay.open { display: block; }
-
-    #cart-drawer {
-      position: fixed;
-      top: 0;
-      right: -420px;
-      width: 400px;
-      max-width: 100vw;
-      height: 100vh;
-      background: var(--bg);
-      z-index: 301;
-      display: flex;
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(6px);
       flex-direction: column;
-      transition: right 0.3s ease;
-      box-shadow: -4px 0 24px rgba(26,26,26,0.12);
     }
 
-    #cart-drawer.open { right: 0; }
+    #crop-modal.open { display: flex; }
 
-    .cart-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .cart-header h2 {
-      font-family: 'Assistant', sans-serif;
-      font-size: 1.1rem;
-    }
-
-    #close-cart {
-      background: none;
-      border: none;
-      font-size: 1.6rem;
-      color: var(--muted);
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    #close-cart:hover { color: var(--ink); }
-
-    #cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      flex-direction: column;
+    .crop-modal-inner {
+      display: flex; flex-direction: column;
+      width: 100%; height: 100%;
+      max-width: 700px; margin: 0 auto;
+      padding: 1.5rem;
       gap: 1rem;
     }
 
-    #cart-empty { color: var(--muted); text-align: center; padding: 3rem 0; }
-
-    .cart-item {
-      display: flex;
-      gap: 0.9rem;
-      align-items: flex-start;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .cart-item img {
-      width: 64px;
-      height: 64px;
-      object-fit: cover;
-      border-radius: 8px;
-      background: var(--cream-dk);
+    .crop-modal-header {
+      display: flex; align-items: center; justify-content: space-between;
       flex-shrink: 0;
     }
 
-    .cart-item-info { flex: 1; font-size: 0.9rem; }
-    .cart-item-info .item-title { font-family: 'Assistant', sans-serif; font-weight: 600; }
-    .cart-item-info .item-variant { color: var(--muted); font-size: 0.8rem; }
-    .cart-item-info .item-price { font-weight: 700; margin-top: 0.25rem; }
+    .crop-modal-header h3 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; color: var(--white); }
 
-    .remove-item {
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-size: 1.2rem;
-      cursor: pointer;
+    .crop-modal-header p { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+    #crop-modal-close { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 50%; font-size: 1.1rem; }
+    #crop-modal-close:hover { color: var(--white); }
+
+    .crop-area { flex: 1; min-height: 0; overflow: hidden; border-radius: var(--radius-sm); background: #000; }
+
+    #crop-image { display: block; max-width: 100%; }
+
+    .crop-actions { display: flex; gap: 0.75rem; flex-shrink: 0; }
+
+    #crop-cancel {
+      flex: 1; padding: 0.8rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); border-radius: var(--radius-lg);
+      font-size: 0.9rem; font-weight: 500;
     }
 
-    .remove-item:hover { color: var(--red); }
-
-    .cart-footer {
-      padding: 1.25rem 1.5rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 0.9rem;
+    #crop-confirm {
+      flex: 2; padding: 0.8rem;
+      background: linear-gradient(135deg, var(--amber), var(--orange));
+      color: #000; border: none; border-radius: var(--radius-lg);
+      font-size: 0.9rem; font-weight: 700;
     }
 
-    .cart-total-row {
-      display: flex;
-      justify-content: space-between;
-      font-family: 'Assistant', sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-    }
+    #crop-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    #checkout-btn {
-      padding: 0.85rem;
-      background: var(--ink);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius);
-      font-family: 'Assistant', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+    /* ── Gallery ── */
+    #gallery { padding: 5rem 1.5rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 
-    #checkout-btn:hover:not(:disabled) { background: #333; }
-    #checkout-btn:disabled { background: #aaa; cursor: not-allowed; }
+    .gallery-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+
+    .gallery-card { border-radius: var(--radius); overflow: hidden; background: var(--surface2); border: 1px solid var(--border); }
+
+    .gallery-pair { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; }
+
+    .gallery-side { aspect-ratio: 1400 / 1910; overflow: hidden; background: var(--bg); }
+    .gallery-side img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-side .g-ph { width: 100%; height: 100%; min-height: 120px; background: #1a1410; }
+
+    .gallery-sep { display: flex; align-items: center; padding: 0 4px; color: var(--amber); font-size: 0.7rem; }
+
+    .gallery-caption { padding: 0.75rem 1rem; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--border); }
+    .gallery-caption span:last-child { color: var(--amber); }
+
+    /* ── Features ── */
+    #features { padding: 5rem 1.5rem; }
+
+    .features-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem 1.5rem; transition: border-color 0.3s, transform 0.3s; }
+    .feature-card:hover { border-color: rgba(245,166,35,0.3); transform: translateY(-3px); }
+    .feature-icon { font-size: 1.75rem; margin-bottom: 1rem; }
+    .feature-card h3 { font-size: 1rem; color: var(--white); margin-bottom: 0.4rem; font-family: 'Inter', sans-serif; font-weight: 600; }
+    .feature-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── Reviews ── */
+    #reviews { padding: 5rem 1.5rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .reviews-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+
+    .review-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; transition: border-color 0.3s; }
+    .review-card:hover { border-color: rgba(245,166,35,0.2); }
+
+    .review-stars { color: var(--amber); font-size: 0.9rem; margin-bottom: 0.9rem; letter-spacing: 1px; }
+    .review-text { font-size: 0.93rem; color: var(--text); line-height: 1.7; margin-bottom: 1.25rem; }
+    .review-author { display: flex; align-items: center; gap: 0.75rem; }
+    .review-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--amber), var(--orange)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #000; flex-shrink: 0; }
+    .review-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+    .review-meta { font-size: 0.75rem; color: var(--muted); }
+    .verified { color: var(--green); font-size: 0.7rem; }
+
+    /* ── FAQ ── */
+    #faq { padding: 5rem 1.5rem; }
+    .faq-list { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; transition: border-color 0.3s; }
+    .faq-item.open { border-color: rgba(245,166,35,0.3); }
+    .faq-q { width: 100%; background: none; border: none; padding: 1.1rem 1.25rem; text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: var(--white); font-size: 0.95rem; font-weight: 500; }
+    .faq-icon { width: 22px; height: 22px; background: var(--surface2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--amber); font-size: 1rem; transition: transform 0.3s; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { display: none; padding: 0 1.25rem 1.1rem; font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── Footer CTA ── */
+    #footer-cta { padding: 5rem 1.5rem; text-align: center; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,166,35,0.07) 0%, transparent 70%); border-top: 1px solid var(--border); }
+    #footer-cta h2 { font-size: clamp(2rem, 5vw, 3rem); color: var(--white); margin-bottom: 1rem; }
+    #footer-cta p { color: var(--muted); margin-bottom: 2rem; }
 
     /* ── Footer ── */
-    footer {
-      margin-top: 2.5rem;
-      background: var(--ink);
-      color: rgba(255,255,255,0.6);
-      padding: 2rem 1.5rem 1.5rem;
-      text-align: center;
-      font-size: 0.82rem;
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 2.5rem 1.5rem; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); }
+    .footer-logo span { color: var(--amber); }
+    .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-payments { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .footer-payments span { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; font-size: 0.72rem; color: var(--muted); }
+    .footer-copy { max-width: 1200px; margin: 1.5rem auto 0; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--muted); text-align: center; }
+
+    /* ── Cart drawer ── */
+    #cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 400; backdrop-filter: blur(3px); }
+    #cart-overlay.open { display: block; }
+    #cart-drawer { position: fixed; top: 0; right: -440px; width: 420px; max-width: 100vw; height: 100vh; background: var(--surface); z-index: 401; display: flex; flex-direction: column; transition: right 0.35s cubic-bezier(0.4,0,0.2,1); border-left: 1px solid var(--border); }
+    #cart-drawer.open { right: 0; }
+    .cart-hd { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .cart-hd h2 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; color: var(--white); }
+    #close-cart { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    #close-cart:hover { color: var(--white); }
+    #cart-items { flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    #cart-empty { color: var(--muted); text-align: center; padding: 3rem 0; font-size: 0.9rem; }
+    .cart-item { display: flex; gap: 0.9rem; align-items: flex-start; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .cart-item img { width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-sm); background: var(--surface2); flex-shrink: 0; }
+    .ci-info { flex: 1; font-size: 0.88rem; }
+    .ci-title { color: var(--white); font-weight: 500; margin-bottom: 0.2rem; }
+    .ci-variant { color: var(--muted); font-size: 0.78rem; }
+    .ci-price { color: var(--amber); font-weight: 600; margin-top: 0.3rem; }
+    .ci-remove { background: none; border: none; color: var(--muted); font-size: 1.1rem; transition: color 0.2s; }
+    .ci-remove:hover { color: var(--red); }
+    .cart-ft { padding: 1.25rem 1.5rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 1rem; }
+    .cart-total-row { display: flex; justify-content: space-between; font-size: 0.95rem; font-weight: 600; color: var(--white); }
+    #checkout-btn { width: 100%; padding: 0.9rem; background: linear-gradient(135deg, var(--amber), var(--orange)); color: #000; border: none; border-radius: var(--radius-lg); font-weight: 700; font-size: 0.95rem; transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s; }
+    #checkout-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(245,166,35,0.3); }
+    #checkout-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Mobile sticky bar ── */
+    #sticky-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 0.85rem 1.25rem; z-index: 150; gap: 0.75rem; align-items: center; }
+    .sticky-price { flex: 1; }
+    .sticky-price .sp-current { font-size: 1.2rem; font-weight: 700; color: var(--white); }
+    .sticky-price .sp-orig { font-size: 0.8rem; text-decoration: line-through; color: var(--muted); }
+    #sticky-cta { flex: 2; padding: 0.75rem 1.25rem; background: linear-gradient(135deg, var(--amber), var(--orange)); color: #000; border: none; border-radius: var(--radius-lg); font-weight: 700; font-size: 0.9rem; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
+      .hero-ctas { justify-content: center; }
+      .hero-guarantees { justify-content: center; }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-visual { order: -1; }
+      .hero-product-wrap { max-width: 300px; }
+      .floating-tag { display: block; }
+      .floating-tag.top-left { top: 6%; left: 4%; }
+      .floating-tag.bottom-right { bottom: 6%; right: 4%; }
+      .steps { grid-template-columns: 1fr; gap: 1rem; }
+      .steps::before { display: none; }
+      .gallery-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      #sticky-bar { display: flex; }
+      body { padding-bottom: 80px; }
     }
 
-    footer .f-logo {
-      font-family: 'Assistant', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
+    @media (max-width: 600px) {
+      .trust-divider { display: none; }
+      .trust-inner { gap: 1rem; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
     }
 
-    footer .f-links {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 0.75rem 0;
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
-
-    footer a { color: rgba(255,255,255,0.6); }
-    footer a:hover { color: #fff; }
-
-    .f-payments {
-      display: flex;
-      gap: 0.4rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 1rem;
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
-
-    .f-payments span {
-      background: rgba(255,255,255,0.12);
-      border-radius: 4px;
-      padding: 2px 7px;
-      font-size: 0.72rem;
-    }
-
-    /* ── Desktop adjustments ── */
-    @media (min-width: 600px) {
-      #hero, #badges, #magic, #pricing { padding-left: 2rem; padding-right: 2rem; }
-      .divider { margin-left: 2rem; margin-right: 2rem; }
-      .btn-cta { padding-left: 2rem; padding-right: 2rem; }
-    }
-
-    @media (min-width: 900px) {
-      #hero h1 { font-size: 2.4rem; }
-      .hero-body { grid-template-columns: 1fr 1fr; gap: 2rem; }
-      #badges { grid-template-columns: repeat(4, 1fr); }
-      .before-after-thumbs { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── Sale Banner ── -->
-<div id="sale-banner">
-  <span>Sale + FREE worldwide shipping ENDS IN:</span>
+<!-- ── Announcement ── -->
+<div id="announcement">
+  <span>🔥 LIMITED SALE - FREE worldwide shipping ENDS IN:</span>
   <div class="countdown">
-    <div class="countdown-unit"><span class="num" id="cd-h">00</span><span class="lbl">HRS</span></div>
-    <div class="countdown-unit"><span class="num" id="cd-m">00</span><span class="lbl">MIN</span></div>
-    <div class="countdown-unit"><span class="num" id="cd-s">00</span><span class="lbl">SEC</span></div>
+    <div class="cd-unit"><span class="n" id="cd-h">00</span><span class="l">HRS</span></div>
+    <div class="cd-unit"><span class="n" id="cd-m">00</span><span class="l">MIN</span></div>
+    <div class="cd-unit"><span class="n" id="cd-s">00</span><span class="l">SEC</span></div>
   </div>
 </div>
+
+<!-- ── Header ── -->
+<header id="header">
+  <div class="header-inner">
+    <div class="logo">Bees<span>City</span></div>
+    <button id="cart-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Cart (<span id="cart-count">0</span>)
+    </button>
+  </div>
+</header>
 
 <!-- ── Hero ── -->
 <section id="hero">
-  <h1>Turn Your Photo into a Glowing<br>3D Lithophane</h1>
-
-  <div class="hero-body">
-    <div class="hero-img" id="hero-img-wrap">
-      <div class="placeholder">Product image loading…</div>
-    </div>
-
-    <div class="hero-features">
-      <div class="rating">
-        <span class="stars">★★★★★</span>
-        <span><strong>Excellent 4.8</strong> | 110 reviews</span>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">🐝 Handmade in the UK</div>
+      <h1>Turn Your Photo<br>into a <em>Glowing</em><br>3D Lithophane</h1>
+      <p class="hero-sub">A unique, backlit 3D printed frame made from your favourite photo. The perfect personalised gift that lights up any room.</p>
+      <div class="hero-rating">
+        <span class="stars-amber">★★★★★</span>
+        <span class="rating-text"><strong>4.8</strong> · 110 verified reviews</span>
       </div>
-
-      <ul class="feature-list">
-        <li><span class="icon">📷</span> Made from Your Photo</li>
-        <li><span class="icon">💡</span> LED Frame Included</li>
-        <li><span class="icon">🇬🇧</span> Made in the UK</li>
-        <li><span class="icon">📦</span> Free Shipping</li>
-      </ul>
+      <div class="hero-ctas">
+        <a href="#upload-section" class="btn-amber">📷 Upload Your Photo</a>
+        <a href="#gallery" class="btn-ghost">See Examples</a>
+      </div>
+      <div class="hero-guarantees">
+        <div class="guarantee"><div class="g-check">✓</div> Free Shipping</div>
+        <div class="guarantee"><div class="g-check">✓</div> 30-Day Returns</div>
+        <div class="guarantee"><div class="g-check">✓</div> Made to Order</div>
+      </div>
     </div>
-  </div>
-
-  <button class="btn-cta" id="hero-cta" disabled>Create Yours</button>
-</section>
-
-<!-- ── Trust badges ── -->
-<div id="badges">
-  <div class="badge">
-    <div class="badge-check">
-      <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-    Handmade to Order
-  </div>
-  <div class="badge">
-    <div class="badge-check">
-      <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-    High-Detail 3D Printing
-  </div>
-  <div class="badge">
-    <div class="badge-check">
-      <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-    30 Days Return Policy
-  </div>
-  <div class="badge">
-    <div class="badge-check">
-      <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-    Easy Photo Upload
-  </div>
-</div>
-
-<hr class="divider" />
-
-<!-- ── See the Magic ── -->
-<section id="magic">
-  <h2>See the Magic</h2>
-
-  <!-- Main before/after -->
-  <div class="before-after-main">
-    <div class="ba-side" id="ba-photo">
-      <div class="placeholder">Your Photo</div>
-      <span class="ba-label">Your Photo</span>
-    </div>
-    <div class="ba-arrow">→</div>
-    <div class="ba-side" id="ba-result">
-      <div class="placeholder">3D Lithophane</div>
-      <span class="ba-label">3D Lithophane</span>
-    </div>
-  </div>
-
-  <!-- Thumbnail row -->
-  <div class="before-after-thumbs">
-    <div class="ba-thumb">
-      <div class="t-side"><div class="placeholder"></div></div>
-      <div class="t-arrow">→</div>
-      <div class="t-side"><div class="placeholder"></div></div>
-    </div>
-    <div class="ba-thumb">
-      <div class="t-side"><div class="placeholder"></div></div>
-      <div class="t-arrow">→</div>
-      <div class="t-side"><div class="placeholder"></div></div>
-    </div>
-    <div class="ba-thumb">
-      <div class="t-side"><div class="placeholder"></div></div>
-      <div class="t-arrow">→</div>
-      <div class="t-side"><div class="placeholder"></div></div>
+    <div class="hero-visual">
+      <div class="hero-product-wrap">
+        <div class="hero-glow-ring"></div>
+        <div class="hero-product-placeholder" id="hero-img-wrap"><span>Loading…</span></div>
+        <div class="floating-tag top-left">✦ LED Included</div>
+        <div class="floating-tag bottom-right">🇬🇧 Made in the UK</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ── Pricing ── -->
-<div id="pricing">
-  <div class="price-row" id="price-row">
-    <span class="price-current" id="price-current">£19.90</span>
-    <span class="price-original" id="price-original">£45.00</span>
-    <span class="price-badge" id="price-badge">-56%</span>
+<!-- ── Trust bar ── -->
+<div id="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item">⭐ <strong>4.8/5</strong> - 110 Reviews</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">🎁 2,000+ Gifts Sent</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">🇬🇧 Handmade in the UK</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">📦 Free Worldwide Shipping</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">🔄 30-Day Returns</div>
   </div>
-  <button class="btn-cta" id="shop-btn" disabled>Shop now</button>
 </div>
+
+<!-- ── Bees Callout ── -->
+<div id="bees-callout">
+  <div class="bees-callout-inner">
+    <span class="bee-icon">🐝</span>
+    <p><strong>We work like bees</strong> - every order gets our full attention, start to finish. No shortcuts, no cutting corners. Just proper handmade craft from a small UK studio that genuinely cares.</p>
+    <span class="bee-icon">🐝</span>
+  </div>
+</div>
+
+<!-- ── How it works ── -->
+<section id="how-it-works">
+  <span class="section-label">Simple as 1, 2, 3</span>
+  <h2 class="section-title">How It Works</h2>
+  <p class="section-sub">Order in minutes. Your custom lithophane is crafted and shipped to your door.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Upload Your Photo</h3>
+      <p>Choose any portrait, landscape, or sentimental photo. Higher resolution gives more detail.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>We Print & Craft</h3>
+      <p>We convert your photo into a detailed 3D lithophane and hand-finish every frame ourselves.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>It Glows for You</h3>
+      <p>Plug in the included LED light and watch your memory come to life in warm glowing light.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Upload ── -->
+<section id="upload-section">
+  <div class="upload-inner">
+    <span class="section-label">Create Yours</span>
+    <h2 class="section-title" style="margin-bottom:0.5rem;">Upload Your Photo</h2>
+    <p class="section-sub">Drop your photo below, crop it to fit, and we'll take care of the rest.</p>
+
+    <div id="drop-zone">
+      <input type="file" id="file-input" accept="image/*" />
+      <div id="drop-default">
+        <div class="drop-icon">🖼️</div>
+        <div class="drop-title">Drop your photo here</div>
+        <div class="drop-sub">or click to browse · JPG, PNG, HEIC up to 20MB</div>
+        <button class="btn-pick" type="button" id="pick-btn">Choose Photo</button>
+      </div>
+      <div id="drop-chosen" style="display:none;">
+        <div class="drop-icon">✂️</div>
+        <div class="drop-title" id="chosen-name">photo.jpg</div>
+        <div class="drop-sub" style="color:var(--amber)">Opening crop tool…</div>
+      </div>
+    </div>
+
+    <div id="upload-progress">
+      <div class="spinner"></div>
+      <span>Uploading your photo securely…</span>
+    </div>
+
+    <div id="photo-preview-wrap">
+      <div class="preview-header">
+        <div class="preview-ready-label">✦ Photo uploaded</div>
+        <button class="btn-change-photo" id="change-photo-btn">Change photo</button>
+      </div>
+      <div class="photo-preview-box">
+        <img id="preview-img" src="" alt="Your uploaded photo" />
+      </div>
+      <p class="photo-preview-note">Your photo is ready - tap Order below to complete your purchase.</p>
+    </div>
+
+    <button id="add-to-cart-btn" disabled>Upload a photo to order</button>
+
+    <div class="price-under-btn">
+      <span class="p-current" id="price-display">£19.90</span>
+      <span class="p-original" id="original-display">£45.00</span>
+      <span class="p-badge" id="discount-badge">-56%</span>
+      &nbsp;· Free shipping · Ships in 3–5 days
+    </div>
+  </div>
+</section>
+
+<!-- ── Gallery ── -->
+<section id="gallery">
+  <span class="section-label">Real Results</span>
+  <h2 class="section-title" style="margin-bottom:0.5rem;">See the Magic</h2>
+  <p class="section-sub">Real customer photos turned into glowing 3D lithophanes.</p>
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <div class="gallery-pair">
+        <div class="gallery-side"><div class="g-ph" style="background:url('images/before1.png') center/cover;"></div></div>
+        <div class="gallery-sep">→</div>
+        <div class="gallery-side"><div class="g-ph" style="background:url('images/after1.png') center/cover;"></div></div>
+      </div>
+      <div class="gallery-caption"><span>Couple Photo</span><span>★★★★★</span></div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-pair">
+        <div class="gallery-side"><div class="g-ph" style="background:url('images/before2.png') center/cover;"></div></div>
+        <div class="gallery-sep">→</div>
+        <div class="gallery-side"><div class="g-ph" style="background:url('images/after2.png') center/cover;"></div></div>
+      </div>
+      <div class="gallery-caption"><span>Family Portrait</span><span>★★★★★</span></div>
+    </div>
+    <div class="gallery-card">
+      <div class="gallery-pair">
+        <div class="gallery-side"><div class="g-ph" style="background:url('images/before3.png') center/cover;"></div></div>
+        <div class="gallery-sep">→</div>
+        <div class="gallery-side"><div class="g-ph" style="background:url('images/after3.png') center/cover;"></div></div>
+      </div>
+      <div class="gallery-caption"><span>Favourite Person</span><span>★★★★★</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ── -->
+<section id="features">
+  <span class="section-label">Why Bees City</span>
+  <h2 class="section-title" style="margin-bottom:0.5rem;">Built Different</h2>
+  <p class="section-sub">Every detail considered. Every piece made with care.</p>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">📷</div><h3>Made from Your Photo</h3><p>Any photo becomes a one-of-a-kind 3D lithophane - portraits, landscapes, pets, anything you love.</p></div>
+    <div class="feature-card"><div class="feature-icon">💡</div><h3>LED Frame Included</h3><p>Every order includes a plug-in LED light unit. No extras to buy - just plug it in and it glows.</p></div>
+    <div class="feature-card"><div class="feature-icon">🎨</div><h3>High-Detail 3D Printing</h3><p>Printed at ultra-high resolution to capture every shadow, expression, and tiny detail.</p></div>
+    <div class="feature-card"><div class="feature-icon">🐝</div><h3>We Work Like Bees</h3><p>Small UK studio, big dedication. Every order is handled personally - we don't do mass production.</p></div>
+    <div class="feature-card"><div class="feature-icon">📦</div><h3>Free Worldwide Shipping</h3><p>We ship everywhere, free. Safely packaged so it arrives in perfect condition.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔄</div><h3>30-Day Returns</h3><p>Not completely in love with it? We'll make it right - no awkward questions asked.</p></div>
+  </div>
+</section>
+
+<!-- ── Reviews ── -->
+<section id="reviews">
+  <span class="section-label">Customer Love</span>
+  <h2 class="section-title" style="margin-bottom:0.5rem;">What People Are Saying</h2>
+  <p class="section-sub">Over 2,000 happy customers across the UK and worldwide.</p>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Got this for my mum's birthday, used a photo of her and my nan who passed away last year. She absolutley bawled her eyes out when she saw it lol. Proper lovely quality, you can see so much detail in their faces. Defintely ordering another one for Christmas tbh</p>
+      <div class="review-author">
+        <div class="review-avatar">S</div>
+        <div>
+          <div class="review-name">Sarah M.</div>
+          <div class="review-meta">2 weeks ago · <span class="verified">✓ Verified</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Ordered this for the missus as an anniversary pressie and she was dead chuffed. The detail on our dog's face is unreal, every little wrinkle came out spot on. Delivery was well fast too, came in like 3 days. Will defo be getting more of these for the family</p>
+      <div class="review-author">
+        <div class="review-avatar">J</div>
+        <div>
+          <div class="review-name">James R.</div>
+          <div class="review-meta">1 month ago · <span class="verified">✓ Verified</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Wasn't sure what to expect if im honest but absolutley blown away. Sits on my bedside table and looks dead nice with the light on at night. Packaging was brilliant as well, came really well protected. 5 stars no question, cheers guys 🙌</p>
+      <div class="review-author">
+        <div class="review-avatar">L</div>
+        <div>
+          <div class="review-name">Lauren T.</div>
+          <div class="review-meta">3 weeks ago · <span class="verified">✓ Verified</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section id="faq">
+  <span class="section-label">Got Questions?</span>
+  <h2 class="section-title" style="margin-bottom:0.5rem;">Frequently Asked</h2>
+  <p class="section-sub">Everything you need to know before ordering.</p>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q">What photos work best? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Clear, well-lit photos with good contrast work best - portraits, couples, and pet photos are especially popular. Avoid heavily blurred or very dark images for the best detail.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">How do I send my photo? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Just upload it directly on this page before you checkout - that's it. Your photo is securely uploaded straight away and attached to your order automatically.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">How long does delivery take? <span class="faq-icon">+</span></button>
+      <div class="faq-a">UK orders typically arrive in 3–5 business days. International orders take 7–14 business days. All orders include free tracked shipping.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">What size is the frame? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Our standard lithophane frame is 15cm × 15cm - perfect for a bedside table, shelf, or desk. Get in touch if you'd like a custom size.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Can I return it? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Absolutely. We offer a 30-day return policy. If there's a quality issue or something's not right, we'll sort it - no fuss.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer CTA ── -->
+<section id="footer-cta">
+  <h2>Ready to Create Yours?</h2>
+  <p>Upload a photo in seconds. We work like bees on the rest. 🐝</p>
+  <a href="#upload-section" class="btn-amber" style="font-size:1rem; padding:1rem 2.5rem;">📷 Upload Your Photo Now</a>
+</section>
 
 <!-- ── Footer ── -->
 <footer>
-  <div class="f-logo">Bees City</div>
-  <p>Custom 3D printed lithophane frames, handmade in the UK.</p>
-  <div class="f-links">
-    <a href="#">About Me</a>
-    <a href="#">Shipping & Returns</a>
-    <a href="mailto:hello@beescity.co.uk">Contact</a>
+  <div class="footer-inner">
+    <div class="footer-logo">Bees<span>City</span></div>
+    <div class="footer-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#faq">FAQ</a>
+      <a href="mailto:hello@beescity.co.uk">Contact</a>
+    </div>
+    <div class="footer-payments">
+      <span>VISA</span><span>Mastercard</span><span>Amex</span><span>Maestro</span><span>PayPal</span>
+    </div>
   </div>
-  <p>© 2024 Bees City</p>
-  <div class="f-payments">
-    <span>VISA</span><span>Mastercard</span><span>Amex</span><span>Maestro</span><span>PayPal</span>
-  </div>
+  <div class="footer-copy">© 2024 Bees City · Handmade in the UK · beescity.co.uk</div>
 </footer>
 
-<!-- ── Cart Drawer ── -->
+<!-- ── Mobile sticky ── -->
+<div id="sticky-bar">
+  <div class="sticky-price">
+    <div class="sp-current" id="sticky-price">£19.90</div>
+    <div class="sp-orig" id="sticky-orig">was £45.00</div>
+  </div>
+  <button id="sticky-cta">📷 Order Now</button>
+</div>
+
+<!-- ── Cart drawer ── -->
 <div id="cart-overlay"></div>
 <div id="cart-drawer">
-  <div class="cart-header">
+  <div class="cart-hd">
     <h2>Your Cart</h2>
     <button id="close-cart">&times;</button>
   </div>
-  <div id="cart-items">
-    <p id="cart-empty">Your cart is empty.</p>
-  </div>
-  <div class="cart-footer">
+  <div id="cart-items"><p id="cart-empty">Your cart is empty.</p></div>
+  <div class="cart-ft">
     <div class="cart-total-row"><span>Total</span><span id="cart-total-amount">£0.00</span></div>
-    <button id="checkout-btn" disabled>Checkout</button>
+    <button id="checkout-btn" disabled>Proceed to Checkout</button>
   </div>
 </div>
 
-<script>
-  const API = '/graphql';
+<!-- ── Crop modal ── -->
+<div id="crop-modal">
+  <div class="crop-modal-inner">
+    <div class="crop-modal-header">
+      <div>
+        <h3>Crop Your Photo</h3>
+        <p>Drag to reposition · Scroll to zoom</p>
+      </div>
+      <button id="crop-modal-close">&times;</button>
+    </div>
+    <div class="crop-area">
+      <img id="crop-image" src="" alt="Crop preview" />
+    </div>
+    <div class="crop-actions">
+      <button id="crop-cancel">Cancel</button>
+      <button id="crop-confirm">✓ Use This Photo</button>
+    </div>
+  </div>
+</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+<script>
+  const API              = '/graphql';
+  const CLOUDFLARE_URL   = '/upload';
+
+  // ── State ──
+  let cartId = null, checkoutUrl = null, firstVariantId = null;
+  let cropper = null, uploadedPhotoUrl = null;
+
+  // ── Countdown ──
+  function tick() {
+    const now = new Date(), end = new Date();
+    end.setHours(23, 59, 59, 0);
+    let d = Math.max(0, end - now);
+    const h = Math.floor(d / 3600000); d -= h * 3600000;
+    const m = Math.floor(d / 60000);   d -= m * 60000;
+    const s = Math.floor(d / 1000);
+    document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+
+  // ── GraphQL helper ──
   async function gql(query, variables = {}) {
     const res = await fetch(API, {
       method: 'POST',
@@ -704,130 +914,207 @@
     return res.json();
   }
 
-  // ── State ──
-  let cartId = null;
-  let checkoutUrl = null;
-  let firstVariantId = null;
-
-  // ── Countdown timer (counts to midnight tonight) ──
-  function updateCountdown() {
-    const now = new Date();
-    const midnight = new Date();
-    midnight.setHours(23, 59, 59, 0);
-    let diff = Math.max(0, midnight - now);
-
-    const h = Math.floor(diff / 3600000);
-    diff -= h * 3600000;
-    const m = Math.floor(diff / 60000);
-    diff -= m * 60000;
-    const s = Math.floor(diff / 1000);
-
-    document.getElementById('cd-h').textContent = String(h).padStart(2, '0');
-    document.getElementById('cd-m').textContent = String(m).padStart(2, '0');
-    document.getElementById('cd-s').textContent = String(s).padStart(2, '0');
-  }
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-
-  // ── Load first product and populate hero ──
-  const PRODUCTS_QUERY = `
-    query {
-      products(first: 1) {
-        nodes {
-          id title
-          featuredImage { url altText }
-          priceRange { minVariantPrice { amount currencyCode } }
-          compareAtPriceRange { maxVariantPrice { amount currencyCode } }
-          variants(first: 5) {
-            nodes { id title availableForSale price { amount currencyCode } }
-          }
-        }
-      }
-    }
-  `;
-
-  function formatMoney(amount, currency) {
-    return new Intl.NumberFormat('en-GB', { style: 'currency', currency }).format(amount);
-  }
-
+  // ── Load product ──
   async function loadProduct() {
-    const data = await gql(PRODUCTS_QUERY);
-    const product = data?.data?.products?.nodes?.[0];
-    if (!product) return;
+    const data = await gql(`query {
+      products(first:1) { nodes {
+        id title featuredImage { url altText }
+        priceRange { minVariantPrice { amount currencyCode } }
+        compareAtPriceRange { maxVariantPrice { amount currencyCode } }
+        variants(first:5) { nodes { id title availableForSale price { amount currencyCode } } }
+      }}
+    }`);
 
-    // Hero image
-    if (product.featuredImage) {
+    const p = data?.data?.products?.nodes?.[0];
+    if (!p) return;
+
+    if (p.featuredImage) {
       const wrap = document.getElementById('hero-img-wrap');
-      wrap.innerHTML = `<img src="${product.featuredImage.url}" alt="${product.featuredImage.altText ?? product.title}" />`;
-      document.getElementById('ba-result').innerHTML = `
-        <img src="${product.featuredImage.url}" alt="3D Lithophane" />
-        <span class="ba-label">3D Lithophane</span>
-      `;
+      const img = document.createElement('img');
+      img.className = 'hero-product-img';
+      img.src = p.featuredImage.url;
+      img.alt = p.featuredImage.altText ?? p.title;
+      wrap.replaceWith(img);
     }
 
-    // Price
-    const variant = product.variants.nodes.find(v => v.availableForSale) ?? product.variants.nodes[0];
-    firstVariantId = variant?.id ?? null;
+    const variant = p.variants.nodes.find(v => v.availableForSale) ?? p.variants.nodes[0];
+    firstVariantId = variant?.id;
 
-    const salePrice = parseFloat(variant?.price?.amount ?? product.priceRange.minVariantPrice.amount);
-    const currency  = variant?.price?.currencyCode ?? product.priceRange.minVariantPrice.currencyCode;
-    const origPrice = parseFloat(product.compareAtPriceRange?.maxVariantPrice?.amount ?? 0);
+    const sale = parseFloat(variant?.price?.amount ?? p.priceRange.minVariantPrice.amount);
+    const cur  = variant?.price?.currencyCode ?? 'GBP';
+    const orig = parseFloat(p.compareAtPriceRange?.maxVariantPrice?.amount ?? 0);
+    const fmt  = n => new Intl.NumberFormat('en-GB', { style:'currency', currency: cur }).format(n);
 
-    document.getElementById('price-current').textContent = formatMoney(salePrice, currency);
+    document.getElementById('price-display').textContent  = fmt(sale);
+    document.getElementById('sticky-price').textContent   = fmt(sale);
 
-    if (origPrice > salePrice) {
-      document.getElementById('price-original').textContent = formatMoney(origPrice, currency);
-      const pct = Math.round((1 - salePrice / origPrice) * 100);
-      document.getElementById('price-badge').textContent = `-${pct}%`;
+    if (orig > sale) {
+      document.getElementById('original-display').textContent = fmt(orig);
+      document.getElementById('sticky-orig').textContent      = 'was ' + fmt(orig);
+      document.getElementById('discount-badge').textContent   = `-${Math.round((1-sale/orig)*100)}%`;
     } else {
-      document.getElementById('price-original').style.display = 'none';
-      document.getElementById('price-badge').style.display = 'none';
-    }
-
-    // Enable CTAs
-    if (variant?.availableForSale && firstVariantId) {
-      document.getElementById('hero-cta').disabled = false;
-      document.getElementById('shop-btn').disabled = false;
+      ['original-display','discount-badge'].forEach(id => document.getElementById(id).style.display = 'none');
     }
   }
+
+  // ── File input / drag-drop ──
+  const fileInput = document.getElementById('file-input');
+  const dropZone  = document.getElementById('drop-zone');
+
+  document.getElementById('pick-btn').addEventListener('click', e => { e.stopPropagation(); fileInput.click(); });
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) openCropModal(fileInput.files[0]);
+  });
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) openCropModal(e.dataTransfer.files[0]);
+  });
+
+  document.getElementById('change-photo-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    uploadedPhotoUrl = null;
+    document.getElementById('photo-preview-wrap').classList.remove('visible');
+    document.getElementById('drop-default').style.display = 'block';
+    document.getElementById('drop-chosen').style.display  = 'none';
+    dropZone.classList.remove('has-file');
+    document.getElementById('add-to-cart-btn').disabled = true;
+    document.getElementById('add-to-cart-btn').textContent = 'Upload a photo to order';
+    fileInput.value = '';
+  });
+
+  // ── Crop modal ──
+  function openCropModal(file) {
+    document.getElementById('drop-default').style.display = 'none';
+    document.getElementById('drop-chosen').style.display  = 'block';
+    document.getElementById('chosen-name').textContent    = file.name;
+
+    const cropImg = document.getElementById('crop-image');
+    cropImg.src = URL.createObjectURL(file);
+    document.getElementById('crop-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    if (cropper) { cropper.destroy(); cropper = null; }
+
+    cropImg.onload = () => {
+      cropper = new Cropper(cropImg, {
+        aspectRatio: 1400 / 1910,
+        viewMode: 1,
+        autoCropArea: 0.9,
+        dragMode: 'crop',
+        zoomable: true,
+        zoomOnWheel: false,
+        cropBoxResizable: true,
+        cropBoxMovable: true,
+        guides: true,
+        center: true,
+        highlight: true,
+        background: true
+      });
+    };
+  }
+
+  function closeCropModal() {
+    document.getElementById('crop-modal').classList.remove('open');
+    document.body.style.overflow = '';
+    if (cropper) { cropper.destroy(); cropper = null; }
+  }
+
+  document.getElementById('crop-modal-close').addEventListener('click', closeCropModal);
+  document.getElementById('crop-cancel').addEventListener('click', () => {
+    closeCropModal();
+    document.getElementById('drop-default').style.display = 'block';
+    document.getElementById('drop-chosen').style.display  = 'none';
+    fileInput.value = '';
+  });
+
+  // ── Confirm crop → upload to Cloudflare ──
+  document.getElementById('crop-confirm').addEventListener('click', async () => {
+    if (!cropper) return;
+
+    const confirmBtn = document.getElementById('crop-confirm');
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Uploading…';
+
+    const cleanCanvas = cropper.getCroppedCanvas({ width: 1200, height: Math.round(1200 * 1910/1400) });
+
+    closeCropModal();
+
+    // Show progress
+    document.getElementById('upload-progress').classList.add('visible');
+
+    const blob = await new Promise(r => cleanCanvas.toBlob(r, 'image/png'));
+
+    // Show preview immediately (before upload finishes)
+    document.getElementById('preview-img').src = cleanCanvas.toDataURL('image/png');
+
+    try {
+      const form = new FormData();
+      form.append('file', blob, 'custom-image.png');
+
+      const res = await fetch(CLOUDFLARE_URL, { method: 'POST', body: form });
+
+      if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
+
+      const { url } = await res.json();
+      uploadedPhotoUrl = url;
+
+      // Show preview section
+      document.getElementById('upload-progress').classList.remove('visible');
+      document.getElementById('photo-preview-wrap').classList.add('visible');
+      dropZone.classList.add('has-file');
+
+      // Enable order button
+      document.getElementById('add-to-cart-btn').disabled = !firstVariantId;
+      document.getElementById('add-to-cart-btn').textContent = 'Order Your Lithophane';
+
+    } catch (err) {
+      console.error('[UPLOAD] error', err);
+      document.getElementById('upload-progress').classList.remove('visible');
+      document.getElementById('drop-default').style.display = 'block';
+      document.getElementById('drop-chosen').style.display  = 'none';
+      fileInput.value = '';
+      alert('Upload failed - please try again or use a different photo.');
+    } finally {
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = '✓ Use This Photo';
+    }
+  });
 
   // ── Cart ──
-  const CART_FIELDS = `
-    id checkoutUrl totalQuantity
+  const CART_FIELDS = `id checkoutUrl totalQuantity
     cost { totalAmount { amount currencyCode } }
-    lines(first: 50) {
-      nodes {
-        id quantity
-        merchandise {
-          ... on ProductVariant {
-            id title
-            price { amount currencyCode }
-            product { title featuredImage { url } }
-          }
-        }
-      }
-    }
-  `;
+    lines(first:50) { nodes { id quantity merchandise { ... on ProductVariant {
+      id title price { amount currencyCode } product { title featuredImage { url } }
+    }}}}`;
 
-  async function cartCreate(variantId) {
+  function fmt(amount, currency) {
+    return new Intl.NumberFormat('en-GB', { style:'currency', currency }).format(amount);
+  }
+
+  async function cartCreate(variantId, photoUrl) {
     const res = await gql(`
-      mutation cartCreate($lines: [CartLineInput!]) {
-        cartCreate(input: { lines: $lines }) {
+      mutation cartCreate($lines:[CartLineInput!], $attributes:[AttributeInput!]) {
+        cartCreate(input:{ lines:$lines, attributes:$attributes }) {
           cart { ${CART_FIELDS} }
-          userErrors { field message }
+          userErrors { message }
         }
       }
-    `, { lines: [{ merchandiseId: variantId, quantity: 1 }] });
+    `, {
+      lines: [{ merchandiseId: variantId, quantity: 1 }],
+      attributes: photoUrl ? [{ key: 'Photo URL', value: photoUrl }] : []
+    });
     return res.data.cartCreate;
   }
 
   async function cartLinesAdd(variantId) {
     const res = await gql(`
-      mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
-        cartLinesAdd(cartId: $cartId, lines: $lines) {
-          cart { ${CART_FIELDS} }
-        }
+      mutation cartLinesAdd($cartId:ID!, $lines:[CartLineInput!]!) {
+        cartLinesAdd(cartId:$cartId, lines:$lines) { cart { ${CART_FIELDS} } }
       }
     `, { cartId, lines: [{ merchandiseId: variantId, quantity: 1 }] });
     return res.data.cartLinesAdd;
@@ -835,110 +1122,114 @@
 
   async function cartLinesRemove(lineId) {
     const res = await gql(`
-      mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
-        cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
-          cart { ${CART_FIELDS} }
-        }
+      mutation cartLinesRemove($cartId:ID!, $lineIds:[ID!]!) {
+        cartLinesRemove(cartId:$cartId, lineIds:$lineIds) { cart { ${CART_FIELDS} } }
       }
     `, { cartId, lineIds: [lineId] });
     return res.data.cartLinesRemove;
   }
 
   function updateCartUI(cart) {
-    cartId = cart.id;
-    checkoutUrl = cart.checkoutUrl;
-
-    const total = cart.cost?.totalAmount;
-    document.getElementById('cart-total-amount').textContent = total
-      ? formatMoney(total.amount, total.currencyCode)
-      : '£0.00';
-
+    cartId = cart.id; checkoutUrl = cart.checkoutUrl;
+    document.getElementById('cart-count').textContent = cart.totalQuantity;
+    const t = cart.cost?.totalAmount;
+    document.getElementById('cart-total-amount').textContent = t ? fmt(t.amount, t.currencyCode) : '£0.00';
     const lines = cart.lines.nodes;
     const container = document.getElementById('cart-items');
     container.innerHTML = '';
-
-    if (lines.length === 0) {
+    if (!lines.length) {
       container.innerHTML = '<p id="cart-empty">Your cart is empty.</p>';
       document.getElementById('checkout-btn').disabled = true;
       return;
     }
-
     document.getElementById('checkout-btn').disabled = false;
-
     lines.forEach(line => {
       const v = line.merchandise;
-      const imgUrl = v.product?.featuredImage?.url;
-      const lineTotal = formatMoney(v.price.amount * line.quantity, v.price.currencyCode);
       const el = document.createElement('div');
       el.className = 'cart-item';
       el.innerHTML = `
-        ${imgUrl ? `<img src="${imgUrl}" alt="${v.product?.title}" />` : ''}
-        <div class="cart-item-info">
-          <div class="item-title">${v.product?.title ?? ''}</div>
-          ${v.title !== 'Default Title' ? `<div class="item-variant">${v.title}</div>` : ''}
-          <div class="item-price">${lineTotal} × ${line.quantity}</div>
+        ${v.product?.featuredImage?.url ? `<img src="${v.product.featuredImage.url}" alt="${v.product.title}" />` : ''}
+        <div class="ci-info">
+          <div class="ci-title">${v.product?.title ?? ''}</div>
+          ${v.title !== 'Default Title' ? `<div class="ci-variant">${v.title}</div>` : ''}
+          <div class="ci-price">${fmt(v.price.amount * line.quantity, v.price.currencyCode)} × ${line.quantity}</div>
         </div>
-        <button class="remove-item" data-line-id="${line.id}">&times;</button>
+        <button class="ci-remove" data-id="${line.id}">&times;</button>
       `;
-      el.querySelector('.remove-item').addEventListener('click', async e => {
-        const result = await cartLinesRemove(e.currentTarget.dataset.lineId);
-        updateCartUI(result.cart);
+      el.querySelector('.ci-remove').addEventListener('click', async e => {
+        updateCartUI((await cartLinesRemove(e.currentTarget.dataset.id)).cart);
       });
       container.appendChild(el);
     });
   }
 
-  async function addToCart() {
+  document.getElementById('add-to-cart-btn').addEventListener('click', async () => {
     if (!firstVariantId) return;
-
-    const btns = document.querySelectorAll('.btn-cta');
-    btns.forEach(b => { b.disabled = true; b.textContent = 'Adding…'; });
-
+    const btn = document.getElementById('add-to-cart-btn');
+    btn.disabled = true; btn.textContent = 'Adding…';
     try {
-      const result = cartId
-        ? await cartLinesAdd(firstVariantId)
-        : await cartCreate(firstVariantId);
-
-      if (result.userErrors?.length) {
-        alert(result.userErrors.map(e => e.message).join('\n'));
-        return;
-      }
-
+      const result = cartId ? await cartLinesAdd(firstVariantId) : await cartCreate(firstVariantId, uploadedPhotoUrl);
+      if (result.userErrors?.length) { alert(result.userErrors.map(e => e.message).join('\n')); return; }
       updateCartUI(result.cart);
       openCart();
-    } catch (err) {
-      console.error(err);
-      alert('Could not add to cart. Is the server running?');
-    } finally {
-      document.getElementById('hero-cta').disabled = false;
-      document.getElementById('hero-cta').textContent = 'Create Yours';
-      document.getElementById('shop-btn').disabled = false;
-      document.getElementById('shop-btn').textContent = 'Shop now';
-    }
-  }
-
-  document.getElementById('hero-cta').addEventListener('click', addToCart);
-  document.getElementById('shop-btn').addEventListener('click', addToCart);
+    } catch(err) { console.error(err); alert('Could not add to cart. Is the server running?'); }
+    finally { btn.disabled = false; btn.textContent = 'Order Your Lithophane'; }
+  });
 
   // ── Cart drawer ──
-  function openCart() {
-    document.getElementById('cart-drawer').classList.add('open');
-    document.getElementById('cart-overlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
+  function openCart()  { document.getElementById('cart-drawer').classList.add('open'); document.getElementById('cart-overlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeCart() { document.getElementById('cart-drawer').classList.remove('open'); document.getElementById('cart-overlay').classList.remove('open'); document.body.style.overflow = ''; }
 
-  function closeCart() {
-    document.getElementById('cart-drawer').classList.remove('open');
-    document.getElementById('cart-overlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
+  document.getElementById('cart-btn').addEventListener('click', openCart);
   document.getElementById('close-cart').addEventListener('click', closeCart);
   document.getElementById('cart-overlay').addEventListener('click', closeCart);
+  document.getElementById('checkout-btn').addEventListener('click', () => { if (checkoutUrl) window.location.href = checkoutUrl; });
 
-  document.getElementById('checkout-btn').addEventListener('click', () => {
-    if (checkoutUrl) window.location.href = checkoutUrl;
+  // ── Mobile sticky ──
+  document.getElementById('sticky-cta').addEventListener('click', () => {
+    document.getElementById('upload-section').scrollIntoView({ behavior: 'smooth' });
   });
+
+  // ── FAQ ──
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => btn.closest('.faq-item').classList.toggle('open'));
+  });
+
+  // ── Scroll reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  // Stagger siblings inside grid/flex containers
+  function observeGroup(selector) {
+    document.querySelectorAll(selector).forEach((el, i) => {
+      el.classList.add('reveal');
+      const delay = i % 4; // cap at 4 so long lists don't wait forever
+      if (delay > 0) el.classList.add(`reveal-delay-${delay}`);
+      observer.observe(el);
+    });
+  }
+
+  // Single elements that just slide up on their own
+  function observeEach(selector) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+  }
+
+  observeEach('.section-label, .section-title, .section-sub');
+  observeEach('.bees-callout-inner, .upload-inner, #footer-cta h2, #footer-cta p, #footer-cta .btn-amber');
+  observeGroup('.step');
+  observeGroup('.gallery-card');
+  observeGroup('.feature-card');
+  observeGroup('.review-card');
+  observeGroup('.faq-item');
 
   // ── Init ──
   loadProduct();
