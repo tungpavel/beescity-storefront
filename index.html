@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bees City — 3D Lithophane Frames</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Alegreya+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #FBF5F0;
+      --ink:      #1a1a1a;
+      --muted:    #666;
+      --red:      #e5322d;
+      --green:    #27ae60;
+      --gold:     #f5a623;
+      --border:   #e0d4cc;
+      --cream-dk: #EFE0D2;
+      --radius:   50px;
+    }
+
+    body {
+      font-family: 'Alegreya Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* ── Sale Banner ── */
+    #sale-banner {
+      background: var(--ink);
+      color: #fff;
+      text-align: center;
+      padding: 0.55rem 1rem;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255,255,255,0.15);
+      border-radius: 5px;
+      padding: 0.2rem 0.45rem;
+      min-width: 34px;
+      line-height: 1.1;
+    }
+
+    .countdown-unit .num {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .countdown-unit .lbl {
+      font-size: 0.58rem;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      padding: 1.25rem 1rem 0.75rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    #hero h1 {
+      font-family: 'Assistant', sans-serif;
+      font-size: clamp(1.3rem, 5vw, 2rem);
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1rem;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+
+    .hero-body {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .hero-img {
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--cream-dk);
+      aspect-ratio: 1;
+    }
+
+    .hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-img .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b09080;
+      font-size: 0.75rem;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .hero-features { display: flex; flex-direction: column; gap: 0.55rem; }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .stars { color: var(--gold); letter-spacing: -1px; font-size: 0.9rem; }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .feature-list li {
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .feature-list li .icon { font-size: 1rem; flex-shrink: 0; }
+
+    /* ── CTA button ── */
+    .btn-cta {
+      display: block;
+      width: 100%;
+      max-width: 900px;
+      margin: 1rem auto 0;
+      padding: 0.85rem 1rem;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Assistant', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-cta:hover { background: #333; }
+    .btn-cta:disabled { background: #aaa; cursor: not-allowed; }
+
+    /* ── Trust badges ── */
+    #badges {
+      max-width: 900px;
+      margin: 1.1rem auto 0;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 1rem;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .badge-check {
+      width: 18px;
+      height: 18px;
+      background: var(--green);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .badge-check svg { width: 11px; height: 11px; }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 1rem;
+    }
+
+    /* ── See the Magic ── */
+    #magic {
+      padding: 0 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    #magic h2 {
+      font-family: 'Assistant', sans-serif;
+      font-size: clamp(1.4rem, 5vw, 2rem);
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .before-after-main {
+      border-radius: 12px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0;
+      align-items: center;
+      background: var(--cream-dk);
+      margin-bottom: 0.75rem;
+    }
+
+    .ba-side {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: #dcc9b8;
+    }
+
+    .ba-side img { width: 100%; height: 100%; object-fit: cover; }
+
+    .ba-side .ba-label {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      white-space: nowrap;
+      font-family: 'Assistant', sans-serif;
+    }
+
+    .ba-arrow {
+      padding: 0 0.5rem;
+      font-size: 1.4rem;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .ba-side .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: #b09080;
+      text-align: center;
+      padding: 0.5rem;
+    }
+
+    .before-after-thumbs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .ba-thumb {
+      border-radius: 8px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      background: var(--cream-dk);
+      aspect-ratio: 2/1;
+    }
+
+    .ba-thumb .t-side {
+      height: 100%;
+      overflow: hidden;
+      background: #dcc9b8;
+    }
+
+    .ba-thumb .t-side img { width: 100%; height: 100%; object-fit: cover; }
+    .ba-thumb .t-side .placeholder { width: 100%; height: 100%; background: #dcc9b8; }
+
+    .ba-thumb .t-arrow {
+      font-size: 0.6rem;
+      color: var(--muted);
+      padding: 0 2px;
+      line-height: 1;
+    }
+
+    /* ── Pricing ── */
+    #pricing {
+      max-width: 900px;
+      margin: 1.5rem auto 0;
+      padding: 0 1rem;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .price-current {
+      font-family: 'Assistant', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .price-original {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.1rem;
+      color: var(--red);
+      text-decoration: line-through;
+    }
+
+    .price-badge {
+      background: var(--red);
+      color: #fff;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    /* ── Cart drawer ── */
+    #cart-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,26,26,0.45);
+      z-index: 300;
+    }
+
+    #cart-overlay.open { display: block; }
+
+    #cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      max-width: 100vw;
+      height: 100vh;
+      background: var(--bg);
+      z-index: 301;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s ease;
+      box-shadow: -4px 0 24px rgba(26,26,26,0.12);
+    }
+
+    #cart-drawer.open { right: 0; }
+
+    .cart-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-header h2 {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.1rem;
+    }
+
+    #close-cart {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    #close-cart:hover { color: var(--ink); }
+
+    #cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    #cart-empty { color: var(--muted); text-align: center; padding: 3rem 0; }
+
+    .cart-item {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: var(--cream-dk);
+      flex-shrink: 0;
+    }
+
+    .cart-item-info { flex: 1; font-size: 0.9rem; }
+    .cart-item-info .item-title { font-family: 'Assistant', sans-serif; font-weight: 600; }
+    .cart-item-info .item-variant { color: var(--muted); font-size: 0.8rem; }
+    .cart-item-info .item-price { font-weight: 700; margin-top: 0.25rem; }
+
+    .remove-item {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .remove-item:hover { color: var(--red); }
+
+    .cart-footer {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Assistant', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    #checkout-btn {
+      padding: 0.85rem;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #checkout-btn:hover:not(:disabled) { background: #333; }
+    #checkout-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 2.5rem;
+      background: var(--ink);
+      color: rgba(255,255,255,0.6);
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+    }
+
+    footer .f-logo {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    footer .f-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 0.75rem 0;
+    }
+
+    footer a { color: rgba(255,255,255,0.6); }
+    footer a:hover { color: #fff; }
+
+    .f-payments {
+      display: flex;
+      gap: 0.4rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .f-payments span {
+      background: rgba(255,255,255,0.12);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 0.72rem;
+    }
+
+    /* ── Desktop adjustments ── */
+    @media (min-width: 600px) {
+      #hero, #badges, #magic, #pricing { padding-left: 2rem; padding-right: 2rem; }
+      .divider { margin-left: 2rem; margin-right: 2rem; }
+      .btn-cta { padding-left: 2rem; padding-right: 2rem; }
+    }
+
+    @media (min-width: 900px) {
+      #hero h1 { font-size: 2.4rem; }
+      .hero-body { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      #badges { grid-template-columns: repeat(4, 1fr); }
+      .before-after-thumbs { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Sale Banner ── -->
+<div id="sale-banner">
+  <span>Sale + FREE worldwide shipping ENDS IN:</span>
+  <div class="countdown">
+    <div class="countdown-unit"><span class="num" id="cd-h">00</span><span class="lbl">HRS</span></div>
+    <div class="countdown-unit"><span class="num" id="cd-m">00</span><span class="lbl">MIN</span></div>
+    <div class="countdown-unit"><span class="num" id="cd-s">00</span><span class="lbl">SEC</span></div>
+  </div>
+</div>
+
+<!-- ── Hero ── -->
+<section id="hero">
+  <h1>Turn Your Photo into a Glowing<br>3D Lithophane</h1>
+
+  <div class="hero-body">
+    <div class="hero-img" id="hero-img-wrap">
+      <div class="placeholder">Product image loading…</div>
+    </div>
+
+    <div class="hero-features">
+      <div class="rating">
+        <span class="stars">★★★★★</span>
+        <span><strong>Excellent 4.8</strong> | 110 reviews</span>
+      </div>
+
+      <ul class="feature-list">
+        <li><span class="icon">📷</span> Made from Your Photo</li>
+        <li><span class="icon">💡</span> LED Frame Included</li>
+        <li><span class="icon">🇬🇧</span> Made in the UK</li>
+        <li><span class="icon">📦</span> Free Shipping</li>
+      </ul>
+    </div>
+  </div>
+
+  <button class="btn-cta" id="hero-cta" disabled>Create Yours</button>
+</section>
+
+<!-- ── Trust badges ── -->
+<div id="badges">
+  <div class="badge">
+    <div class="badge-check">
+      <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    Handmade to Order
+  </div>
+  <div class="badge">
+    <div class="badge-check">
+      <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    High-Detail 3D Printing
+  </div>
+  <div class="badge">
+    <div class="badge-check">
+      <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    30 Days Return Policy
+  </div>
+  <div class="badge">
+    <div class="badge-check">
+      <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    Easy Photo Upload
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- ── See the Magic ── -->
+<section id="magic">
+  <h2>See the Magic</h2>
+
+  <!-- Main before/after -->
+  <div class="before-after-main">
+    <div class="ba-side" id="ba-photo">
+      <div class="placeholder">Your Photo</div>
+      <span class="ba-label">Your Photo</span>
+    </div>
+    <div class="ba-arrow">→</div>
+    <div class="ba-side" id="ba-result">
+      <div class="placeholder">3D Lithophane</div>
+      <span class="ba-label">3D Lithophane</span>
+    </div>
+  </div>
+
+  <!-- Thumbnail row -->
+  <div class="before-after-thumbs">
+    <div class="ba-thumb">
+      <div class="t-side"><div class="placeholder"></div></div>
+      <div class="t-arrow">→</div>
+      <div class="t-side"><div class="placeholder"></div></div>
+    </div>
+    <div class="ba-thumb">
+      <div class="t-side"><div class="placeholder"></div></div>
+      <div class="t-arrow">→</div>
+      <div class="t-side"><div class="placeholder"></div></div>
+    </div>
+    <div class="ba-thumb">
+      <div class="t-side"><div class="placeholder"></div></div>
+      <div class="t-arrow">→</div>
+      <div class="t-side"><div class="placeholder"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Pricing ── -->
+<div id="pricing">
+  <div class="price-row" id="price-row">
+    <span class="price-current" id="price-current">£19.90</span>
+    <span class="price-original" id="price-original">£45.00</span>
+    <span class="price-badge" id="price-badge">-56%</span>
+  </div>
+  <button class="btn-cta" id="shop-btn" disabled>Shop now</button>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="f-logo">Bees City</div>
+  <p>Custom 3D printed lithophane frames, handmade in the UK.</p>
+  <div class="f-links">
+    <a href="#">About Me</a>
+    <a href="#">Shipping & Returns</a>
+    <a href="mailto:hello@beescity.co.uk">Contact</a>
+  </div>
+  <p>© 2024 Bees City</p>
+  <div class="f-payments">
+    <span>VISA</span><span>Mastercard</span><span>Amex</span><span>Maestro</span><span>PayPal</span>
+  </div>
+</footer>
+
+<!-- ── Cart Drawer ── -->
+<div id="cart-overlay"></div>
+<div id="cart-drawer">
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <button id="close-cart">&times;</button>
+  </div>
+  <div id="cart-items">
+    <p id="cart-empty">Your cart is empty.</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total</span><span id="cart-total-amount">£0.00</span></div>
+    <button id="checkout-btn" disabled>Checkout</button>
+  </div>
+</div>
+
+<script>
+  const API = '/graphql';
+
+  async function gql(query, variables = {}) {
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, variables })
+    });
+    return res.json();
+  }
+
+  // ── State ──
+  let cartId = null;
+  let checkoutUrl = null;
+  let firstVariantId = null;
+
+  // ── Countdown timer (counts to midnight tonight) ──
+  function updateCountdown() {
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(23, 59, 59, 0);
+    let diff = Math.max(0, midnight - now);
+
+    const h = Math.floor(diff / 3600000);
+    diff -= h * 3600000;
+    const m = Math.floor(diff / 60000);
+    diff -= m * 60000;
+    const s = Math.floor(diff / 1000);
+
+    document.getElementById('cd-h').textContent = String(h).padStart(2, '0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2, '0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2, '0');
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ── Load first product and populate hero ──
+  const PRODUCTS_QUERY = `
+    query {
+      products(first: 1) {
+        nodes {
+          id title
+          featuredImage { url altText }
+          priceRange { minVariantPrice { amount currencyCode } }
+          compareAtPriceRange { maxVariantPrice { amount currencyCode } }
+          variants(first: 5) {
+            nodes { id title availableForSale price { amount currencyCode } }
+          }
+        }
+      }
+    }
+  `;
+
+  function formatMoney(amount, currency) {
+    return new Intl.NumberFormat('en-GB', { style: 'currency', currency }).format(amount);
+  }
+
+  async function loadProduct() {
+    const data = await gql(PRODUCTS_QUERY);
+    const product = data?.data?.products?.nodes?.[0];
+    if (!product) return;
+
+    // Hero image
+    if (product.featuredImage) {
+      const wrap = document.getElementById('hero-img-wrap');
+      wrap.innerHTML = `<img src="${product.featuredImage.url}" alt="${product.featuredImage.altText ?? product.title}" />`;
+      document.getElementById('ba-result').innerHTML = `
+        <img src="${product.featuredImage.url}" alt="3D Lithophane" />
+        <span class="ba-label">3D Lithophane</span>
+      `;
+    }
+
+    // Price
+    const variant = product.variants.nodes.find(v => v.availableForSale) ?? product.variants.nodes[0];
+    firstVariantId = variant?.id ?? null;
+
+    const salePrice = parseFloat(variant?.price?.amount ?? product.priceRange.minVariantPrice.amount);
+    const currency  = variant?.price?.currencyCode ?? product.priceRange.minVariantPrice.currencyCode;
+    const origPrice = parseFloat(product.compareAtPriceRange?.maxVariantPrice?.amount ?? 0);
+
+    document.getElementById('price-current').textContent = formatMoney(salePrice, currency);
+
+    if (origPrice > salePrice) {
+      document.getElementById('price-original').textContent = formatMoney(origPrice, currency);
+      const pct = Math.round((1 - salePrice / origPrice) * 100);
+      document.getElementById('price-badge').textContent = `-${pct}%`;
+    } else {
+      document.getElementById('price-original').style.display = 'none';
+      document.getElementById('price-badge').style.display = 'none';
+    }
+
+    // Enable CTAs
+    if (variant?.availableForSale && firstVariantId) {
+      document.getElementById('hero-cta').disabled = false;
+      document.getElementById('shop-btn').disabled = false;
+    }
+  }
+
+  // ── Cart ──
+  const CART_FIELDS = `
+    id checkoutUrl totalQuantity
+    cost { totalAmount { amount currencyCode } }
+    lines(first: 50) {
+      nodes {
+        id quantity
+        merchandise {
+          ... on ProductVariant {
+            id title
+            price { amount currencyCode }
+            product { title featuredImage { url } }
+          }
+        }
+      }
+    }
+  `;
+
+  async function cartCreate(variantId) {
+    const res = await gql(`
+      mutation cartCreate($lines: [CartLineInput!]) {
+        cartCreate(input: { lines: $lines }) {
+          cart { ${CART_FIELDS} }
+          userErrors { field message }
+        }
+      }
+    `, { lines: [{ merchandiseId: variantId, quantity: 1 }] });
+    return res.data.cartCreate;
+  }
+
+  async function cartLinesAdd(variantId) {
+    const res = await gql(`
+      mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+        cartLinesAdd(cartId: $cartId, lines: $lines) {
+          cart { ${CART_FIELDS} }
+        }
+      }
+    `, { cartId, lines: [{ merchandiseId: variantId, quantity: 1 }] });
+    return res.data.cartLinesAdd;
+  }
+
+  async function cartLinesRemove(lineId) {
+    const res = await gql(`
+      mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+        cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+          cart { ${CART_FIELDS} }
+        }
+      }
+    `, { cartId, lineIds: [lineId] });
+    return res.data.cartLinesRemove;
+  }
+
+  function updateCartUI(cart) {
+    cartId = cart.id;
+    checkoutUrl = cart.checkoutUrl;
+
+    const total = cart.cost?.totalAmount;
+    document.getElementById('cart-total-amount').textContent = total
+      ? formatMoney(total.amount, total.currencyCode)
+      : '£0.00';
+
+    const lines = cart.lines.nodes;
+    const container = document.getElementById('cart-items');
+    container.innerHTML = '';
+
+    if (lines.length === 0) {
+      container.innerHTML = '<p id="cart-empty">Your cart is empty.</p>';
+      document.getElementById('checkout-btn').disabled = true;
+      return;
+    }
+
+    document.getElementById('checkout-btn').disabled = false;
+
+    lines.forEach(line => {
+      const v = line.merchandise;
+      const imgUrl = v.product?.featuredImage?.url;
+      const lineTotal = formatMoney(v.price.amount * line.quantity, v.price.currencyCode);
+      const el = document.createElement('div');
+      el.className = 'cart-item';
+      el.innerHTML = `
+        ${imgUrl ? `<img src="${imgUrl}" alt="${v.product?.title}" />` : ''}
+        <div class="cart-item-info">
+          <div class="item-title">${v.product?.title ?? ''}</div>
+          ${v.title !== 'Default Title' ? `<div class="item-variant">${v.title}</div>` : ''}
+          <div class="item-price">${lineTotal} × ${line.quantity}</div>
+        </div>
+        <button class="remove-item" data-line-id="${line.id}">&times;</button>
+      `;
+      el.querySelector('.remove-item').addEventListener('click', async e => {
+        const result = await cartLinesRemove(e.currentTarget.dataset.lineId);
+        updateCartUI(result.cart);
+      });
+      container.appendChild(el);
+    });
+  }
+
+  async function addToCart() {
+    if (!firstVariantId) return;
+
+    const btns = document.querySelectorAll('.btn-cta');
+    btns.forEach(b => { b.disabled = true; b.textContent = 'Adding…'; });
+
+    try {
+      const result = cartId
+        ? await cartLinesAdd(firstVariantId)
+        : await cartCreate(firstVariantId);
+
+      if (result.userErrors?.length) {
+        alert(result.userErrors.map(e => e.message).join('\n'));
+        return;
+      }
+
+      updateCartUI(result.cart);
+      openCart();
+    } catch (err) {
+      console.error(err);
+      alert('Could not add to cart. Is the server running?');
+    } finally {
+      document.getElementById('hero-cta').disabled = false;
+      document.getElementById('hero-cta').textContent = 'Create Yours';
+      document.getElementById('shop-btn').disabled = false;
+      document.getElementById('shop-btn').textContent = 'Shop now';
+    }
+  }
+
+  document.getElementById('hero-cta').addEventListener('click', addToCart);
+  document.getElementById('shop-btn').addEventListener('click', addToCart);
+
+  // ── Cart drawer ──
+  function openCart() {
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCart() {
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('close-cart').addEventListener('click', closeCart);
+  document.getElementById('cart-overlay').addEventListener('click', closeCart);
+
+  document.getElementById('checkout-btn').addEventListener('click', () => {
+    if (checkoutUrl) window.location.href = checkoutUrl;
+  });
+
+  // ── Init ──
+  loadProduct();
+</script>
+</body>
+</html>
