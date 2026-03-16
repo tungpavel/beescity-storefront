@@ -676,7 +676,7 @@
       </div>
       <div class="hero-price-row">
         <span class="hp-current" id="hero-price">£19.90</span>
-        <span class="hp-original" id="hero-original">£45.00</span>
+        <span class="hp-original" id="hero-original">£30.00</span>
         <span class="hp-badge" id="hero-badge">-56%</span>
         <span class="hp-shipping">· Free worldwide shipping</span>
       </div>
@@ -792,7 +792,7 @@
 
     <div class="price-under-btn">
       <span class="p-current" id="price-display">£19.90</span>
-      <span class="p-original" id="original-display">£45.00</span>
+      <span class="p-original" id="original-display">£30.00</span>
       <span class="p-badge" id="discount-badge">-56%</span>
       &nbsp;· Free shipping · Ships in 3–5 days
     </div>
@@ -995,7 +995,7 @@
 <div id="sticky-bar">
   <div class="sticky-price">
     <div class="sp-current" id="sticky-price">£19.90</div>
-    <div class="sp-orig" id="sticky-orig">was £45.00</div>
+    <div class="sp-orig" id="sticky-orig">was £30.00</div>
   </div>
   <button id="sticky-cta">📷 Order Now</button>
 </div>
@@ -1056,7 +1056,8 @@
     })(window,document,'clarity','script',CLARITY_ID);
   }
 
-  function loadMetaPixel() {
+  // Load pixel script + PageView immediately (no consent needed for basic reach/ad measurement)
+  function initMetaPixel() {
     if (window._pixelLoaded) return;
     window._pixelLoaded = true;
     !function(f,b,e,v,n,t,s){
@@ -1069,7 +1070,11 @@
     }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', META_PIXEL);
     fbq('track', 'PageView');
-    // ViewContent — product viewed
+  }
+
+  // Fire richer product events only after marketing consent
+  function loadMetaPixel() {
+    initMetaPixel(); // ensure script is loaded
     fbq('track', 'ViewContent', {
       content_name: 'Custom Lithophane',
       content_type: 'product',
@@ -1077,6 +1082,9 @@
       value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 19.90
     });
   }
+
+  // Fire pixel immediately for PageView (Meta checker + ad reach)
+  initMetaPixel();
 
   // ── Consent store ──
   const Consent = window.Consent = {
