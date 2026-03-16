@@ -348,6 +348,8 @@
     #add-to-cart-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(245,166,35,0.4); }
     #add-to-cart-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
+    .photo-tips { background: rgba(255,193,7,0.1); border: 1px solid rgba(255,193,7,0.3); border-radius: 8px; padding: 0.65rem 1rem; margin-bottom: 1.2rem; font-size: 0.88rem; color: var(--muted); text-align: center; }
+    .photo-tips strong { color: var(--amber); }
     .price-under-btn { text-align: center; margin-top: 0.85rem; font-size: 0.9rem; color: var(--muted); }
     .price-under-btn .p-current { font-size: 1.4rem; font-weight: 700; color: var(--white); margin-right: 0.5rem; }
     .price-under-btn .p-original { text-decoration: line-through; color: var(--red); margin-right: 0.4rem; }
@@ -750,6 +752,10 @@
     <span class="section-label">Create Yours</span>
     <h2 class="section-title" style="margin-bottom:0.5rem;">Upload Your Photo</h2>
     <p class="section-sub">Drop your photo below, crop it to fit, and we'll take care of the rest.</p>
+
+    <div class="photo-tips">
+      <span>📸 Best results: <strong>high contrast</strong> &amp; <strong>high resolution</strong> - think clear faces, contrasting colours</span>
+    </div>
 
     <div id="drop-zone">
       <input type="file" id="file-input" accept="image/*" />
