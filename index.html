@@ -76,6 +76,11 @@
     .logo { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--white); }
     .logo span { color: var(--amber); }
 
+    .header-right { display: flex; align-items: center; gap: 0.75rem; }
+
+    .ig-link { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); transition: color 0.2s, border-color 0.2s; }
+    .ig-link:hover { color: #E1306C; border-color: #E1306C; }
+
     #cart-btn {
       display: flex; align-items: center; gap: 0.5rem;
       background: var(--surface2); border: 1px solid var(--border); color: var(--white);
@@ -144,6 +149,13 @@
     .hero-guarantees { display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; }
     .guarantee { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--muted); }
     .g-check { width: 15px; height: 15px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; color: #fff; flex-shrink: 0; }
+
+    .hero-price-row { display: flex; align-items: baseline; gap: 0.6rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .hero-price-row .hp-current { font-size: 2rem; font-weight: 700; color: var(--white); font-family: 'Playfair Display', serif; }
+    .hero-price-row .hp-original { font-size: 1rem; text-decoration: line-through; color: var(--red); }
+    .hero-price-row .hp-badge { background: var(--red); color: #fff; border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.78rem; font-weight: 700; }
+    .hero-price-row .hp-shipping { font-size: 0.82rem; color: var(--muted); }
+    .usb-note { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; font-size: 0.78rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.3rem 0.7rem; }
 
     .hero-visual { display: flex; justify-content: center; align-items: center; position: relative; }
 
@@ -525,6 +537,78 @@
       .footer-inner { flex-direction: column; align-items: flex-start; }
     }
 
+    /* ── Cookie Banner ── */
+    #cookie-banner {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+      background: #1a1a1a; border-top: 1px solid rgba(245,166,35,0.25);
+      padding: 1.1rem 1.5rem;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
+    }
+    #cookie-banner.show { display: flex; }
+    .cookie-text { flex: 1; min-width: 220px; font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+    .cookie-text strong { color: var(--text); }
+    .cookie-text a { color: var(--amber); text-decoration: underline; }
+    .cookie-btns { display: flex; gap: 0.6rem; flex-shrink: 0; flex-wrap: wrap; }
+    #cookie-accept {
+      padding: 0.6rem 1.3rem; border-radius: var(--radius-lg); border: none;
+      background: linear-gradient(135deg, var(--amber), var(--orange));
+      color: #000; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+    }
+    #cookie-necessary {
+      padding: 0.6rem 1.3rem; border-radius: var(--radius-lg);
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text); font-size: 0.85rem; cursor: pointer;
+    }
+    #cookie-necessary:hover { border-color: rgba(255,255,255,0.3); }
+    #cookie-manage-link { font-size: 0.78rem; color: var(--muted); text-decoration: underline; cursor: pointer; white-space: nowrap; }
+
+    /* ── Cookie Manage Modal ── */
+    #cookie-modal {
+      display: none; position: fixed; inset: 0; z-index: 10000;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    #cookie-modal.open { display: flex; }
+    .cookie-modal-box {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      max-width: 480px; width: 100%; padding: 2rem; display: flex; flex-direction: column; gap: 1.25rem;
+    }
+    .cookie-modal-box h3 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; color: var(--white); }
+    .cookie-modal-box p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+    .cookie-toggle-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: 0.9rem 0; border-top: 1px solid var(--border); }
+    .cookie-toggle-info strong { display: block; font-size: 0.88rem; color: var(--white); margin-bottom: 0.2rem; }
+    .cookie-toggle-info span { font-size: 0.78rem; color: var(--muted); }
+    .cookie-toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+    .cookie-toggle input { opacity: 0; width: 0; height: 0; }
+    .cookie-toggle-slider {
+      position: absolute; inset: 0; border-radius: 24px; cursor: pointer;
+      background: var(--surface2); border: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .cookie-toggle-slider::after {
+      content: ''; position: absolute; left: 3px; top: 3px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--muted); transition: transform 0.2s, background 0.2s;
+    }
+    .cookie-toggle input:checked + .cookie-toggle-slider { background: rgba(245,166,35,0.25); border-color: var(--amber); }
+    .cookie-toggle input:checked + .cookie-toggle-slider::after { transform: translateX(18px); background: var(--amber); }
+    .cookie-toggle input:disabled + .cookie-toggle-slider { opacity: 0.5; cursor: not-allowed; }
+    .cookie-modal-btns { display: flex; gap: 0.75rem; }
+    #cookie-save-prefs {
+      flex: 1; padding: 0.7rem; border-radius: var(--radius-lg); border: none;
+      background: linear-gradient(135deg, var(--amber), var(--orange));
+      color: #000; font-weight: 700; font-size: 0.88rem; cursor: pointer;
+    }
+    #cookie-reject-all {
+      padding: 0.7rem 1.1rem; border-radius: var(--radius-lg);
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); font-size: 0.88rem; cursor: pointer;
+    }
+
     /* ── Scroll reveal ── */
     .reveal {
       opacity: 0;
@@ -549,7 +633,7 @@
 
 <!-- ── Announcement ── -->
 <div id="announcement">
-  <span>🔥 LIMITED SALE - FREE worldwide shipping ENDS IN:</span>
+  <span>LIMITED SALE - FREE worldwide shipping ENDS IN:</span>
   <div class="countdown">
     <div class="cd-unit"><span class="n" id="cd-h">00</span><span class="l">HRS</span></div>
     <div class="cd-unit"><span class="n" id="cd-m">00</span><span class="l">MIN</span></div>
@@ -561,10 +645,15 @@
 <header id="header">
   <div class="header-inner">
     <div class="logo">Bees<span>City</span></div>
-    <button id="cart-btn">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-      Cart (<span id="cart-count">0</span>)
-    </button>
+    <div class="header-right">
+      <a href="https://www.instagram.com/beescity.memories/" target="_blank" rel="noopener" class="ig-link" aria-label="Instagram">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+      </a>
+      <button id="cart-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Cart (<span id="cart-count">0</span>)
+      </button>
+    </div>
   </div>
 </header>
 
@@ -583,6 +672,13 @@
         <a href="#upload-section" class="btn-amber">📷 Upload Your Photo</a>
         <a href="#gallery" class="btn-ghost">See Examples</a>
       </div>
+      <div class="hero-price-row">
+        <span class="hp-current" id="hero-price">£19.90</span>
+        <span class="hp-original" id="hero-original">£45.00</span>
+        <span class="hp-badge" id="hero-badge">-56%</span>
+        <span class="hp-shipping">· Free worldwide shipping</span>
+      </div>
+      <div><span class="usb-note">⚡ USB-A cable included &nbsp;·&nbsp; Plug/adapter <strong>not</strong> included</span></div>
       <div class="hero-guarantees">
         <div class="guarantee"><div class="g-check">✓</div> Free Shipping</div>
         <div class="guarantee"><div class="g-check">✓</div> 30-Day Returns</div>
@@ -593,7 +689,7 @@
       <div class="hero-product-wrap">
         <div class="hero-glow-ring"></div>
         <div class="hero-product-placeholder" id="hero-img-wrap"><span>Loading…</span></div>
-        <div class="floating-tag top-left">✦ LED Included</div>
+        <div class="floating-tag top-left">✦ USB-A LED Included</div>
         <div class="floating-tag bottom-right">🇬🇧 Made in the UK</div>
       </div>
     </div>
@@ -619,7 +715,7 @@
 <div id="bees-callout">
   <div class="bees-callout-inner">
     <span class="bee-icon">🐝</span>
-    <p><strong>We work like bees</strong> - every order gets our full attention, start to finish. No shortcuts, no cutting corners. Just proper handmade craft from a small UK studio that genuinely cares.</p>
+    <p><strong>We work like bees</strong> - every order gets our full attention, start to finish. No shortcuts, no cutting corners. Genuine handmade craft from a small british studio.</p>
     <span class="bee-icon">🐝</span>
   </div>
 </div>
@@ -633,7 +729,7 @@
     <div class="step">
       <div class="step-num">1</div>
       <h3>Upload Your Photo</h3>
-      <p>Choose any portrait, landscape, or sentimental photo. Higher resolution gives more detail.</p>
+      <p>Choose any photo - portrait or landscape. Higher resolution gives more detail.</p>
     </div>
     <div class="step">
       <div class="step-num">2</div>
@@ -643,7 +739,7 @@
     <div class="step">
       <div class="step-num">3</div>
       <h3>It Glows for You</h3>
-      <p>Plug in the included LED light and watch your memory come to life in warm glowing light.</p>
+      <p>Connect the included USB-A LED light to any USB port or power bank and watch your memory glow. <em style="font-style:normal;color:var(--muted);font-size:0.82em;">Plug adapter not included.</em></p>
     </div>
   </div>
 </section>
@@ -737,7 +833,7 @@
   <p class="section-sub">Every detail considered. Every piece made with care.</p>
   <div class="features-grid">
     <div class="feature-card"><div class="feature-icon">📷</div><h3>Made from Your Photo</h3><p>Any photo becomes a one-of-a-kind 3D lithophane - portraits, landscapes, pets, anything you love.</p></div>
-    <div class="feature-card"><div class="feature-icon">💡</div><h3>LED Frame Included</h3><p>Every order includes a plug-in LED light unit. No extras to buy - just plug it in and it glows.</p></div>
+    <div class="feature-card"><div class="feature-icon">💡</div><h3>USB-A LED Included</h3><p>Every order comes with a USB-A powered LED light. Just plug into any USB port — no adapter needed. <strong style="color:var(--amber)">Note: plug/adapter not included.</strong></p></div>
     <div class="feature-card"><div class="feature-icon">🎨</div><h3>High-Detail 3D Printing</h3><p>Printed at ultra-high resolution to capture every shadow, expression, and tiny detail.</p></div>
     <div class="feature-card"><div class="feature-icon">🐝</div><h3>We Work Like Bees</h3><p>Small UK studio, big dedication. Every order is handled personally - we don't do mass production.</p></div>
     <div class="feature-card"><div class="feature-icon">📦</div><h3>Free Worldwide Shipping</h3><p>We ship everywhere, free. Safely packaged so it arrives in perfect condition.</p></div>
@@ -749,11 +845,11 @@
 <section id="reviews">
   <span class="section-label">Customer Love</span>
   <h2 class="section-title" style="margin-bottom:0.5rem;">What People Are Saying</h2>
-  <p class="section-sub">Over 2,000 happy customers across the UK and worldwide.</p>
+  <p class="section-sub">Over 200 happy customers across the UK and worldwide.</p>
   <div class="reviews-grid">
     <div class="review-card">
       <div class="review-stars">★★★★★</div>
-      <p class="review-text">Got this for my mum's birthday, used a photo of her and my nan who passed away last year. She absolutley bawled her eyes out when she saw it lol. Proper lovely quality, you can see so much detail in their faces. Defintely ordering another one for Christmas tbh</p>
+      <p class="review-text">Used a photo of my mum and me. Love it</p>
       <div class="review-author">
         <div class="review-avatar">S</div>
         <div>
@@ -764,7 +860,7 @@
     </div>
     <div class="review-card">
       <div class="review-stars">★★★★★</div>
-      <p class="review-text">Ordered this for the missus as an anniversary pressie and she was dead chuffed. The detail on our dog's face is unreal, every little wrinkle came out spot on. Delivery was well fast too, came in like 3 days. Will defo be getting more of these for the family</p>
+      <p class="review-text">The detail on our dog's face is amazing</p>
       <div class="review-author">
         <div class="review-avatar">J</div>
         <div>
@@ -775,7 +871,7 @@
     </div>
     <div class="review-card">
       <div class="review-stars">★★★★★</div>
-      <p class="review-text">Wasn't sure what to expect if im honest but absolutley blown away. Sits on my bedside table and looks dead nice with the light on at night. Packaging was brilliant as well, came really well protected. 5 stars no question, cheers guys 🙌</p>
+      <p class="review-text">Wasn't sure what to expect, turned out very well. Speedy delivery as well</p>
       <div class="review-author">
         <div class="review-avatar">L</div>
         <div>
@@ -789,7 +885,7 @@
 
 <!-- ── FAQ ── -->
 <section id="faq">
-  <span class="section-label">Got Questions?</span>
+  <span class="section-label">Have Questions?</span>
   <h2 class="section-title" style="margin-bottom:0.5rem;">Frequently Asked</h2>
   <p class="section-sub">Everything you need to know before ordering.</p>
   <div class="faq-list">
@@ -832,6 +928,10 @@
       <a href="#gallery">Gallery</a>
       <a href="#faq">FAQ</a>
       <a href="mailto:hello@beescity.co.uk">Contact</a>
+      <a href="https://www.instagram.com/beescity.memories/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:0.35rem;color:var(--muted);" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color=''">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        @beescity.memories
+      </a>
     </div>
     <div class="footer-payments">
       <span>VISA</span><span>Mastercard</span><span>Amex</span><span>Maestro</span><span>PayPal</span>
@@ -839,6 +939,51 @@
   </div>
   <div class="footer-copy">© 2024 Bees City · Handmade in the UK · beescity.co.uk</div>
 </footer>
+
+<!-- ── Cookie Banner ── -->
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <p class="cookie-text">
+    <strong>We use cookies.</strong> We'd like to use analytics cookies (Microsoft Clarity) to understand how you use our site, and marketing cookies (Meta Pixel) to show you relevant ads.
+    You can choose what you're comfortable with. <span id="cookie-manage-link">Manage preferences</span>
+  </p>
+  <div class="cookie-btns">
+    <button id="cookie-necessary">Necessary Only</button>
+    <button id="cookie-accept">Accept All</button>
+  </div>
+</div>
+
+<!-- ── Cookie Manage Modal ── -->
+<div id="cookie-modal" role="dialog" aria-modal="true" aria-label="Cookie preferences">
+  <div class="cookie-modal-box">
+    <h3>Cookie Preferences</h3>
+    <p>Choose which cookies you allow. You can change your mind at any time by clearing your browser storage.</p>
+    <div class="cookie-toggle-row">
+      <div class="cookie-toggle-info">
+        <strong>Strictly Necessary</strong>
+        <span>Required for the site to work — cart, checkout, photo upload. Cannot be disabled.</span>
+      </div>
+      <label class="cookie-toggle"><input type="checkbox" checked disabled><span class="cookie-toggle-slider"></span></label>
+    </div>
+    <div class="cookie-toggle-row">
+      <div class="cookie-toggle-info">
+        <strong>Analytics (Microsoft Clarity)</strong>
+        <span>Session recordings and heatmaps. Helps us improve the experience.</span>
+      </div>
+      <label class="cookie-toggle"><input type="checkbox" id="pref-analytics"><span class="cookie-toggle-slider"></span></label>
+    </div>
+    <div class="cookie-toggle-row">
+      <div class="cookie-toggle-info">
+        <strong>Marketing (Meta Pixel)</strong>
+        <span>Used to show you relevant ads on Instagram and Facebook.</span>
+      </div>
+      <label class="cookie-toggle"><input type="checkbox" id="pref-marketing"><span class="cookie-toggle-slider"></span></label>
+    </div>
+    <div class="cookie-modal-btns">
+      <button id="cookie-reject-all">Reject All</button>
+      <button id="cookie-save-prefs">Save My Preferences</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── Mobile sticky ── -->
 <div id="sticky-bar">
@@ -882,6 +1027,274 @@
     </div>
   </div>
 </div>
+
+<!-- ── Consent Manager + Tracking ── -->
+<script>
+(function() {
+  // ── Owner exclusion — run this once in your browser console to stop tracking yourself:
+  //    localStorage.setItem('bc_owner', '1')
+  if (localStorage.getItem('bc_owner') === '1') return;
+
+  const CONSENT_KEY  = 'bc_consent';
+  const CLARITY_ID   = 'vwrn7hi7dc';
+  const META_PIXEL   = '1404761640860998';
+
+  // ── Load scripts ──
+  function loadClarity() {
+    if (window._clarityLoaded) return;
+    window._clarityLoaded = true;
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window,document,'clarity','script',CLARITY_ID);
+  }
+
+  function loadMetaPixel() {
+    if (window._pixelLoaded) return;
+    window._pixelLoaded = true;
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)
+    }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', META_PIXEL);
+    fbq('track', 'PageView');
+    // ViewContent — product viewed
+    fbq('track', 'ViewContent', {
+      content_name: 'Custom Lithophane',
+      content_type: 'product',
+      currency: 'GBP',
+      value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 19.90
+    });
+  }
+
+  // ── Consent store ──
+  const Consent = window.Consent = {
+    get() { try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); } catch(e) { return null; } },
+
+    save(analytics, marketing) {
+      const prefs = { analytics, marketing, ts: Date.now() };
+      localStorage.setItem(CONSENT_KEY, JSON.stringify(prefs));
+      return prefs;
+    },
+
+    apply(prefs) {
+      if (prefs.analytics) loadClarity();
+      if (prefs.marketing) loadMetaPixel();
+    },
+
+    acceptAll() {
+      this.apply(this.save(true, true));
+      hideBanner();
+    },
+
+    necessaryOnly() {
+      this.save(false, false);
+      hideBanner();
+    },
+
+    savePrefs() {
+      const a = document.getElementById('pref-analytics').checked;
+      const m = document.getElementById('pref-marketing').checked;
+      this.apply(this.save(a, m));
+      closeModal(); hideBanner();
+    },
+
+    // Called from Analytics module to fire pixel events after consent
+    pixel(event, data) {
+      if (typeof fbq === 'function') fbq('track', event, data || {});
+    }
+  };
+
+  // ── Banner / modal UI ──
+  function showBanner() { document.getElementById('cookie-banner').classList.add('show'); }
+  function hideBanner() { document.getElementById('cookie-banner').classList.remove('show'); }
+  function openModal()  {
+    const prefs = Consent.get();
+    if (prefs) {
+      document.getElementById('pref-analytics').checked = !!prefs.analytics;
+      document.getElementById('pref-marketing').checked = !!prefs.marketing;
+    }
+    document.getElementById('cookie-modal').classList.add('open');
+  }
+  function closeModal() { document.getElementById('cookie-modal').classList.remove('open'); }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('cookie-accept').addEventListener('click', () => Consent.acceptAll());
+    document.getElementById('cookie-necessary').addEventListener('click', () => Consent.necessaryOnly());
+    document.getElementById('cookie-manage-link').addEventListener('click', () => { hideBanner(); openModal(); });
+    document.getElementById('cookie-save-prefs').addEventListener('click', () => Consent.savePrefs());
+    document.getElementById('cookie-reject-all').addEventListener('click', () => { Consent.necessaryOnly(); closeModal(); });
+
+    // Apply existing consent or show banner
+    const existing = Consent.get();
+    if (existing) {
+      Consent.apply(existing);
+    } else {
+      showBanner();
+    }
+  });
+})();
+</script>
+
+<!-- ── Analytics ── -->
+<script>
+(function() {
+  const SESSION_ID = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
+  const START_TIME = Date.now();
+  const ENDPOINT   = null; // Set to a URL to enable backend analytics (not needed while using Clarity)
+
+  const Analytics = window.Analytics = {
+    sessionId: SESSION_ID,
+    events: [],
+
+    track(event, data) {
+      const entry = Object.assign({
+        event,
+        sessionId: SESSION_ID,
+        ts: Date.now(),
+        elapsed: Date.now() - START_TIME,
+        page: location.pathname,
+        referrer: document.referrer,
+        ua: navigator.userAgent,
+        screen: screen.width + 'x' + screen.height,
+        viewport: window.innerWidth + 'x' + window.innerHeight,
+      }, data || {});
+      this.events.push(entry);
+      this._saveLocal(entry);
+      this._send(entry);
+      this._clarity(entry);
+      console.log('[Analytics]', entry);
+    },
+
+    _saveLocal(entry) {
+      try {
+        const key = 'bc_events';
+        const prev = JSON.parse(localStorage.getItem(key) || '[]');
+        prev.push(entry);
+        localStorage.setItem(key, JSON.stringify(prev.slice(-1000))); // keep last 1000 events
+      } catch(e) {}
+    },
+
+    _clarity(entry) {
+      if (typeof clarity !== 'function') return;
+      // Tag key business events so you can filter session recordings in Clarity
+      const evMap = {
+        photo_uploaded:    () => { clarity('event', 'Photo Uploaded'); clarity('set', 'uploaded_photo', 'true'); },
+        add_to_cart:       () => { clarity('event', 'Add to Cart');    clarity('set', 'added_to_cart', 'true'); },
+        checkout_started:  () => { clarity('event', 'Checkout Started'); clarity('set', 'started_checkout', 'true'); },
+        page_load:         () => { clarity('set', 'referrer', entry.referrer || 'direct'); },
+      };
+      if (evMap[entry.event]) evMap[entry.event]();
+    },
+
+    _send(entry) {
+      if (!ENDPOINT) return;
+      try {
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(ENDPOINT, JSON.stringify(entry));
+        } else {
+          fetch(ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(entry), keepalive:true }).catch(()=>{});
+        }
+      } catch(e) {}
+    },
+
+    // ── Section time tracking ──
+    _sectionEnter: {},
+    _sectionTotals: {},
+
+    _onSectionEnter(id) {
+      if (!this._sectionEnter[id]) {
+        this._sectionEnter[id] = Date.now();
+        this.track('section_enter', { section: id });
+      }
+    },
+
+    _onSectionLeave(id) {
+      if (this._sectionEnter[id]) {
+        const ms = Date.now() - this._sectionEnter[id];
+        this._sectionTotals[id] = (this._sectionTotals[id] || 0) + ms;
+        delete this._sectionEnter[id];
+        this.track('section_leave', { section: id, timeSpentMs: ms, totalMs: this._sectionTotals[id] });
+      }
+    },
+
+    initSectionTracking() {
+      const targets = document.querySelectorAll('section[id], header[id], div[id="trust-bar"], div[id="bees-callout"], footer');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          const id = e.target.id || e.target.tagName.toLowerCase();
+          if (e.isIntersecting) this._onSectionEnter(id);
+          else this._onSectionLeave(id);
+        });
+      }, { threshold: 0.25 });
+      targets.forEach(t => obs.observe(t));
+    },
+
+    // ── Click tracking ──
+    initClickTracking() {
+      document.addEventListener('click', (e) => {
+        const el = e.target.closest('button, a, [data-track]');
+        if (!el) return;
+        this.track('click', {
+          elId:   el.id || '',
+          elTag:  el.tagName.toLowerCase(),
+          elText: el.textContent.trim().slice(0, 60),
+          elClass: (el.className || '').toString().split(' ')[0],
+          href:   el.href || '',
+        });
+      }, { capture: true });
+    },
+
+    // ── Page lifecycle ──
+    initPageTracking() {
+      this.track('page_load', { url: location.href });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.track('page_hidden', { totalMs: Date.now() - START_TIME });
+          // flush active section times
+          Object.keys(this._sectionEnter).forEach(id => this._onSectionLeave(id));
+        } else {
+          this.track('page_visible');
+        }
+      });
+
+      window.addEventListener('pagehide', () => {
+        this.track('page_exit', { totalMs: Date.now() - START_TIME });
+      });
+
+      // Scroll depth
+      let maxDepth = 0;
+      window.addEventListener('scroll', () => {
+        const depth = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+        if (depth > maxDepth) { maxDepth = depth; }
+      }, { passive: true });
+
+      setInterval(() => {
+        this.track('heartbeat', { totalMs: Date.now() - START_TIME, scrollDepth: maxDepth });
+      }, 30000); // every 30s
+    },
+
+    init() {
+      this.initPageTracking();
+      this.initClickTracking();
+      // Section tracking after DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.initSectionTracking());
+      } else {
+        this.initSectionTracking();
+      }
+    }
+  };
+
+  Analytics.init();
+})();
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 <script>
@@ -949,13 +1362,17 @@
 
     document.getElementById('price-display').textContent  = fmt(sale);
     document.getElementById('sticky-price').textContent   = fmt(sale);
+    document.getElementById('hero-price').textContent     = fmt(sale);
 
     if (orig > sale) {
       document.getElementById('original-display').textContent = fmt(orig);
       document.getElementById('sticky-orig').textContent      = 'was ' + fmt(orig);
       document.getElementById('discount-badge').textContent   = `-${Math.round((1-sale/orig)*100)}%`;
+      document.getElementById('hero-original').textContent    = fmt(orig);
+      document.getElementById('hero-badge').textContent       = `-${Math.round((1-sale/orig)*100)}%`;
     } else {
       ['original-display','discount-badge'].forEach(id => document.getElementById(id).style.display = 'none');
+      ['hero-original','hero-badge'].forEach(id => document.getElementById(id).style.display = 'none');
     }
   }
 
@@ -1064,6 +1481,8 @@
 
       const { url } = await res.json();
       uploadedPhotoUrl = url;
+      Analytics.track('photo_uploaded');
+      Consent.pixel('CustomizeProduct', { content_name: 'Custom Lithophane' });
 
       // Show preview section
       document.getElementById('upload-progress').classList.remove('visible');
@@ -1173,6 +1592,13 @@
       const result = cartId ? await cartLinesAdd(firstVariantId) : await cartCreate(firstVariantId, uploadedPhotoUrl);
       if (result.userErrors?.length) { alert(result.userErrors.map(e => e.message).join('\n')); return; }
       updateCartUI(result.cart);
+      Analytics.track('add_to_cart', { hasPhoto: !!uploadedPhotoUrl });
+      Consent.pixel('AddToCart', {
+        content_name: 'Custom Lithophane',
+        content_type: 'product',
+        currency: 'GBP',
+        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 19.90
+      });
       openCart();
     } catch(err) { console.error(err); alert('Could not add to cart. Is the server running?'); }
     finally { btn.disabled = false; btn.textContent = 'Order Your Lithophane'; }
@@ -1185,7 +1611,17 @@
   document.getElementById('cart-btn').addEventListener('click', openCart);
   document.getElementById('close-cart').addEventListener('click', closeCart);
   document.getElementById('cart-overlay').addEventListener('click', closeCart);
-  document.getElementById('checkout-btn').addEventListener('click', () => { if (checkoutUrl) window.location.href = checkoutUrl; });
+  document.getElementById('checkout-btn').addEventListener('click', () => {
+    if (checkoutUrl) {
+      Analytics.track('checkout_started');
+      Consent.pixel('InitiateCheckout', {
+        content_name: 'Custom Lithophane',
+        currency: 'GBP',
+        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 19.90
+      });
+      window.location.href = checkoutUrl;
+    }
+  });
 
   // ── Mobile sticky ──
   document.getElementById('sticky-cta').addEventListener('click', () => {
