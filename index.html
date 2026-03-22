@@ -78,8 +78,9 @@
 
     .header-right { display: flex; align-items: center; gap: 0.75rem; }
 
-    .ig-link { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); transition: color 0.2s, border-color 0.2s; }
-    .ig-link:hover { color: #E1306C; border-color: #E1306C; }
+    .ig-link { display: flex; align-items: center; color: #fff; opacity: 0.9; transition: opacity 0.2s; }
+    .ig-link:hover { opacity: 1; }
+    .ig-link svg { filter: brightness(0) invert(1); }
 
     #cart-btn {
       display: flex; align-items: center; gap: 0.5rem;
@@ -174,6 +175,7 @@
 
     .hero-product-img { width: 100%; aspect-ratio: 1400 / 1910; border-radius: var(--radius); object-fit: cover; position: relative; z-index: 1; box-shadow: var(--glow); }
     .hero-product-placeholder { width: 100%; aspect-ratio: 1400 / 1910; border-radius: var(--radius); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--muted); position: relative; z-index: 1; border: 1px solid var(--border); box-shadow: var(--glow); }
+    .hero-product-video { width: 100%; aspect-ratio: 1400 / 1910; border-radius: var(--radius); object-fit: cover; position: relative; z-index: 1; box-shadow: var(--glow); display: block; }
 
     .floating-tag { position: absolute; background: rgba(20,20,20,0.9); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 0.75rem; font-size: 0.78rem; font-weight: 500; z-index: 2; backdrop-filter: blur(8px); }
     .floating-tag.top-left { top: 12%; left: -10%; color: var(--green); border-color: rgba(34,197,94,0.3); }
@@ -282,6 +284,16 @@
       font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
       text-transform: uppercase; color: var(--green);
     }
+    .preview-ready-label.processing { color: var(--amber); }
+
+    .preview-processing-overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.45); border-radius: var(--radius); z-index: 2;
+      font-size: 0.82rem; font-weight: 600; color: var(--amber); letter-spacing: 0.05em;
+      gap: 0.4rem;
+    }
+    .preview-processing-overlay.hidden { display: none; }
+    .photo-preview-box { position: relative; }
 
     .btn-change-photo {
       background: none; border: none; color: var(--muted); font-size: 0.8rem;
@@ -426,6 +438,15 @@
     .gallery-caption { padding: 0.75rem 1rem; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--border); }
     .gallery-caption span:last-child { color: var(--amber); }
 
+    /* ── Examples ── */
+    #examples { padding: 5rem 1.5rem; }
+    .examples-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    .example-item { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); height: 320px; background: var(--surface); position: relative; transition: transform 0.3s, border-color 0.3s; }
+    .example-item:hover { transform: translateY(-4px); border-color: rgba(245,166,35,0.35); }
+    .example-item img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    .example-item .ex-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.6rem 0.75rem; background: linear-gradient(transparent, rgba(0,0,0,0.75)); font-size: 0.75rem; color: rgba(255,255,255,0.9); }
+    .example-empty { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.8rem; opacity: 0.35; }
+
     /* ── Features ── */
     #features { padding: 5rem 1.5rem; }
 
@@ -527,6 +548,7 @@
       .steps { grid-template-columns: 1fr; gap: 1rem; }
       .steps::before { display: none; }
       .gallery-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+      .examples-grid { grid-template-columns: repeat(2, 1fr); }
       .reviews-grid { grid-template-columns: 1fr; }
       #sticky-bar { display: flex; }
       body { padding-bottom: 80px; }
@@ -551,6 +573,7 @@
       box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
     }
     #cookie-banner.show { display: flex; }
+    body:has(#cookie-banner.show) { padding-bottom: 130px; }
     .cookie-text { flex: 1; min-width: 220px; font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
     .cookie-text strong { color: var(--text); }
     .cookie-text a { color: var(--amber); text-decoration: underline; }
@@ -637,6 +660,7 @@
 <div id="announcement">
   <span>LIMITED SALE - FREE worldwide shipping ENDS IN:</span>
   <div class="countdown">
+    <div class="cd-unit"><span class="n" id="cd-d">00</span><span class="l">DAYS</span></div>
     <div class="cd-unit"><span class="n" id="cd-h">00</span><span class="l">HRS</span></div>
     <div class="cd-unit"><span class="n" id="cd-m">00</span><span class="l">MIN</span></div>
     <div class="cd-unit"><span class="n" id="cd-s">00</span><span class="l">SEC</span></div>
@@ -649,7 +673,7 @@
     <div class="logo">Bees<span>City</span></div>
     <div class="header-right">
       <a href="https://www.instagram.com/beescity.memories/" target="_blank" rel="noopener" class="ig-link" aria-label="Instagram">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
       </a>
       <button id="cart-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
@@ -665,7 +689,7 @@
     <div class="hero-text">
       <div class="hero-badge">🐝 Handmade in the UK</div>
       <h1>Turn Your Photo<br>into a <em>Glowing</em><br>3D Lithophane</h1>
-      <p class="hero-sub">A unique, backlit 3D printed frame made from your favourite photo. The perfect personalised gift that lights up any room.</p>
+      <p class="hero-sub">The gift they'll never throw away. A backlit 3D frame made from their favourite photo — perfect for birthdays, Mother's Day, anniversaries, or just because.</p>
       <div class="hero-rating">
         <span class="stars-amber">★★★★★</span>
         <span class="rating-text"><strong>4.8</strong> · 110 verified reviews</span>
@@ -675,129 +699,29 @@
         <a href="#gallery" class="btn-ghost">See Examples</a>
       </div>
       <div class="hero-price-row">
-        <span class="hp-current" id="hero-price">£19.90</span>
-        <span class="hp-original" id="hero-original">£30.00</span>
-        <span class="hp-badge" id="hero-badge">-56%</span>
-        <span class="hp-shipping">· Free worldwide shipping</span>
+        <span class="hp-current" id="hero-price">£29.90</span>
+        <span class="hp-original" id="hero-original">£35.00</span>
+        <span class="hp-badge" id="hero-badge">-17%</span>
       </div>
-      <div><span class="usb-note">⚡ USB-A cable included &nbsp;·&nbsp; Plug/adapter <strong>not</strong> included</span></div>
+      <div><span class="usb-note">⚡ Plugs into any phone charger, or laptop</span></div>
       <div class="hero-guarantees">
         <div class="guarantee"><div class="g-check">✓</div> Free Shipping</div>
         <div class="guarantee"><div class="g-check">✓</div> 30-Day Returns</div>
-        <div class="guarantee"><div class="g-check">✓</div> Made to Order</div>
       </div>
     </div>
     <div class="hero-visual">
       <div class="hero-product-wrap">
         <div class="hero-glow-ring"></div>
-        <div class="hero-product-placeholder" id="hero-img-wrap"><span>Loading…</span></div>
-        <div class="floating-tag top-left">✦ USB-A LED Included</div>
+        <video class="hero-product-video" autoplay muted loop playsinline poster="">
+          <source src="https://pub-ad987d435fb34e1f9c2ebaf4458c8590.r2.dev/VID_20260320_111542_553_bsl.mp4" type="video/mp4">
+        </video>
+        <div class="floating-tag top-left">✦ Plugs into any USB port</div>
         <div class="floating-tag bottom-right">🇬🇧 Made in the UK</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── Trust bar ── -->
-<div id="trust-bar">
-  <div class="trust-inner">
-    <div class="trust-item">⭐ <strong>4.8/5</strong> - 110 Reviews</div>
-    <div class="trust-divider"></div>
-    <div class="trust-item">🎁 2,000+ Gifts Sent</div>
-    <div class="trust-divider"></div>
-    <div class="trust-item">🇬🇧 Handmade in the UK</div>
-    <div class="trust-divider"></div>
-    <div class="trust-item">📦 Free Worldwide Shipping</div>
-    <div class="trust-divider"></div>
-    <div class="trust-item">🔄 30-Day Returns</div>
-  </div>
-</div>
-
-<!-- ── Bees Callout ── -->
-<div id="bees-callout">
-  <div class="bees-callout-inner">
-    <span class="bee-icon">🐝</span>
-    <p><strong>We work like bees</strong> - every order gets our full attention, start to finish. No shortcuts, no cutting corners. Genuine handmade craft from a small british studio.</p>
-    <span class="bee-icon">🐝</span>
-  </div>
-</div>
-
-<!-- ── How it works ── -->
-<section id="how-it-works">
-  <span class="section-label">Simple as 1, 2, 3</span>
-  <h2 class="section-title">How It Works</h2>
-  <p class="section-sub">Order in minutes. Your custom lithophane is crafted and shipped to your door.</p>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h3>Upload Your Photo</h3>
-      <p>Choose any photo - portrait or landscape. Higher resolution gives more detail.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h3>We Print & Craft</h3>
-      <p>We convert your photo into a detailed 3D lithophane and hand-finish every frame ourselves.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>It Glows for You</h3>
-      <p>Connect the included USB-A LED light to any USB port or power bank and watch your memory glow. <em style="font-style:normal;color:var(--muted);font-size:0.82em;">Plug adapter not included.</em></p>
-    </div>
-  </div>
-</section>
-
-<!-- ── Upload ── -->
-<section id="upload-section">
-  <div class="upload-inner">
-    <span class="section-label">Create Yours</span>
-    <h2 class="section-title" style="margin-bottom:0.5rem;">Upload Your Photo</h2>
-    <p class="section-sub">Drop your photo below, crop it to fit, and we'll take care of the rest.</p>
-
-    <div class="photo-tips">
-      <span>📸 Best results: <strong>high contrast</strong> &amp; <strong>high resolution</strong> - think clear faces, contrasting colours</span>
-    </div>
-
-    <div id="drop-zone">
-      <input type="file" id="file-input" accept="image/*" />
-      <div id="drop-default">
-        <div class="drop-icon">🖼️</div>
-        <div class="drop-title">Drop your photo here</div>
-        <div class="drop-sub">or click to browse · JPG, PNG, HEIC up to 20MB</div>
-        <button class="btn-pick" type="button" id="pick-btn">Choose Photo</button>
-      </div>
-      <div id="drop-chosen" style="display:none;">
-        <div class="drop-icon">✂️</div>
-        <div class="drop-title" id="chosen-name">photo.jpg</div>
-        <div class="drop-sub" style="color:var(--amber)">Opening crop tool…</div>
-      </div>
-    </div>
-
-    <div id="upload-progress">
-      <div class="spinner"></div>
-      <span>Uploading your photo securely…</span>
-    </div>
-
-    <div id="photo-preview-wrap">
-      <div class="preview-header">
-        <div class="preview-ready-label">✦ Photo uploaded</div>
-        <button class="btn-change-photo" id="change-photo-btn">Change photo</button>
-      </div>
-      <div class="photo-preview-box">
-        <img id="preview-img" src="" alt="Your uploaded photo" />
-      </div>
-      <p class="photo-preview-note">Your photo is ready - tap Order below to complete your purchase.</p>
-    </div>
-
-    <button id="add-to-cart-btn" disabled>Upload a photo to order</button>
-
-    <div class="price-under-btn">
-      <span class="p-current" id="price-display">£19.90</span>
-      <span class="p-original" id="original-display">£30.00</span>
-      <span class="p-badge" id="discount-badge">-56%</span>
-      &nbsp;· Free shipping · Ships in 3–5 days
-    </div>
-  </div>
-</section>
 
 <!-- ── Gallery ── -->
 <section id="gallery">
@@ -832,18 +756,97 @@
   </div>
 </section>
 
-<!-- ── Features ── -->
-<section id="features">
-  <span class="section-label">Why Bees City</span>
-  <h2 class="section-title" style="margin-bottom:0.5rem;">Built Different</h2>
-  <p class="section-sub">Every detail considered. Every piece made with care.</p>
-  <div class="features-grid">
-    <div class="feature-card"><div class="feature-icon">📷</div><h3>Made from Your Photo</h3><p>Any photo becomes a one-of-a-kind 3D lithophane - portraits, landscapes, pets, anything you love.</p></div>
-    <div class="feature-card"><div class="feature-icon">💡</div><h3>USB-A LED Included</h3><p>Every order comes with a USB-A powered LED light. Just plug into any USB port — no adapter needed. <strong style="color:var(--amber)">Note: plug/adapter not included.</strong></p></div>
-    <div class="feature-card"><div class="feature-icon">🎨</div><h3>High-Detail 3D Printing</h3><p>Printed at ultra-high resolution to capture every shadow, expression, and tiny detail.</p></div>
-    <div class="feature-card"><div class="feature-icon">🐝</div><h3>We Work Like Bees</h3><p>Small UK studio, big dedication. Every order is handled personally - we don't do mass production.</p></div>
-    <div class="feature-card"><div class="feature-icon">📦</div><h3>Free Worldwide Shipping</h3><p>We ship everywhere, free. Safely packaged so it arrives in perfect condition.</p></div>
-    <div class="feature-card"><div class="feature-icon">🔄</div><h3>30-Day Returns</h3><p>Not completely in love with it? We'll make it right - no awkward questions asked.</p></div>
+<!-- ── How it works ── -->
+<section id="how-it-works">
+  <span class="section-label">Simple as 1, 2, 3</span>
+  <h2 class="section-title">How It Works</h2>
+  <p class="section-sub">Order in minutes. Your custom lithophane is crafted and shipped to your door.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Upload Your Photo</h3>
+      <p>Choose any photo - portrait or landscape. Higher resolution gives more detail.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>We Print & Craft</h3>
+      <p>We convert your photo into a detailed 3D lithophane and hand-finish every frame ourselves.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>It Glows for You</h3>
+      <p>Plug the included LED into any phone charger, or laptop and watch your memory glow.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Examples ── -->
+<section id="examples">
+  <span class="section-label">Made from Any Photo</span>
+  <h2 class="section-title" style="margin-bottom:0.5rem;">What Will Yours Look Like?</h2>
+  <p class="section-sub">Pets, couples, families, portraits — any memory becomes a glowing keepsake.</p>
+  <div class="examples-grid">
+    <!-- To add a photo: <div class="example-item"><img src="YOUR_R2_URL" alt="..."><div class="ex-label">Label</div></div> -->
+    <div class="example-item"><img src="images/photo1.jpg" alt="Lithophane example"><div class="ex-label">Couple</div></div>
+    <div class="example-item"><img src="images/photo2.jpg" alt="Lithophane example"><div class="ex-label">Pets</div></div>
+    <div class="example-item"><img src="images/photo3.jpg" alt="Lithophane example"><div class="ex-label">Favourite Moments</div></div>
+    <div class="example-item"><img src="images/photo4.jpg" alt="Lithophane example"><div class="ex-label">Loved Ones</div></div>
+    <div class="example-item"><img src="images/photo5.jpg" alt="Lithophane example"><div class="ex-label">With your pet</div></div>
+    <div class="example-item"><img src="images/photo6.jpg" alt="Lithophane example"><div class="ex-label">Family</div></div>
+  </div>
+</section>
+
+<!-- ── Upload ── -->
+<section id="upload-section">
+  <div class="upload-inner">
+    <span class="section-label">Create Yours</span>
+    <h2 class="section-title" style="margin-bottom:0.5rem;">Upload Your Photo</h2>
+    <p class="section-sub">Drop your photo below, crop it to fit, and we'll take care of the rest.</p>
+
+    <div class="photo-tips">
+      <span>Best results: <strong>high contrast</strong> &amp; <strong>high resolution</strong> - think clear faces, contrasting colours</span>
+    </div>
+
+    <div id="drop-zone">
+      <input type="file" id="file-input" accept="image/*" />
+      <div id="drop-default">
+        <div class="drop-icon">🖼️</div>
+        <div class="drop-title">Drop your photo here</div>
+        <div class="drop-sub">or click to browse · JPG, PNG, HEIC up to 20MB</div>
+        <button class="btn-pick" type="button" id="pick-btn">Choose Photo</button>
+      </div>
+      <div id="drop-chosen" style="display:none;">
+        <div class="drop-icon">✂️</div>
+        <div class="drop-title" id="chosen-name">photo.jpg</div>
+        <div class="drop-sub" style="color:var(--amber)">Opening crop tool…</div>
+      </div>
+    </div>
+
+    <div id="upload-progress">
+      <div class="spinner"></div>
+      <span>Uploading your photo securely…</span>
+    </div>
+
+    <div id="photo-preview-wrap">
+      <div class="preview-header">
+        <div class="preview-ready-label">✦ Photo uploaded</div>
+        <button class="btn-change-photo" id="change-photo-btn">Change photo</button>
+      </div>
+      <div class="photo-preview-box">
+        <img id="preview-img" src="" alt="Your uploaded photo" />
+        <div class="preview-processing-overlay hidden" id="processing-overlay">✦ Processing…</div>
+      </div>
+      <p class="photo-preview-note" id="preview-note">Your photo is ready - tap Order below to complete your purchase.</p>
+    </div>
+
+    <button id="add-to-cart-btn" disabled>Add to Cart</button>
+
+    <div class="price-under-btn">
+      <span class="p-current" id="price-display">£29.90</span>
+      <span class="p-original" id="original-display">£35.00</span>
+      <span class="p-badge" id="discount-badge">-17%</span>
+      &nbsp;· Free shipping · Ships in 3–5 days
+    </div>
   </div>
 </section>
 
@@ -851,11 +854,11 @@
 <section id="reviews">
   <span class="section-label">Customer Love</span>
   <h2 class="section-title" style="margin-bottom:0.5rem;">What People Are Saying</h2>
-  <p class="section-sub">Over 200 happy customers across the UK and worldwide.</p>
+  <p class="section-sub">Over 150 happy customers across the UK and worldwide.</p>
   <div class="reviews-grid">
     <div class="review-card">
       <div class="review-stars">★★★★★</div>
-      <p class="review-text">Used a photo of my mum and me. Love it</p>
+      <p class="review-text">Great bday present!</p>
       <div class="review-author">
         <div class="review-avatar">S</div>
         <div>
@@ -866,7 +869,7 @@
     </div>
     <div class="review-card">
       <div class="review-stars">★★★★★</div>
-      <p class="review-text">The detail on our dog's face is amazing</p>
+      <p class="review-text">great detail on out dog's photo</p>
       <div class="review-author">
         <div class="review-avatar">J</div>
         <div>
@@ -877,7 +880,7 @@
     </div>
     <div class="review-card">
       <div class="review-stars">★★★★★</div>
-      <p class="review-text">Wasn't sure what to expect, turned out very well. Speedy delivery as well</p>
+      <p class="review-text">Great service, very happy with the result</p>
       <div class="review-author">
         <div class="review-avatar">L</div>
         <div>
@@ -909,19 +912,19 @@
     </div>
     <div class="faq-item">
       <button class="faq-q">What size is the frame? <span class="faq-icon">+</span></button>
-      <div class="faq-a">Our standard lithophane frame is 15cm × 15cm - perfect for a bedside table, shelf, or desk. Get in touch if you'd like a custom size.</div>
+      <div class="faq-a">Our standard lithophane frame is W17cm × L22 cm (W6.69 × L8.66 in) - perfect for a bedside table, shelf, or desk.</div>
     </div>
     <div class="faq-item">
       <button class="faq-q">Can I return it? <span class="faq-icon">+</span></button>
-      <div class="faq-a">Absolutely. We offer a 30-day return policy. If there's a quality issue or something's not right, we'll sort it - no fuss.</div>
+      <div class="faq-a">Absolutely. We offer a 30-day return policy. If there's a quality issue or something's not right, we'll sort it.</div>
     </div>
   </div>
 </section>
 
 <!-- ── Footer CTA ── -->
 <section id="footer-cta">
-  <h2>Ready to Create Yours?</h2>
-  <p>Upload a photo in seconds. We work like bees on the rest. 🐝</p>
+  <h2>Give a Gift They'll Actually Keep</h2>
+  <p>Upload a photo in seconds. We handle the rest and ship it straight to their door. 🐝</p>
   <a href="#upload-section" class="btn-amber" style="font-size:1rem; padding:1rem 2.5rem;">📷 Upload Your Photo Now</a>
 </section>
 
@@ -942,6 +945,10 @@
     <div class="footer-payments">
       <span>VISA</span><span>Mastercard</span><span>Amex</span><span>Maestro</span><span>PayPal</span>
     </div>
+  </div>
+  <div class="footer-contact" style="max-width:1200px; margin: 1.25rem auto 0; padding-top: 1.25rem; border-top: 1px solid var(--border); display:flex; gap:2rem; flex-wrap:wrap; font-size:0.82rem; color:var(--muted);">
+    <a href="mailto:hello@beescity.co.uk" style="color:var(--muted); transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color=''">✉ hello@beescity.co.uk</a>
+    <a href="tel:07999771029" style="color:var(--muted); transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color=''">📞 07999 771029</a>
   </div>
   <div class="footer-copy">© 2024 Bees City · Handmade in the UK · beescity.co.uk</div>
 </footer>
@@ -994,8 +1001,8 @@
 <!-- ── Mobile sticky ── -->
 <div id="sticky-bar">
   <div class="sticky-price">
-    <div class="sp-current" id="sticky-price">£19.90</div>
-    <div class="sp-orig" id="sticky-orig">was £30.00</div>
+    <div class="sp-current" id="sticky-price">£29.90</div>
+    <div class="sp-orig" id="sticky-orig">was £35.00</div>
   </div>
   <button id="sticky-cta">📷 Order Now</button>
 </div>
@@ -1079,7 +1086,7 @@
       content_name: 'Custom Lithophane',
       content_type: 'product',
       currency: 'GBP',
-      value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 19.90
+      value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.90
     });
   }
 
@@ -1319,14 +1326,19 @@
   let cartId = null, checkoutUrl = null, firstVariantId = null;
   let cropper = null, uploadedPhotoUrl = null;
 
-  // ── Countdown ──
+  // ── Countdown — resets weekly, ends Sunday 23:59:59 ──
   function tick() {
-    const now = new Date(), end = new Date();
+    const now = new Date();
+    const end = new Date(now);
+    const daysUntilSunday = (7 - now.getDay()) % 7 || 7; // days until next Sunday (always at least 1)
+    end.setDate(now.getDate() + daysUntilSunday);
     end.setHours(23, 59, 59, 0);
     let d = Math.max(0, end - now);
+    const days = Math.floor(d / 86400000); d -= days * 86400000;
     const h = Math.floor(d / 3600000); d -= h * 3600000;
     const m = Math.floor(d / 60000);   d -= m * 60000;
     const s = Math.floor(d / 1000);
+    document.getElementById('cd-d').textContent = String(days).padStart(2,'0');
     document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
     document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
     document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
@@ -1357,14 +1369,6 @@
     const p = data?.data?.products?.nodes?.[0];
     if (!p) return;
 
-    if (p.featuredImage) {
-      const wrap = document.getElementById('hero-img-wrap');
-      const img = document.createElement('img');
-      img.className = 'hero-product-img';
-      img.src = p.featuredImage.url;
-      img.alt = p.featuredImage.altText ?? p.title;
-      wrap.replaceWith(img);
-    }
 
     const variant = p.variants.nodes.find(v => v.availableForSale) ?? p.variants.nodes[0];
     firstVariantId = variant?.id;
@@ -1416,7 +1420,7 @@
     document.getElementById('drop-chosen').style.display  = 'none';
     dropZone.classList.remove('has-file');
     document.getElementById('add-to-cart-btn').disabled = true;
-    document.getElementById('add-to-cart-btn').textContent = 'Upload a photo to order';
+    document.getElementById('add-to-cart-btn').textContent = 'Add to Cart';
     fileInput.value = '';
   });
 
@@ -1477,13 +1481,16 @@
 
     closeCropModal();
 
-    // Show progress
-    document.getElementById('upload-progress').classList.add('visible');
-
     const blob = await new Promise(r => cleanCanvas.toBlob(r, 'image/png'));
 
-    // Show preview immediately (before upload finishes)
+    // Show original photo immediately with processing badge
     document.getElementById('preview-img').src = cleanCanvas.toDataURL('image/png');
+    document.getElementById('processing-overlay').classList.remove('hidden');
+    document.getElementById('photo-preview-wrap').classList.add('visible');
+    const readyLabel = document.querySelector('.preview-ready-label');
+    readyLabel.textContent = '✦ Processing…';
+    readyLabel.classList.add('processing');
+    document.getElementById('preview-note').textContent = 'Uploading your photo securely…';
 
     try {
       const form = new FormData();
@@ -1498,18 +1505,21 @@
       Analytics.track('photo_uploaded');
       Consent.pixel('CustomizeProduct', { content_name: 'Custom Lithophane' });
 
-      // Show preview section
-      document.getElementById('upload-progress').classList.remove('visible');
-      document.getElementById('photo-preview-wrap').classList.add('visible');
+      // Clear processing state, show uploaded result
+      document.getElementById('processing-overlay').classList.add('hidden');
+      readyLabel.textContent = '✦ Photo uploaded';
+      readyLabel.classList.remove('processing');
+      document.getElementById('preview-note').textContent = 'Your photo is ready - tap Order below to complete your purchase.';
       dropZone.classList.add('has-file');
 
       // Enable order button
       document.getElementById('add-to-cart-btn').disabled = !firstVariantId;
-      document.getElementById('add-to-cart-btn').textContent = 'Order Your Lithophane';
+      document.getElementById('add-to-cart-btn').textContent = 'Add to Cart';
 
     } catch (err) {
       console.error('[UPLOAD] error', err);
-      document.getElementById('upload-progress').classList.remove('visible');
+      document.getElementById('processing-overlay').classList.add('hidden');
+      document.getElementById('photo-preview-wrap').classList.remove('visible');
       document.getElementById('drop-default').style.display = 'block';
       document.getElementById('drop-chosen').style.display  = 'none';
       fileInput.value = '';
@@ -1611,11 +1621,11 @@
         content_name: 'Custom Lithophane',
         content_type: 'product',
         currency: 'GBP',
-        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 19.90
+        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.90
       });
       openCart();
     } catch(err) { console.error(err); alert('Could not add to cart. Is the server running?'); }
-    finally { btn.disabled = false; btn.textContent = 'Order Your Lithophane'; }
+    finally { btn.disabled = false; btn.textContent = 'Add to Cart'; }
   });
 
   // ── Cart drawer ──
@@ -1631,7 +1641,7 @@
       Consent.pixel('InitiateCheckout', {
         content_name: 'Custom Lithophane',
         currency: 'GBP',
-        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 19.90
+        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.90
       });
       window.location.href = checkoutUrl;
     }
