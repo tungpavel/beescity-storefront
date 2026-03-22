@@ -1415,6 +1415,7 @@
   document.getElementById('change-photo-btn').addEventListener('click', e => {
     e.stopPropagation();
     uploadedPhotoUrl = null;
+    stickyCta.textContent = '📷 Order Now';
     document.getElementById('photo-preview-wrap').classList.remove('visible');
     document.getElementById('drop-default').style.display = 'block';
     document.getElementById('drop-chosen').style.display  = 'none';
@@ -1511,6 +1512,7 @@
       readyLabel.classList.remove('processing');
       document.getElementById('preview-note').textContent = 'Your photo is ready - tap Order below to complete your purchase.';
       dropZone.classList.add('has-file');
+      stickyCta.textContent = '🛒 Add to Cart';
 
       // Enable order button
       document.getElementById('add-to-cart-btn').disabled = !firstVariantId;
@@ -1648,8 +1650,13 @@
   });
 
   // ── Mobile sticky ──
-  document.getElementById('sticky-cta').addEventListener('click', () => {
-    document.getElementById('upload-section').scrollIntoView({ behavior: 'smooth' });
+  const stickyCta = document.getElementById('sticky-cta');
+  stickyCta.addEventListener('click', () => {
+    if (uploadedPhotoUrl) {
+      document.getElementById('add-to-cart-btn').click();
+    } else {
+      document.getElementById('upload-section').scrollIntoView({ behavior: 'smooth' });
+    }
   });
 
   // ── FAQ ──
