@@ -1330,7 +1330,7 @@
   function tick() {
     const now = new Date();
     const end = new Date(now);
-    const daysUntilSunday = (7 - now.getDay()) % 7 || 7; // days until next Sunday (always at least 1)
+    const daysUntilSunday = (7 - now.getDay()) % 7; // days until this Sunday (0 = today is Sunday)
     end.setDate(now.getDate() + daysUntilSunday);
     end.setHours(23, 59, 59, 0);
     let d = Math.max(0, end - now);
