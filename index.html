@@ -529,7 +529,7 @@
     #checkout-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     /* ── Mobile sticky bar ── */
-    #sticky-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 0.85rem 1.25rem; padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 80px)); z-index: 150; gap: 0.75rem; align-items: center; }
+    #sticky-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 0.85rem 1.25rem; padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 100px)); z-index: 150; gap: 0.75rem; align-items: center; will-change: transform; transform: translateZ(0); }
     .sticky-price { flex: 1; }
     .sticky-price .sp-current { font-size: 1.2rem; font-weight: 700; color: var(--white); }
     .sticky-price .sp-orig { font-size: 0.8rem; text-decoration: line-through; color: var(--muted); }
@@ -552,7 +552,7 @@
       .examples-grid { grid-template-columns: repeat(2, 1fr); }
       .reviews-grid { grid-template-columns: 1fr; }
       #sticky-bar { display: flex; }
-      body { padding-bottom: 80px; }
+      body { padding-bottom: calc(80px + env(safe-area-inset-bottom, 100px)); }
     }
 
     @media (max-width: 600px) {
@@ -568,7 +568,7 @@
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
       background: #1a1a1a; border-top: 1px solid rgba(245,166,35,0.25);
       padding: 1.1rem 1.5rem;
-      padding-bottom: calc(1.1rem + env(safe-area-inset-bottom, 80px));
+      padding-bottom: calc(1.1rem + env(safe-area-inset-bottom, 100px));
       gap: 1.25rem;
       align-items: center;
       flex-wrap: wrap;
