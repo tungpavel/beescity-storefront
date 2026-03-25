@@ -380,11 +380,13 @@
 
     .crop-modal-inner {
       display: flex; flex-direction: column;
-      width: 100%; height: 100%;
+      width: 100%; height: 100dvh; max-height: 100%;
       max-width: 700px; margin: 0 auto;
       padding: 1.5rem;
-      padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 80px));
+      padding-bottom: calc(1.5rem + max(env(safe-area-inset-bottom), 120px));
       gap: 1rem;
+      box-sizing: border-box;
+      overflow-y: auto;
     }
 
     .crop-modal-header {
