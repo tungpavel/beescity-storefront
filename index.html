@@ -1503,7 +1503,10 @@
 
       const res = await fetch(CLOUDFLARE_URL, { method: 'POST', body: form });
 
-      if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
+      if (!res.ok) {
+        const errText = await res.text().catch(() => '');
+        throw new Error(`Upload failed: ${res.status} — ${errText}`);
+      }
 
       const { url } = await res.json();
       uploadedPhotoUrl = url;
@@ -1523,7 +1526,7 @@
       document.getElementById('add-to-cart-btn').textContent = 'Add to Cart';
 
     } catch (err) {
-      console.error('[UPLOAD] error', err);
+      console.error('[UPLOAD] error', err.message);
       document.getElementById('processing-overlay').classList.add('hidden');
       document.getElementById('photo-preview-wrap').classList.remove('visible');
       document.getElementById('drop-default').style.display = 'block';

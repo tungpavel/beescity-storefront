@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lithophane Master Guide - Print Perfect Lithophanes Every Time</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link rel="apple-touch-icon" href="/images/favicon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0B0B0B;
+      --surface:   #141414;
+      --surface2:  #1E1E1E;
+      --amber:     #F5A623;
+      --amber-dk:  #D4881A;
+      --orange:    #FF6B35;
+      --white:     #FFFFFF;
+      --text:      #E8E8E8;
+      --muted:     #888888;
+      --border:    rgba(255,255,255,0.08);
+      --green:     #22C55E;
+      --red:       #EF4444;
+      --radius-sm: 8px;
+      --radius:    16px;
+      --radius-lg: 28px;
+      --glow:      0 0 40px rgba(245,166,35,0.35), 0 0 80px rgba(245,166,35,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif; line-height: 1.15; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; font-family: 'Inter', sans-serif; }
+
+    /* ── Shared layout ── */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Section labels (matches main site exactly) ── */
+    .section-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+    .section-title { font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--white); text-align: center; margin-bottom: 0.75rem; }
+    .section-sub { text-align: center; color: var(--muted); font-size: 1rem; margin-bottom: 3.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    /* ── Badge (matches hero-badge on main site) ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(245,166,35,0.12);
+      border: 1px solid rgba(245,166,35,0.3);
+      color: var(--amber);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+    }
+
+    /* ── Primary CTA button (matches btn-amber) ── */
+    .btn-amber {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--amber), var(--orange));
+      color: #000;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,166,35,0.4); }
+    .btn-amber:active { transform: translateY(0); }
+    .btn-amber .price { background: rgba(0,0,0,0.15); border-radius: 6px; padding: 0.1rem 0.5rem; }
+
+    /* ── Ghost button ── */
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.3); background: var(--surface); }
+
+    /* ══════════════════════════════ HERO ══════════════════════════════ */
+    #hero {
+      padding: 5rem 0 4.5rem;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,166,35,0.06) 0%, transparent 70%), var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(245,166,35,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,166,35,0.2), transparent);
+    }
+    .hero-eyebrow { margin-bottom: 1.5rem; }
+    .hero-title {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-title em { font-style: normal; color: var(--amber); }
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.25rem;
+      line-height: 1.7;
+    }
+    .hero-cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.85rem;
+    }
+    .hero-reassurance {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .guarantee {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .g-check {
+      width: 15px; height: 15px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; color: #fff; flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════ TRUST BAR ══════════════════════════════ */
+    #trust-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 1.5rem;
+    }
+    .trust-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      white-space: nowrap;
+      color: var(--text);
+    }
+    .trust-item svg { color: var(--amber); flex-shrink: 0; }
+    .trust-divider { width: 1px; height: 20px; background: var(--border); }
+
+    /* ══════════════════════════════ WHAT'S INSIDE ══════════════════════════════ */
+    #inside { padding: 5rem 0; background: var(--bg); }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(245,166,35,0.3);
+      transform: translateY(-4px);
+    }
+    .card-num {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+    }
+    .card-icon { font-size: 1.6rem; margin-bottom: 0.75rem; line-height: 1; }
+    .card h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+    .card p { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+
+    /* ══════════════════════════════ WHO IS THIS FOR ══════════════════════════════ */
+    #who {
+      padding: 5rem 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .who-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .who-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: border-color 0.3s;
+    }
+    .who-card:hover { border-color: rgba(245,166,35,0.25); }
+    .who-emoji { font-size: 1.8rem; line-height: 1; }
+    .who-card strong { font-size: 0.92rem; font-weight: 600; color: var(--white); }
+    .who-card span { font-size: 0.8rem; color: var(--muted); }
+    .who-cta { text-align: center; }
+
+    /* ══════════════════════════════ VALUE BOX ══════════════════════════════ */
+    #value { padding: 5rem 0; background: var(--bg); }
+    .value-wrap {
+      background: rgba(245,166,35,0.04);
+      border: 1px solid rgba(245,166,35,0.18);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .value-price {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 8vw, 4.5rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+      margin: 1rem 0 0.4rem;
+    }
+    .value-price sup { font-size: 0.45em; vertical-align: super; color: var(--amber); }
+    .value-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+    .value-list {
+      list-style: none;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .value-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .value-list li .g-check { margin-top: 0.15rem; }
+
+    /* ══════════════════════════════ FAQ ══════════════════════════════ */
+    #faq {
+      padding: 5rem 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-list {
+      max-width: 680px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      width: 100%;
+      background: var(--surface2);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem 1.4rem;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--white);
+      transition: background 0.15s;
+    }
+    .faq-q:hover { background: #252525; }
+    .faq-q svg { flex-shrink: 0; transition: transform 0.25s; color: var(--amber); }
+    .faq-item.open .faq-q svg { transform: rotate(45deg); }
+    .faq-a {
+      background: var(--surface);
+      padding: 0 1.4rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding: 1rem 1.4rem 1.25rem; }
+
+    /* ══════════════════════════════ BOTTOM CTA ══════════════════════════════ */
+    #cta-bottom {
+      padding: 5rem 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(245,166,35,0.04) 0%, transparent 70%), var(--bg);
+      text-align: center;
+    }
+    #cta-bottom .section-title { margin-bottom: 0.75rem; }
+    #cta-bottom p { color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; }
+
+    /* ══════════════════════════════ FOOTER ══════════════════════════════ */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: underline; }
+    .logo-footer { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.4rem; }
+    .logo-footer span { color: var(--amber); }
+
+    /* ══════════════════════════════ RESPONSIVE ══════════════════════════════ */
+    @media (max-width: 600px) {
+      #hero { padding: 3.5rem 0 3rem; }
+      #inside, #who, #value, #faq, #cta-bottom { padding: 3.5rem 0; }
+      .cards-grid { grid-template-columns: 1fr 1fr; }
+      .who-grid { grid-template-columns: 1fr 1fr; }
+      .value-wrap { padding: 2rem 1.25rem; }
+      .trust-inner { gap: 1.5rem; }
+      .trust-divider { display: none; }
+    }
+    @media (max-width: 400px) {
+      .cards-grid, .who-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════ HERO ══════════════════════════════ -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span class="badge">✦ Digital PDF Guide</span>
+      </div>
+      <h1 class="hero-title">
+        The <em>Lithophane Master Guide</em>
+      </h1>
+      <p class="hero-subtitle">
+        Stop guessing slicer settings. Get the exact LithophaneMaker.com workflow and Bambu Studio settings that produce crisp, perfectly lit lithophanes - every single print.
+      </p>
+      <div class="hero-cta-group">
+        <a href="https://oh-bees-city.myshopify.com/checkouts/cn/hWNAMorL86PO9vNuyxzEXcIN/en-gb?_r=AQAB--Vaw_ugwnaSJ0AeTFqLvotsZJCGPdWt_3lM4bmpLIY&auto_redirect=false&edge_redirect=true&preview_theme_id=192470253951&skip_shop_pay=true" class="btn-amber">
+          Buy Now &nbsp;<span class="price">£5</span>
+        </a>
+        <div class="hero-reassurance">
+          <span class="guarantee"><span class="g-check">✓</span> Instant download</span>
+          <span class="guarantee"><span class="g-check">✓</span> One-time payment</span>
+          <span class="guarantee"><span class="g-check">✓</span> No subscription</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ TRUST BAR ══════════════════════════════ -->
+  <div id="trust-bar">
+    <div class="trust-inner">
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Instant PDF download
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Any device
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        15-minute read
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ WHAT'S INSIDE ══════════════════════════════ -->
+  <section id="inside">
+    <div class="container">
+      <span class="section-label">Inside the guide</span>
+      <h2 class="section-title">8 Chapters. Everything You Need.</h2>
+      <p class="section-sub">From photo selection to your first perfect print - no stone left unturned.</p>
+
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-num">Chapter 01</div>
+          <div class="card-icon">📸</div>
+          <h3>Choosing the Right Photo</h3>
+          <p>What makes a great lithophane image - lighting, contrast, resolution, and what to avoid.</p>
+        </div>
+        <div class="card">
+          <div class="card-num">Chapter 02</div>
+          <div class="card-icon">🌐</div>
+          <h3>LithophaneMaker.com Walkthrough</h3>
+          <p>Step-by-step guide to every setting on the site - thicknesses, sizes, borders, and export options.</p>
+        </div>
+        <div class="card">
+          <div class="card-num">Chapter 03</div>
+          <div class="card-icon">🖨️</div>
+          <h3>Importing into Bambu Studio</h3>
+          <p>How to bring your STL in, orient it correctly, and prepare it for slicing.</p>
+        </div>
+        <div class="card">
+          <div class="card-num">Chapter 04</div>
+          <div class="card-icon">🧱</div>
+          <h3>Wall Count &amp; Infill Settings</h3>
+          <p>Why 999 walls and 0% infill is the magic combo, and how to set it in Bambu Studio.</p>
+        </div>
+        <div class="card">
+          <div class="card-num">Chapter 05</div>
+          <div class="card-icon">🌡️</div>
+          <h3>Temperature &amp; Fan Settings</h3>
+          <p>Disable the fan for the first 5 layers, nozzle temp sweet spots, and bed adhesion tips.</p>
+        </div>
+        <div class="card">
+          <div class="card-num">Chapter 06</div>
+          <div class="card-icon">⚡</div>
+          <h3>Speed, Brim &amp; Nozzle Size</h3>
+          <p>The exact speed profile, when to use a brim, and which nozzle size gives the sharpest detail.</p>
+        </div>
+        <div class="card">
+          <div class="card-num">Chapter 07</div>
+          <div class="card-icon">🔆</div>
+          <h3>Orientation &amp; Lighting</h3>
+          <p>Which way to print for best results, and how to light your finished lithophane for display.</p>
+        </div>
+        <div class="card">
+          <div class="card-num">Chapter 08</div>
+          <div class="card-icon">🛠️</div>
+          <h3>Troubleshooting &amp; Common Fixes</h3>
+          <p>Blurry prints, adhesion failures, warping - quick solutions to the most common problems.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ WHO IS THIS FOR ══════════════════════════════ -->
+  <section id="who">
+    <div class="container">
+      <span class="section-label">Perfect for</span>
+      <h2 class="section-title">Who Is This Guide For?</h2>
+      <p class="section-sub">If any of these sound like you, this guide will save you hours of trial and error.</p>
+
+      <div class="who-grid">
+        <div class="who-card">
+          <div class="who-emoji">🙋</div>
+          <strong>People constantly asking "how do I print lithophanes?"</strong>
+          <span>Stop Googling fragmented advice. Get a single definitive reference you can bookmark forever.</span>
+        </div>
+        <div class="who-card">
+          <div class="who-emoji">🐼</div>
+          <strong>Bambu Lab printer owners</strong>
+          <span>Settings are dialled in specifically for Bambu Studio - no translating from Cura or PrusaSlicer.</span>
+        </div>
+        <div class="who-card">
+          <div class="who-emoji">🎁</div>
+          <strong>Gift makers &amp; personalised print sellers</strong>
+          <span>Consistent, professional results every time means happy customers and repeat orders.</span>
+        </div>
+        <div class="who-card">
+          <div class="who-emoji">🆕</div>
+          <strong>Complete beginners</strong>
+          <span>No prior knowledge needed. Starts from the very basics and walks you through everything.</span>
+        </div>
+      </div>
+
+      <div class="who-cta">
+        <a href="https://oh-bees-city.myshopify.com/checkouts/cn/hWNAMorL86PO9vNuyxzEXcIN/en-gb?_r=AQAB--Vaw_ugwnaSJ0AeTFqLvotsZJCGPdWt_3lM4bmpLIY&auto_redirect=false&edge_redirect=true&preview_theme_id=192470253951&skip_shop_pay=true" class="btn-amber">
+          Get the Guide &nbsp;<span class="price">£5</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ VALUE BOX ══════════════════════════════ -->
+  <section id="value">
+    <div class="container">
+      <div class="value-wrap">
+        <span class="badge">One-time payment</span>
+        <div class="value-price"><sup>£</sup>5</div>
+        <p class="value-desc">Instant PDF download - no subscription, no upsells.</p>
+        <ul class="value-list">
+          <li><span class="g-check">✓</span> Complete step-by-step LithophaneMaker.com workflow</li>
+          <li><span class="g-check">✓</span> Exact Bambu Studio slicer settings (copy-paste ready)</li>
+          <li><span class="g-check">✓</span> 8 detailed chapters covering every stage</li>
+          <li><span class="g-check">✓</span> Troubleshooting section for common print failures</li>
+          <li><span class="g-check">✓</span> Lighting &amp; display tips for a pro finish</li>
+          <li><span class="g-check">✓</span> Yours to keep and reference forever</li>
+        </ul>
+        <a href="https://oh-bees-city.myshopify.com/checkouts/cn/hWNAMorL86PO9vNuyxzEXcIN/en-gb?_r=AQAB--Vaw_ugwnaSJ0AeTFqLvotsZJCGPdWt_3lM4bmpLIY&auto_redirect=false&edge_redirect=true&preview_theme_id=192470253951&skip_shop_pay=true" class="btn-amber">
+          Buy Now &nbsp;<span class="price">£5</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ FAQ ══════════════════════════════ -->
+  <section id="faq">
+    <div class="container">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Common Questions</h2>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Is this a physical book?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">No - it's a digital PDF guide. After purchase you'll receive an instant download link. You can read it on your phone, tablet, laptop, or print it out yourself. Nothing gets posted.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            What format is the guide in?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">It's a PDF file, readable on any device - iPhone, Android, Mac, Windows, Kindle - with any standard PDF viewer. No special software needed.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Do I need a Bambu Lab printer?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">The slicer settings chapters are written specifically for Bambu Studio. The LithophaneMaker.com workflow and general advice is useful for any FDM printer, but you'll need to translate the specific settings to your own slicer if you're not on Bambu.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            I've never printed a lithophane before. Is this suitable for me?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">Yes - the guide is written for complete beginners. It assumes no prior knowledge and walks you through every stage from start to finish. If you know how to start a print on your Bambu, you're ready.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Can I get a refund?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">Because this is a digital product delivered instantly, we don't offer refunds once the file has been downloaded. If you have a problem with your purchase, get in touch and we'll do our best to help.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ BOTTOM CTA ══════════════════════════════ -->
+  <section id="cta-bottom">
+    <div class="container">
+      <h2 class="section-title">Ready to print perfect lithophanes?</h2>
+      <p>Get the complete guide for a one-time payment of £5.</p>
+      <a href="https://oh-bees-city.myshopify.com/checkouts/cn/hWNAMorL86PO9vNuyxzEXcIN/en-gb?_r=AQAB--Vaw_ugwnaSJ0AeTFqLvotsZJCGPdWt_3lM4bmpLIY&auto_redirect=false&edge_redirect=true&preview_theme_id=192470253951&skip_shop_pay=true" class="btn-amber">
+        Buy Now &nbsp;<span class="price">£5</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="logo-footer">Bees <span>City</span></div>
+      <p>© 2025 Bees City · <a href="mailto:hello@beescity.co.uk">hello@beescity.co.uk</a></p>
+    </div>
+  </footer>
+
+  <!-- FAQ accordion -->
+  <script>
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(el => {
+          el.classList.remove('open');
+          el.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
