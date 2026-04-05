@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The History of Lithophanes — BeesCity Blog</title>
+  <meta name="description" content="From 19th-century porcelain art to modern 3D printing — the fascinating history of lithophanes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <link rel="apple-touch-icon" href="/images/favicon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0B0B0B;
+      --surface:   #141414;
+      --surface2:  #1E1E1E;
+      --amber:     #F5A623;
+      --amber-dk:  #D4881A;
+      --orange:    #FF6B35;
+      --white:     #FFFFFF;
+      --text:      #E8E8E8;
+      --muted:     #888888;
+      --border:    rgba(255,255,255,0.08);
+      --radius-sm: 8px;
+      --radius:    16px;
+      --radius-lg: 28px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.7; overflow-x: hidden; }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; border-radius: var(--radius); }
+
+    /* ── Nav ── */
+    #blog-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(14px);
+    }
+    .blog-nav-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .blog-nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .blog-nav-back:hover { color: var(--white); }
+    .blog-nav-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--white); }
+    .blog-nav-logo span { color: var(--amber); }
+
+    /* ── Article layout ── */
+    .article-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    /* ── Meta ── */
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .article-tag {
+      background: rgba(245,166,35,0.12);
+      border: 1px solid rgba(245,166,35,0.25);
+      color: var(--amber);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.7rem;
+      border-radius: 100px;
+    }
+    .meta-dot { opacity: 0.3; }
+
+    /* ── Headline ── */
+    .article-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+      line-height: 1.15;
+    }
+    .article-intro {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 3rem;
+      border-left: 3px solid var(--amber);
+      padding-left: 1.25rem;
+    }
+
+    /* ── Hero image placeholder ── */
+    .article-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 3rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .article-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius);
+      display: block;
+    }
+    .article-image-placeholder {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .article-caption {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: -2rem;
+      margin-bottom: 3rem;
+    }
+
+    /* ── Body text ── */
+    .article-body { display: flex; flex-direction: column; gap: 1.75rem; }
+
+    .article-body h2 {
+      font-size: 1.5rem;
+      color: var(--white);
+      margin-bottom: -0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .article-body p {
+      font-size: 0.97rem;
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .article-body strong { color: var(--white); font-weight: 600; }
+
+    /* ── Pull quote ── */
+    .pull-quote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1.25rem 1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--white);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item {
+      display: flex;
+      gap: 1.25rem;
+      padding-bottom: 1.75rem;
+      position: relative;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .timeline-dot {
+      width: 12px; height: 12px;
+      background: var(--amber);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.35rem;
+    }
+    .timeline-line {
+      width: 1px;
+      flex: 1;
+      background: var(--border);
+      margin-top: 4px;
+    }
+    .timeline-item:last-child .timeline-line { display: none; }
+    .timeline-year {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .timeline-text {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── CTA ── */
+    .article-cta {
+      margin-top: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+    }
+    .article-cta h3 { font-size: 1.25rem; color: var(--white); margin-bottom: 0.5rem; }
+    .article-cta p { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.25rem; }
+    .btn-amber {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--amber), var(--orange));
+      color: #000;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.8rem 1.75rem;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,166,35,0.4); }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.4rem; }
+    .footer-logo span { color: var(--amber); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .article-wrap { padding: 2.5rem 1rem 4rem; }
+      .article-intro { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="blog-nav">
+    <div class="blog-nav-inner">
+      <a href="/" class="blog-nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to shop
+      </a>
+      <div class="blog-nav-logo">Bees<span>City</span></div>
+    </div>
+  </nav>
+
+  <main class="article-wrap">
+
+    <div class="article-meta">
+      <span class="article-tag">History</span>
+      <span class="meta-dot">·</span>
+      <span>6 min read</span>
+      <span class="meta-dot">·</span>
+      <span>BeesCity Blog</span>
+    </div>
+
+    <h1 class="article-title">The History of Lithophanes — From Royal Porcelain to 3D Printing</h1>
+
+    <p class="article-intro">
+      Long before 3D printers existed, artisans in 19th-century Europe were creating images out of translucent porcelain — held up to a candle to reveal breathtaking detail. That art form is called a lithophane, and it's had one of the most unlikely revivals in modern history.
+    </p>
+
+    <!-- IMAGE — replace src when ready -->
+    <div class="article-image" id="hero-image-wrap">
+      <span class="article-image-placeholder">[ Your image will go here ]</span>
+    </div>
+    <p class="article-caption">A classic porcelain lithophane held up to light — the technique dates back to the 1820s.</p>
+
+    <div class="article-body">
+
+      <h2>What Is a Lithophane?</h2>
+      <p>
+        A lithophane is an image etched or moulded into a thin, translucent material — typically porcelain or, today, white PLA plastic. When held flat in normal light it looks like little more than a textured white panel. But hold it up to a light source and something remarkable happens: the varying thickness of the material blocks or passes different amounts of light, revealing a detailed, glowing image with natural shading and depth.
+      </p>
+      <p>
+        The thinner areas let more light through, appearing bright. The thicker areas block light, creating shadows. No ink, no dyes — just the physical thickness of the material doing all the work.
+      </p>
+
+      <div class="pull-quote">
+        "No ink. No colour. Just light passing through different thicknesses of porcelain — and suddenly, a face appears."
+      </div>
+
+      <h2>Where Did They Come From?</h2>
+      <p>
+        The lithophane was invented in France in the early 1820s. The most commonly credited inventor is <strong>Baron Paul de Bourgoing</strong>, who patented the technique in 1827. The idea spread quickly — within a decade, the major European porcelain manufacturers had picked it up, most notably the <strong>Royal Porcelain Factory in Berlin (KPM)</strong>, as well as factories in Meissen, Sèvres, and the English Parian ware makers.
+      </p>
+      <p>
+        The word itself comes from the Greek: <em>lithos</em> (stone) and <em>phainein</em> (to show). Stone that shows — a fitting name for something so quietly magical.
+      </p>
+
+      <h2>A Timeline</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div>
+            <div class="timeline-year">1827</div>
+            <div class="timeline-text">Baron de Bourgoing patents the lithophane technique in Paris. The first examples are small, delicate porcelain panels sold as luxury novelties.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div>
+            <div class="timeline-year">1830s–1860s</div>
+            <div class="timeline-text">KPM Berlin becomes the most prolific producer, creating thousands of designs — portraits, landscapes, religious scenes, and reproductions of famous paintings. Lithophanes appear in lamp shades, candle holders, tea cups, and windows.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div>
+            <div class="timeline-year">Late 1800s</div>
+            <div class="timeline-text">Photography begins to replace hand-engraved art. Demand for traditional porcelain lithophanes gradually fades, though they remain prized as collectibles.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div>
+            <div class="timeline-year">20th Century</div>
+            <div class="timeline-text">Lithophanes become a niche collector's art form. Museums acquire antique pieces. A small community of enthusiasts keeps the tradition alive.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div>
+            <div class="timeline-year">2010s–Now</div>
+            <div class="timeline-text">Consumer 3D printers arrive. White PLA filament turns out to be nearly perfect for the technique. Tools like LithophaneMaker.com let anyone convert a photo into a printable lithophane in minutes — and the art form explodes in popularity.</div>
+          </div>
+        </div>
+      </div>
+
+      <h2>How Were They Used?</h2>
+      <p>
+        In the Victorian era, lithophanes were primarily decorative objects for wealthy households. They appeared as panels inside <strong>lamp shades</strong> — when the lamp was lit, the scene would glow to life. They were set into <strong>window frames</strong> like stained glass, used as <strong>night lights</strong>, and even built into the bottoms of beer steins and tea cups, so the image only appeared when the cup was drained and held up to the light.
+      </p>
+      <p>
+        Portraits were especially popular. Having a lithophane made of a loved one was a mark of status — a personal, intimate keepsake at a time when photographs were still new and paintings were expensive. Kings, queens, and notable figures all appeared in lithophane form, produced in small runs and sold across Europe.
+      </p>
+
+      <h2>The 3D Printing Revival</h2>
+      <p>
+        The modern revival is, in many ways, more democratic than the original. Anyone with a 3D printer and a photo can create a lithophane that would have taken a skilled craftsman days to engrave by hand. The material changed — white PLA plastic instead of bisque porcelain — but the optical principle is identical. Light, thickness, shadow. That's all it has ever been.
+      </p>
+      <p>
+        Today, lithophanes are printed as gifts: <strong>portraits of children, pets, couples, grandparents</strong>. Framed and backlit on a shelf or beside a lamp, they carry the same quiet warmth they always have. The technology changed. The feeling didn't.
+      </p>
+
+      <div class="article-cta">
+        <h3>Want one made from your photo?</h3>
+        <p>We handcraft custom lithophanes in the UK — upload a photo and we take care of the rest.</p>
+        <a href="/" class="btn-amber">Order Yours →</a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-logo">Bees<span>City</span></div>
+    <p>© 2025 Bees City · Handmade in the UK · <a href="mailto:hello@beescity.co.uk" style="color:var(--muted);">hello@beescity.co.uk</a></p>
+  </footer>
+
+</body>
+</html>
