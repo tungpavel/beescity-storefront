@@ -77,6 +77,8 @@
     .logo span { color: var(--amber); }
 
     .header-right { display: flex; align-items: center; gap: 0.75rem; }
+    .header-guide-link { font-size: 0.82rem; font-weight: 500; color: var(--muted); transition: color 0.2s; white-space: nowrap; }
+    .header-guide-link:hover { color: var(--white); }
 
     .ig-link { display: flex; align-items: center; color: #fff; opacity: 0.9; transition: opacity 0.2s; }
     .ig-link:hover { opacity: 1; }
@@ -672,6 +674,7 @@
   <div class="header-inner">
     <div class="logo">Bees<span>City</span></div>
     <div class="header-right">
+      <a href="/guides/lithophane-printing-guide/" class="header-guide-link">Printing Guide</a>
       <a href="https://www.instagram.com/beescity.memories/" target="_blank" rel="noopener" class="ig-link" aria-label="Instagram">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
       </a>
