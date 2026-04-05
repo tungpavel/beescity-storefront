@@ -110,6 +110,31 @@
     }
     .btn-ghost:hover { border-color: rgba(255,255,255,0.3); background: var(--surface); }
 
+    /* ══════════════════════════════ GUIDE NAV ══════════════════════════════ */
+    #guide-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+    }
+    .guide-nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .guide-nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .guide-nav-back:hover { color: var(--white); }
+    .guide-nav-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--white); }
+    .guide-nav-logo span { color: var(--amber); }
+
     /* ══════════════════════════════ HERO ══════════════════════════════ */
     #hero {
       padding: 5rem 0 4.5rem;
@@ -211,7 +236,7 @@
     #inside { padding: 5rem 0; background: var(--bg); }
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 1rem;
     }
     .card {
@@ -252,7 +277,7 @@
     }
     .who-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 1rem;
       margin-bottom: 3rem;
     }
@@ -381,21 +406,71 @@
     .logo-footer span { color: var(--amber); }
 
     /* ══════════════════════════════ RESPONSIVE ══════════════════════════════ */
-    @media (max-width: 600px) {
-      #hero { padding: 3.5rem 0 3rem; }
-      #inside, #who, #value, #faq, #cta-bottom { padding: 3.5rem 0; }
-      .cards-grid { grid-template-columns: 1fr 1fr; }
-      .who-grid { grid-template-columns: 1fr 1fr; }
-      .value-wrap { padding: 2rem 1.25rem; }
-      .trust-inner { gap: 1.5rem; }
-      .trust-divider { display: none; }
+
+    /* Tablet: 2 columns */
+    @media (max-width: 760px) {
+      .cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .who-grid   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-    @media (max-width: 400px) {
-      .cards-grid, .who-grid { grid-template-columns: 1fr; }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .container { padding: 0 1rem; }
+
+      #hero { padding: 3rem 0 2.75rem; }
+      #inside, #who, #value, #faq, #cta-bottom { padding: 3rem 0; }
+
+      .hero-subtitle { font-size: 0.95rem; }
+      .section-sub { margin-bottom: 2rem; font-size: 0.9rem; }
+
+      /* Always exactly 2 equal columns */
+      .cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+      .who-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+
+      /* Tighten card padding on small screens */
+      .card { padding: 1.1rem; }
+      .card-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+      .card h3 { font-size: 0.85rem; }
+      .card p { font-size: 0.78rem; }
+
+      .who-card { padding: 1.1rem 1rem; }
+      .who-emoji { font-size: 1.5rem; }
+
+      .value-wrap { padding: 2rem 1.25rem; }
+
+      /* Trust bar: 2×2 grid on mobile */
+      .trust-inner {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        justify-items: center;
+      }
+      .trust-divider { display: none; }
+      .trust-item { font-size: 0.8rem; justify-content: center; }
+
+      .btn-amber { width: 100%; justify-content: center; font-size: 1rem; padding: 1rem 1.5rem; }
+      .who-cta, #cta-bottom { padding-left: 1rem; padding-right: 1rem; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ══════════════════════════════ GUIDE NAV ══════════════════════════════ -->
+  <nav id="guide-nav">
+    <div class="guide-nav-inner">
+      <a href="/" class="guide-nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to shop
+      </a>
+      <div class="guide-nav-logo">Bees<span>City</span></div>
+    </div>
+  </nav>
 
   <!-- ══════════════════════════════ HERO ══════════════════════════════ -->
   <section id="hero">

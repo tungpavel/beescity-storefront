@@ -461,21 +461,13 @@
     .feature-card h3 { font-size: 1rem; color: var(--white); margin-bottom: 0.4rem; font-family: 'Inter', sans-serif; font-weight: 600; }
     .feature-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
 
-    /* ── Reviews ── */
-    #reviews { padding: 5rem 1.5rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-
-    .reviews-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-
-    .review-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; transition: border-color 0.3s; }
-    .review-card:hover { border-color: rgba(245,166,35,0.2); }
-
-    .review-stars { color: var(--amber); font-size: 0.9rem; margin-bottom: 0.9rem; letter-spacing: 1px; }
-    .review-text { font-size: 0.93rem; color: var(--text); line-height: 1.7; margin-bottom: 1.25rem; }
-    .review-author { display: flex; align-items: center; gap: 0.75rem; }
-    .review-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--amber), var(--orange)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #000; flex-shrink: 0; }
-    .review-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
-    .review-meta { font-size: 0.75rem; color: var(--muted); }
-    .verified { color: var(--green); font-size: 0.7rem; }
+    /* ── Guide promo banner ── */
+    #guide-promo { padding: 3rem 1.5rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .guide-promo-inner { max-width: 700px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .guide-promo-text { flex: 1; min-width: 220px; }
+    .guide-promo-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.4rem; }
+    .guide-promo-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--white); margin-bottom: 0.4rem; line-height: 1.25; }
+    .guide-promo-sub { font-size: 0.83rem; color: var(--muted); line-height: 1.5; }
 
     /* ── FAQ ── */
     #faq { padding: 5rem 1.5rem; }
@@ -557,7 +549,6 @@
       .steps::before { display: none; }
       .gallery-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
       .examples-grid { grid-template-columns: repeat(2, 1fr); }
-      .reviews-grid { grid-template-columns: 1fr; }
       #sticky-bar { display: flex; }
       body { padding-bottom: calc(80px + env(safe-area-inset-bottom, 100px)); }
     }
@@ -860,44 +851,14 @@
 </section>
 
 <!-- ── Reviews ── -->
-<section id="reviews">
-  <span class="section-label">Customer Love</span>
-  <h2 class="section-title" style="margin-bottom:0.5rem;">What People Are Saying</h2>
-  <p class="section-sub">Over 150 happy customers across the UK and worldwide.</p>
-  <div class="reviews-grid">
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">Great bday present!</p>
-      <div class="review-author">
-        <div class="review-avatar">S</div>
-        <div>
-          <div class="review-name">Sarah M.</div>
-          <div class="review-meta">2 weeks ago · <span class="verified">✓ Verified</span></div>
-        </div>
-      </div>
+<section id="guide-promo">
+  <div class="guide-promo-inner">
+    <div class="guide-promo-text">
+      <div class="guide-promo-eyebrow">✦ Digital Guide</div>
+      <div class="guide-promo-title">Own a 3D printer? Learn to print lithophanes yourself.</div>
+      <div class="guide-promo-sub">The Lithophane Master Guide covers every slicer setting, the exact LithophaneMaker.com workflow, and Bambu Studio setup — 8 chapters, £5 one-time.</div>
     </div>
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">great detail on out dog's photo</p>
-      <div class="review-author">
-        <div class="review-avatar">J</div>
-        <div>
-          <div class="review-name">James R.</div>
-          <div class="review-meta">1 month ago · <span class="verified">✓ Verified</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">Great service, very happy with the result</p>
-      <div class="review-author">
-        <div class="review-avatar">L</div>
-        <div>
-          <div class="review-name">Lauren T.</div>
-          <div class="review-meta">3 weeks ago · <span class="verified">✓ Verified</span></div>
-        </div>
-      </div>
-    </div>
+    <a href="/guides/lithophane-printing-guide/" class="btn-amber" style="white-space:nowrap; flex-shrink:0;">Read the Guide →</a>
   </div>
 </section>
 
@@ -945,6 +906,7 @@
       <a href="#how-it-works">How It Works</a>
       <a href="#gallery">Gallery</a>
       <a href="#faq">FAQ</a>
+      <a href="/guides/lithophane-printing-guide/">Printing Guide</a>
       <a href="mailto:hello@beescity.co.uk">Contact</a>
       <a href="https://www.instagram.com/beescity.memories/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:0.35rem;color:var(--muted);" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color=''">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
@@ -1729,7 +1691,6 @@
   observeGroup('.step');
   observeGroup('.gallery-card');
   observeGroup('.feature-card');
-  observeGroup('.review-card');
   observeGroup('.faq-item');
 
   // ── Init ──
