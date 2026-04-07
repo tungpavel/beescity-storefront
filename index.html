@@ -79,6 +79,10 @@
     .header-right { display: flex; align-items: center; gap: 0.75rem; }
     .header-guide-link { font-size: 0.82rem; font-weight: 500; color: var(--muted); transition: color 0.2s; white-space: nowrap; }
     .header-guide-link:hover { color: var(--white); }
+    @media (max-width: 540px) {
+      .header-guide-link { display: none; }
+      #cart-btn { padding: 0.5rem 0.85rem; white-space: nowrap; flex-shrink: 0; }
+    }
 
     .ig-link { display: flex; align-items: center; color: #fff; opacity: 0.9; transition: opacity 0.2s; }
     .ig-link:hover { opacity: 1; }
@@ -696,14 +700,14 @@
       <p class="hero-sub">The gift they'll never throw away. A backlit 3D frame made from their favourite photo — perfect for birthdays, Mother's Day, anniversaries, or just because.</p>
       <div class="hero-rating">
         <span class="stars-amber">★★★★★</span>
-        <span class="rating-text"><strong>4.8</strong> · 110 verified reviews</span>
+        <span class="rating-text"><strong>100+ made</strong> · 🇬🇧 in the UK</span>
       </div>
       <div class="hero-ctas">
         <a href="#upload-section" class="btn-amber">📷 Upload Your Photo</a>
         <a href="#gallery" class="btn-ghost">See Examples</a>
       </div>
       <div class="hero-price-row">
-        <span class="hp-current" id="hero-price">£29.90</span>
+        <span class="hp-current" id="hero-price">£29.00</span>
         <span class="hp-original" id="hero-original">£35.00</span>
         <span class="hp-badge" id="hero-badge">-17%</span>
       </div>
@@ -846,7 +850,7 @@
     <button id="add-to-cart-btn" disabled>Add to Cart</button>
 
     <div class="price-under-btn">
-      <span class="p-current" id="price-display">£29.90</span>
+      <span class="p-current" id="price-display">£29.00</span>
       <span class="p-original" id="original-display">£35.00</span>
       <span class="p-badge" id="discount-badge">-17%</span>
       &nbsp;· Free shipping · Ships in 3–5 days
@@ -977,7 +981,7 @@
 <!-- ── Mobile sticky ── -->
 <div id="sticky-bar">
   <div class="sticky-price">
-    <div class="sp-current" id="sticky-price">£29.90</div>
+    <div class="sp-current" id="sticky-price">£29.00</div>
     <div class="sp-orig" id="sticky-orig">was £35.00</div>
   </div>
   <button id="sticky-cta">📷 Order Now</button>
@@ -1082,7 +1086,7 @@
       content_name: 'Custom Lithophane',
       content_type: 'product',
       currency: 'GBP',
-      value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.90
+      value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.00
     });
   }
 
@@ -1622,7 +1626,7 @@
         content_name: 'Custom Lithophane',
         content_type: 'product',
         currency: 'GBP',
-        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.90
+        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.00
       });
       openCart();
     } catch(err) { console.error(err); alert('Could not add to cart. Is the server running?'); }
@@ -1642,7 +1646,7 @@
       Consent.pixel('InitiateCheckout', {
         content_name: 'Custom Lithophane',
         currency: 'GBP',
-        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.90
+        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.00
       });
       window.location.href = checkoutUrl;
     }
