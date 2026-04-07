@@ -111,10 +111,17 @@
       pointer-events: none;
     }
 
-    .hero-inner {
-      max-width: 1200px; margin: 0 auto; width: 100%;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    /* hero-video section */
+    #hero-video {
+      background: var(--bg);
+      padding: 3rem 1.5rem 2rem;
+      display: flex; justify-content: center;
     }
+    .hero-video-wrap { position: relative; width: 100%; max-width: 360px; }
+
+    /* hero-text section */
+    #hero { padding: 3rem 1.5rem 3.5rem; text-align: center; background: var(--bg); }
+    .hero-text-inner { max-width: 580px; margin: 0 auto; }
 
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.4rem;
@@ -127,14 +134,14 @@
     #hero h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); color: var(--white); margin-bottom: 1.25rem; font-weight: 900; }
     #hero h1 em { font-style: normal; color: var(--amber); }
 
-    .hero-sub { font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.7; max-width: 420px; }
+    .hero-sub { font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.7; }
 
-    .hero-rating { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2rem; font-size: 0.9rem; }
+    .hero-rating { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 2rem; font-size: 0.9rem; justify-content: center; }
     .stars-amber { color: var(--amber); letter-spacing: 1px; }
     .rating-text { color: var(--muted); }
     .rating-text strong { color: var(--white); }
 
-    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
 
     .btn-amber {
       display: inline-flex; align-items: center; gap: 0.5rem;
@@ -153,20 +160,18 @@
     }
     .btn-ghost:hover { border-color: rgba(255,255,255,0.3); background: var(--surface); }
 
-    .hero-guarantees { display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; }
+    .hero-guarantees { display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center; }
     .guarantee { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--muted); }
     .g-check { width: 15px; height: 15px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; color: #fff; flex-shrink: 0; }
 
-    .hero-price-row { display: flex; align-items: baseline; gap: 0.6rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .hero-price-row { display: flex; align-items: baseline; gap: 0.6rem; margin-top: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; justify-content: center; }
     .hero-price-row .hp-current { font-size: 2rem; font-weight: 700; color: var(--white); font-family: 'Playfair Display', serif; }
     .hero-price-row .hp-original { font-size: 1rem; text-decoration: line-through; color: var(--red); }
     .hero-price-row .hp-badge { background: var(--red); color: #fff; border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.78rem; font-weight: 700; }
     .hero-price-row .hp-shipping { font-size: 0.82rem; color: var(--muted); }
     .usb-note { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; font-size: 0.78rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.3rem 0.7rem; }
 
-    .hero-visual { display: flex; justify-content: center; align-items: center; position: relative; }
-
-    .hero-product-wrap { position: relative; width: 100%; max-width: 440px; }
+    .hero-product-wrap { position: relative; width: 100%; max-width: 360px; }
 
     .hero-glow-ring {
       position: absolute; inset: -30px; border-radius: 50%;
@@ -184,8 +189,8 @@
     .hero-product-video { width: 100%; aspect-ratio: 1400 / 1910; border-radius: var(--radius); object-fit: cover; position: relative; z-index: 1; box-shadow: var(--glow); display: block; }
 
     .floating-tag { position: absolute; background: rgba(20,20,20,0.9); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 0.75rem; font-size: 0.78rem; font-weight: 500; z-index: 2; backdrop-filter: blur(8px); }
-    .floating-tag.top-left { top: 12%; left: -10%; color: var(--green); border-color: rgba(34,197,94,0.3); }
-    .floating-tag.bottom-right { bottom: 12%; right: -8%; color: var(--amber); border-color: rgba(245,166,35,0.3); }
+    .floating-tag.top-left { top: 8%; left: 4%; color: var(--green); border-color: rgba(34,197,94,0.3); }
+    .floating-tag.bottom-right { bottom: 8%; right: 4%; color: var(--amber); border-color: rgba(245,166,35,0.3); }
 
     /* ── Trust bar ── */
     #trust-bar { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.1rem 1.5rem; }
@@ -664,7 +669,7 @@
 
 <!-- ── Announcement ── -->
 <div id="announcement">
-  <span>LIMITED SALE - FREE worldwide shipping ENDS IN:</span>
+  <span>LIMITED SALE - FREE shipping ENDS IN:</span>
   <div class="countdown">
     <div class="cd-unit"><span class="n" id="cd-d">00</span><span class="l">DAYS</span></div>
     <div class="cd-unit"><span class="n" id="cd-h">00</span><span class="l">HRS</span></div>
@@ -691,45 +696,19 @@
   </div>
 </header>
 
-<!-- ── Hero ── -->
-<section id="hero">
-  <div class="hero-inner">
-    <div class="hero-text">
-      <div class="hero-badge">🐝 Handmade in the UK</div>
-      <h1>Turn Your Photo<br>into a <em>Glowing</em><br>3D Lithophane</h1>
-      <p class="hero-sub">The gift they'll never throw away. A backlit 3D frame made from their favourite photo — perfect for birthdays, Mother's Day, anniversaries, or just because.</p>
-      <div class="hero-rating">
-        <span class="stars-amber">★★★★★</span>
-        <span class="rating-text"><strong>100+ made</strong> · 🇬🇧 in the UK</span>
-      </div>
-      <div class="hero-ctas">
-        <a href="#upload-section" class="btn-amber">📷 Upload Your Photo</a>
-        <a href="#gallery" class="btn-ghost">See Examples</a>
-      </div>
-      <div class="hero-price-row">
-        <span class="hp-current" id="hero-price">£29.00</span>
-        <span class="hp-original" id="hero-original">£35.00</span>
-        <span class="hp-badge" id="hero-badge">-17%</span>
-      </div>
-      <div><span class="usb-note">⚡ Plugs into any phone charger, or laptop</span></div>
-      <div class="hero-guarantees">
-        <div class="guarantee"><div class="g-check">✓</div> Free Shipping</div>
-        <div class="guarantee"><div class="g-check">✓</div> 30-Day Returns</div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="hero-product-wrap">
-        <div class="hero-glow-ring"></div>
-        <video class="hero-product-video" autoplay muted loop playsinline poster="">
-          <source src="https://pub-ad987d435fb34e1f9c2ebaf4458c8590.r2.dev/hero_v2.mp4" type="video/mp4">
-        </video>
-        <div class="floating-tag top-left">✦ Plugs into any USB port</div>
-        <div class="floating-tag bottom-right">🇬🇧 Made in the UK</div>
-      </div>
+<!-- ── Hero Video ── -->
+<section id="hero-video">
+  <div class="hero-video-wrap">
+    <div class="hero-product-wrap">
+      <div class="hero-glow-ring"></div>
+      <video class="hero-product-video" autoplay muted loop playsinline poster="">
+        <source src="https://pub-ad987d435fb34e1f9c2ebaf4458c8590.r2.dev/hero_v2.mp4" type="video/mp4">
+      </video>
+      <div class="floating-tag top-left">✦ Plugs into any USB port</div>
+      <div class="floating-tag bottom-right">🇬🇧 Made in the UK</div>
     </div>
   </div>
 </section>
-
 
 <!-- ── Gallery ── -->
 <section id="gallery">
@@ -763,6 +742,34 @@
     </div>
   </div>
 </section>
+
+<!-- ── Hero Text ── -->
+<section id="hero">
+  <div class="hero-text-inner">
+    <div class="hero-badge">🐝 Handmade in the UK</div>
+    <h1>Turn Your Photo<br>into a <em>Glowing</em><br>3D Lithophane</h1>
+    <p class="hero-sub">The gift they'll never throw away. A backlit 3D frame made from their favourite photo — perfect for birthdays, Mother's Day, anniversaries.</p>
+    <div class="hero-rating">
+      <span class="stars-amber">★★★★★</span>
+      <span class="rating-text"><strong>100+ made</strong> · 🇬🇧 in the UK</span>
+    </div>
+    <div class="hero-price-row">
+      <span class="hp-current" id="hero-price">£29.00</span>
+      <span class="hp-original" id="hero-original">£35.00</span>
+      <span class="hp-badge" id="hero-badge">-17%</span>
+    </div>
+    <div class="hero-ctas">
+      <a href="#upload-section" class="btn-amber">📷 Upload Your Photo</a>
+      <a href="#gallery" class="btn-ghost">See Examples</a>
+    </div>
+    <div><span class="usb-note">⚡ Plugs into any phone charger, or laptop</span></div>
+    <div class="hero-guarantees">
+      <div class="guarantee"><div class="g-check">✓</div> Free Shipping</div>
+      <div class="guarantee"><div class="g-check">✓</div> 30-Day Returns</div>
+    </div>
+  </div>
+</section>
+
 
 <!-- ── How it works ── -->
 <section id="how-it-works">
