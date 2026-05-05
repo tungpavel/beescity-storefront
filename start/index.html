@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeesCity – Lithophane Gifts & Prints</title>
+  <meta name="description" content="Custom photo lithophanes, frames, and printing guides. Turn your favourite photo into a glowing 3D keepsake." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0B0B0B;
+      --surface:   #141414;
+      --surface2:  #1E1E1E;
+      --amber:     #F5A623;
+      --orange:    #FF6B35;
+      --white:     #FFFFFF;
+      --text:      #E8E8E8;
+      --muted:     #888888;
+      --border:    rgba(255,255,255,0.08);
+      --green:     #22C55E;
+      --radius-sm: 8px;
+      --radius:    16px;
+      --radius-lg: 28px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+    h1,h2,h3 { font-family: 'Playfair Display', serif; line-height: 1.15; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    #nav {
+      background: rgba(11,11,11,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.5rem;
+    }
+    .nav-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); }
+    .nav-logo span { color: var(--amber); }
+    .nav-links { display: flex; gap: 1.25rem; align-items: center; }
+    .nav-links a { font-size: 0.82rem; color: var(--muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    @media (max-width: 540px) { .nav-links { display: none; } }
+
+    /* ── Hero ── */
+    #hero { padding: 4.5rem 1.5rem 3rem; text-align: center; flex: 1; }
+    .hero-eyebrow { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 1rem; }
+    .hero-title { font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; color: var(--white); margin-bottom: 1rem; }
+    .hero-title em { font-style: italic; color: var(--amber); }
+    .hero-sub { font-size: 1rem; color: var(--muted); max-width: 480px; margin: 0 auto 3rem; line-height: 1.7; }
+
+    /* ── Cards ── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; max-width: 960px; margin: 0 auto; padding: 0 0 4rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; transition: border-color 0.2s, transform 0.2s; cursor: pointer; text-align: left; }
+    .card:hover { border-color: var(--amber); transform: translateY(-3px); }
+    .card.featured { border-color: rgba(245,166,35,0.4); background: linear-gradient(135deg, rgba(245,166,35,0.06), var(--surface)); }
+    .card-badge { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 4px; width: fit-content; }
+    .badge-amber { background: rgba(245,166,35,0.15); color: var(--amber); }
+    .badge-muted { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .card-icon { font-size: 2rem; }
+    .card h3 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); }
+    .card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; flex: 1; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
+    .card-price { font-size: 0.9rem; font-weight: 700; color: var(--white); }
+    .card-arrow { font-size: 0.85rem; color: var(--amber); font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
+
+    /* ── Footer ── */
+    footer { padding: 1.5rem; border-top: 1px solid var(--border); text-align: center; }
+    footer p { font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--amber); }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">Bees<span>City</span></div>
+      <div class="nav-links">
+        <a href="mailto:hello@beescity.co.uk">Contact</a>
+        <a href="https://www.instagram.com/beescity.memories/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <span class="hero-eyebrow">✦ BeesCity</span>
+    <h1 class="hero-title">What are you looking for<em>?</em></h1>
+    <p class="hero-sub">Choose below to get started.</p>
+
+    <div class="cards">
+
+      <a href="/" class="card featured">
+        <span class="card-badge badge-amber">Most popular</span>
+        <div class="card-icon">🖼️</div>
+        <h3>Custom Photo Lithophane</h3>
+        <p>Upload your favourite photo and we'll turn it into a glowing 3D lithophane, ready to display.</p>
+        <div class="card-footer">
+          <span class="card-price">£29.00</span>
+          <span class="card-arrow">Order now →</span>
+        </div>
+      </a>
+
+      <a href="/frame-only/" class="card">
+        <span class="card-badge badge-muted">Frame only</span>
+        <div class="card-icon">💡</div>
+        <h3>Lithophane Frame</h3>
+        <p>Already have a lithophane or printing your own? Get the premium backlit USB frame.</p>
+        <div class="card-footer">
+          <span class="card-price">£25.00</span>
+          <span class="card-arrow">Order now →</span>
+        </div>
+      </a>
+
+      <a href="/guides/lithophane-printing-guide/" class="card">
+        <span class="card-badge badge-muted">Digital guide</span>
+        <div class="card-icon">📖</div>
+        <h3>Printing Guide</h3>
+        <p>Own a 3D printer? Learn the exact slicer settings and workflow to print perfect lithophanes every time.</p>
+        <div class="card-footer">
+          <span class="card-price">£5.00</span>
+          <span class="card-arrow">Read more →</span>
+        </div>
+      </a>
+
+      <a href="/blog/history-of-lithophanes/" class="card">
+        <span class="card-badge badge-muted">Free read</span>
+        <div class="card-icon">📜</div>
+        <h3>History of Lithophanes</h3>
+        <p>Discover the fascinating 200-year history of lithophanes, from 19th century porcelain to modern 3D printing.</p>
+        <div class="card-footer">
+          <span class="card-price">Free</span>
+          <span class="card-arrow">Read more →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 BeesCity · <a href="mailto:hello@beescity.co.uk">hello@beescity.co.uk</a></p>
+  </footer>
+
+</body>
+</html>

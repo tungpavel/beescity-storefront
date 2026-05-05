@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lithophane Frame – BeesCity</title>
+  <meta name="description" content="Premium backlit lithophane frame. USB powered, warm white backlight. Made in the UK. £25 with free shipping." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="/images/favicon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0B0B0B;
+      --surface:   #141414;
+      --surface2:  #1E1E1E;
+      --amber:     #F5A623;
+      --orange:    #FF6B35;
+      --white:     #FFFFFF;
+      --text:      #E8E8E8;
+      --muted:     #888888;
+      --border:    rgba(255,255,255,0.08);
+      --green:     #22C55E;
+      --radius-sm: 8px;
+      --radius:    16px;
+      --radius-lg: 28px;
+      --glow:      0 0 40px rgba(245,166,35,0.35), 0 0 80px rgba(245,166,35,0.15);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+    h1,h2,h3 { font-family: 'Playfair Display', serif; line-height: 1.15; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Nav ── */
+    #nav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(11,11,11,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+    }
+    .nav-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-back { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--muted); transition: color 0.2s; }
+    .nav-back:hover { color: var(--white); }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--white); }
+    .nav-logo span { color: var(--amber); }
+    .nav-cta { font-size: 0.82rem; font-weight: 600; color: #000; background: linear-gradient(135deg, var(--amber), var(--orange)); padding: 0.4rem 0.9rem; border-radius: var(--radius-lg); white-space: nowrap; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── Hero ── */
+    #hero { padding: 4rem 1.5rem 3rem; text-align: center; }
+    .hero-eyebrow { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 1rem; }
+    .hero-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: var(--white); margin-bottom: 1rem; }
+    .hero-sub { font-size: 1rem; color: var(--muted); max-width: 520px; margin: 0 auto 2rem; line-height: 1.7; }
+    .hero-price-row { display: flex; align-items: baseline; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .hero-price { font-size: 2.2rem; font-weight: 700; color: var(--white); font-family: 'Playfair Display', serif; }
+    .hero-shipping { font-size: 0.82rem; color: var(--green); margin-bottom: 2rem; }
+    .btn-amber { display: inline-block; background: linear-gradient(135deg, var(--amber), var(--orange)); color: #000; font-weight: 700; font-size: 1rem; padding: 0.9rem 2.5rem; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; }
+    .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(245,166,35,0.4); }
+    .hero-guarantees { display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 1.25rem; }
+    .guarantee { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; color: var(--muted); }
+    .g-check { color: var(--green); font-weight: 700; }
+
+    /* ── Features ── */
+    #features { padding: 3rem 1.5rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .features-title { text-align: center; font-size: 1.4rem; font-weight: 700; color: var(--white); margin-bottom: 2rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .feature-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
+    .feature-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+    .feature-card h3 { font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+    .feature-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+
+    /* ── How it works ── */
+    #how { padding: 3.5rem 1.5rem; text-align: center; }
+    .how-title { font-size: 1.4rem; font-weight: 700; color: var(--white); margin-bottom: 2rem; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 640px; margin: 0 auto; }
+    .step-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--amber), var(--orange)); color: #000; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; }
+    .step h3 { font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+    .step p { font-size: 0.8rem; color: var(--muted); }
+
+    /* ── CTA bottom ── */
+    #cta { padding: 4rem 1.5rem; text-align: center; }
+    .cta-title { font-size: 1.6rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
+    .cta-sub { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; }
+
+    /* ── Footer ── */
+    footer { padding: 2rem 1.5rem; border-top: 1px solid var(--border); text-align: center; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .footer-logo span { color: var(--amber); }
+    footer p { font-size: 0.78rem; color: var(--muted); }
+
+    @media (max-width: 600px) {
+      .steps { grid-template-columns: 1fr; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </a>
+      <div class="nav-logo">Bees<span>City</span></div>
+      <a href="/" class="nav-cta">Custom Photo</a>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="container">
+      <span class="hero-eyebrow">✦ Frame Only</span>
+      <h1 class="hero-title">The Lithophane Frame</h1>
+      <p class="hero-sub">Already have a lithophane, or printing your own? Get the premium backlit frame that brings it to life.</p>
+      <div class="hero-price-row">
+        <span class="hero-price">£25.00</span>
+      </div>
+      <p class="hero-shipping">✓ Free shipping</p>
+      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber">Order Now — £25</a>
+      <div class="hero-guarantees">
+        <span class="guarantee"><span class="g-check">✓</span> Free shipping</span>
+        <span class="guarantee"><span class="g-check">✓</span> Made in the UK</span>
+        <span class="guarantee"><span class="g-check">✓</span> 30-day returns</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <h2 class="features-title">What's included</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">💡</div>
+          <h3>Warm white backlight</h3>
+          <p>The perfect colour temperature to reveal every detail of your lithophane.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔌</div>
+          <h3>USB powered</h3>
+          <p>Plugs into any USB port, adapter, or power bank. No batteries needed.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🖼️</div>
+          <h3>Standard size compatible</h3>
+          <p>Fits all standard lithophane sizes. Perfect for home prints too.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🇬🇧</div>
+          <h3>Made in the UK</h3>
+          <p>Designed and shipped from the UK. Fast delivery to your door.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="container">
+      <h2 class="how-title">How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Order the frame</h3>
+          <p>We ship it straight to your door.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Insert your lithophane</h3>
+          <p>Slot your print into the frame.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Plug in &amp; glow</h3>
+          <p>Connect USB and watch it light up.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta">
+    <div class="container">
+      <h2 class="cta-title">Ready to light up your lithophane?</h2>
+      <p class="cta-sub">£25 one-time — free shipping — made in the UK.</p>
+      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber">Order Now — £25</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Bees<span>City</span></div>
+    <p>© 2026 BeesCity. All rights reserved.</p>
+    <p style="margin-top:0.4rem;"><a href="/" style="color:var(--amber);">Custom Photo Lithophane</a> &nbsp;·&nbsp; <a href="/guides/lithophane-printing-guide/" style="color:var(--muted);">Printing Guide</a> &nbsp;·&nbsp; <a href="mailto:hello@beescity.co.uk" style="color:var(--muted);">Contact</a></p>
+  </footer>
+
+</body>
+</html>
