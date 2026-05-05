@@ -54,31 +54,35 @@
     .hero-sub { font-size: 1rem; color: var(--muted); max-width: 480px; margin: 0 auto 3rem; line-height: 1.7; }
 
     /* ── Cards ── */
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; max-width: 960px; margin: 0 auto; padding: 0 0 4rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; transition: border-color 0.2s, transform 0.2s; cursor: pointer; text-align: left; }
-    .card:hover { border-color: var(--amber); transform: translateY(-3px); }
+    .cards { display: flex; flex-direction: column; gap: 0.65rem; max-width: 420px; margin: 0 auto; padding: 0 0 4rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1.1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; transition: border-color 0.2s, transform 0.2s; }
+    .card:hover { border-color: var(--amber); transform: translateY(-2px); }
     .card.featured { border-color: rgba(245,166,35,0.4); background: linear-gradient(135deg, rgba(245,166,35,0.06), var(--surface)); }
-    .card-badge { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 4px; width: fit-content; }
-    .badge-amber { background: rgba(245,166,35,0.15); color: var(--amber); }
-    .badge-muted { background: rgba(255,255,255,0.06); color: var(--muted); }
-    .card-icon { font-size: 2rem; }
-    .card h3 { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); }
-    .card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; flex: 1; }
-    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
-    .card-price { font-size: 0.9rem; font-weight: 700; color: var(--white); }
-    .card-arrow { font-size: 0.85rem; color: var(--amber); font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
+    .card-left { display: flex; align-items: center; gap: 0.6rem; }
+    .card-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .card h3 { font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--white); }
+    .card-right { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+    .card-price { font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+    .card-arrow { font-size: 0.82rem; color: var(--amber); font-weight: 600; }
 
     /* ── Footer ── */
     footer { padding: 1.5rem; border-top: 1px solid var(--border); text-align: center; }
     footer p { font-size: 0.78rem; color: var(--muted); }
     footer a { color: var(--amber); }
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
   </style>
 </head>
 <body>
 
   <nav id="nav">
     <div class="nav-inner">
-      <div class="nav-logo">Bees<span>City</span></div>
+      <a href="/start/" class="nav-logo">Bees<span>City</span></a>
       <div class="nav-links">
         <a href="mailto:hello@beescity.co.uk">Contact</a>
         <a href="https://www.instagram.com/beescity.memories/" target="_blank" rel="noopener">Instagram</a>
@@ -94,46 +98,46 @@
     <div class="cards">
 
       <a href="/" class="card featured">
-        <span class="card-badge badge-amber">Most popular</span>
-        <div class="card-icon">🖼️</div>
-        <h3>Custom Photo Lithophane</h3>
-        <p>Upload your favourite photo and we'll turn it into a glowing 3D lithophane, ready to display.</p>
-        <div class="card-footer">
-          <span class="card-price">£29.00</span>
-          <span class="card-arrow">Order now →</span>
+        <div class="card-left">
+          <span class="card-icon">🖼️</span>
+          <h3>Custom Photo Lithophane</h3>
+        </div>
+        <div class="card-right">
+          <span class="card-price" id="price-custom">£29.00</span>
+          <span class="card-arrow">→</span>
         </div>
       </a>
 
       <a href="/frame-only/" class="card">
-        <span class="card-badge badge-muted">Frame only</span>
-        <div class="card-icon">💡</div>
-        <h3>Lithophane Frame</h3>
-        <p>Already have a lithophane or printing your own? Get the premium backlit USB frame.</p>
-        <div class="card-footer">
-          <span class="card-price">£25.00</span>
-          <span class="card-arrow">Order now →</span>
+        <div class="card-left">
+          <span class="card-icon">💡</span>
+          <h3>Lithophane Frame</h3>
+        </div>
+        <div class="card-right">
+          <span class="card-price" id="price-frame">£25.00</span>
+          <span class="card-arrow">→</span>
         </div>
       </a>
 
       <a href="/guides/lithophane-printing-guide/" class="card">
-        <span class="card-badge badge-muted">Digital guide</span>
-        <div class="card-icon">📖</div>
-        <h3>Printing Guide</h3>
-        <p>Own a 3D printer? Learn the exact slicer settings and workflow to print perfect lithophanes every time.</p>
-        <div class="card-footer">
-          <span class="card-price">£5.00</span>
-          <span class="card-arrow">Read more →</span>
+        <div class="card-left">
+          <span class="card-icon">📖</span>
+          <h3>Printing Guide</h3>
+        </div>
+        <div class="card-right">
+          <span class="card-price" id="price-guide">£5.00</span>
+          <span class="card-arrow">→</span>
         </div>
       </a>
 
       <a href="/blog/history-of-lithophanes/" class="card">
-        <span class="card-badge badge-muted">Free read</span>
-        <div class="card-icon">📜</div>
-        <h3>History of Lithophanes</h3>
-        <p>Discover the fascinating 200-year history of lithophanes, from 19th century porcelain to modern 3D printing.</p>
-        <div class="card-footer">
+        <div class="card-left">
+          <span class="card-icon">📜</span>
+          <h3>History of Lithophanes</h3>
+        </div>
+        <div class="card-right">
           <span class="card-price">Free</span>
-          <span class="card-arrow">Read more →</span>
+          <span class="card-arrow">→</span>
         </div>
       </a>
 
@@ -143,6 +147,40 @@
   <footer>
     <p>© 2026 BeesCity · <a href="mailto:hello@beescity.co.uk">hello@beescity.co.uk</a></p>
   </footer>
+
+  <script>
+    async function loadPrices() {
+      try {
+        const res = await fetch('/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: `{
+            custom: product(handle: "3d-print") { variants(first:1) { nodes { price { amount currencyCode } } } }
+            frame:  product(handle: "lithophane-frame") { variants(first:1) { nodes { price { amount currencyCode } } } }
+            guide:  product(handle: "lithophane-master-guide") { variants(first:1) { nodes { price { amount currencyCode } } } }
+          }` })
+        });
+        const data = await res.json();
+        const fmt = (p) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: p.currencyCode }).format(p.amount);
+        const c = data?.data?.custom?.variants?.nodes?.[0]?.price;
+        const f = data?.data?.frame?.variants?.nodes?.[0]?.price;
+        const g = data?.data?.guide?.variants?.nodes?.[0]?.price;
+        if (c) document.getElementById('price-custom').textContent = fmt(c);
+        if (f) document.getElementById('price-frame').textContent = fmt(f);
+        if (g) document.getElementById('price-guide').textContent = fmt(g);
+      } catch(e) {}
+    }
+    loadPrices();
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.card').forEach((el, i) => {
+      el.classList.add('reveal');
+      if (i % 4 > 0) el.classList.add(`reveal-delay-${i % 4}`);
+      revealObserver.observe(el);
+    });
+  </script>
 
 </body>
 </html>

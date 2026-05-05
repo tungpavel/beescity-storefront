@@ -87,6 +87,31 @@
     .cta-title { font-size: 1.6rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
     .cta-sub { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; }
 
+    /* ── Gallery ── */
+    #gallery { padding: 2.5rem 1.5rem; }
+    .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 640px; margin: 0 auto; }
+    .gallery-img { width: 100%; border-radius: var(--radius); object-fit: cover; border: 1px solid var(--border); box-shadow: var(--glow); }
+    .gallery-label { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; }
+    @media (max-width: 480px) { .gallery-grid { grid-template-columns: 1fr; max-width: 320px; } }
+
+    /* ── Upsell modal ── */
+    #upsell-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500; align-items: center; justify-content: center; padding: 1.5rem; }
+    #upsell-overlay.open { display: flex; }
+    #upsell-modal { background: var(--surface); border: 1px solid rgba(245,166,35,0.3); border-radius: var(--radius); max-width: 420px; width: 100%; padding: 2rem 1.75rem; text-align: center; position: relative; }
+    .upsell-badge { display: inline-block; background: rgba(245,166,35,0.15); color: var(--amber); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.65rem; border-radius: 4px; margin-bottom: 1rem; }
+    .upsell-icon { font-size: 2.2rem; margin-bottom: 0.75rem; }
+    .upsell-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .upsell-sub { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; }
+    .upsell-price-row { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .upsell-price-new { font-size: 1.6rem; font-weight: 700; color: var(--white); font-family: 'Playfair Display', serif; }
+    .upsell-price-old { font-size: 0.95rem; text-decoration: line-through; color: var(--muted); }
+    .upsell-save { font-size: 0.78rem; font-weight: 700; color: var(--green); background: rgba(34,197,94,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; }
+    .upsell-btns { display: flex; flex-direction: column; gap: 0.65rem; }
+    .btn-upsell-yes { background: linear-gradient(135deg, var(--amber), var(--orange)); color: #000; font-weight: 700; font-size: 0.95rem; padding: 0.85rem 1.5rem; border-radius: var(--radius-lg); border: none; cursor: pointer; transition: opacity 0.2s; }
+    .btn-upsell-yes:hover { opacity: 0.85; }
+    .btn-upsell-no { background: none; border: none; color: var(--muted); font-size: 0.82rem; cursor: pointer; padding: 0.4rem; transition: color 0.2s; }
+    .btn-upsell-no:hover { color: var(--white); }
+
     /* ── Footer ── */
     footer { padding: 2rem 1.5rem; border-top: 1px solid var(--border); text-align: center; }
     .footer-logo { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
@@ -96,6 +121,13 @@
     @media (max-width: 600px) {
       .steps { grid-template-columns: 1fr; gap: 1rem; }
     }
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
   </style>
 </head>
 <body>
@@ -106,7 +138,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         Back
       </a>
-      <div class="nav-logo">Bees<span>City</span></div>
+      <a href="/start/" class="nav-logo">Bees<span>City</span></a>
       <a href="/" class="nav-cta">Custom Photo</a>
     </div>
   </nav>
@@ -117,14 +149,27 @@
       <h1 class="hero-title">The Lithophane Frame</h1>
       <p class="hero-sub">Already have a lithophane, or printing your own? Get the premium backlit frame that brings it to life.</p>
       <div class="hero-price-row">
-        <span class="hero-price">£25.00</span>
+        <span class="hero-price" id="price-hero">£25.00</span>
       </div>
       <p class="hero-shipping">✓ Free shipping</p>
-      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber">Order Now — £25</a>
+      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber" id="btn-hero">Order Now — £25.00</a>
       <div class="hero-guarantees">
         <span class="guarantee"><span class="g-check">✓</span> Free shipping</span>
         <span class="guarantee"><span class="g-check">✓</span> Made in the UK</span>
         <span class="guarantee"><span class="g-check">✓</span> 30-day returns</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <div class="gallery-grid">
+      <div>
+        <img src="https://pub-ad987d435fb34e1f9c2ebaf4458c8590.r2.dev/Frame_front.jpg" alt="Lithophane frame front" class="gallery-img" />
+        <p class="gallery-label">Front</p>
+      </div>
+      <div>
+        <img src="https://pub-ad987d435fb34e1f9c2ebaf4458c8590.r2.dev/Frame_back.jpg" alt="Lithophane frame back" class="gallery-img" />
+        <p class="gallery-label">Back</p>
       </div>
     </div>
   </section>
@@ -183,16 +228,136 @@
   <section id="cta">
     <div class="container">
       <h2 class="cta-title">Ready to light up your lithophane?</h2>
-      <p class="cta-sub">£25 one-time — free shipping — made in the UK.</p>
-      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber">Order Now — £25</a>
+      <p class="cta-sub" id="cta-sub-price">£25.00 one-time — free shipping — made in the UK.</p>
+      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber" id="btn-cta">Order Now — £25.00</a>
     </div>
   </section>
+
+  <!-- Upsell modal -->
+  <div id="upsell-overlay">
+    <div id="upsell-modal">
+      <div class="upsell-badge">Limited offer</div>
+      <div class="upsell-icon">📖</div>
+      <h2 class="upsell-title">Add the Printing Guide?</h2>
+      <p class="upsell-sub">Learn to print your own lithophanes at home. 8 chapters covering every slicer setting and the exact LithophaneMaker.com workflow.</p>
+      <div class="upsell-price-row">
+        <span class="upsell-price-new">£3.00</span>
+        <span class="upsell-price-old">£5.00</span>
+        <span class="upsell-save">Save £2</span>
+      </div>
+      <div class="upsell-btns">
+        <button class="btn-upsell-yes" id="upsell-yes">Yes, add the guide for £3</button>
+        <button class="btn-upsell-no" id="upsell-no">No thanks, just the frame</button>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <div class="footer-logo">Bees<span>City</span></div>
     <p>© 2026 BeesCity. All rights reserved.</p>
     <p style="margin-top:0.4rem;"><a href="/" style="color:var(--amber);">Custom Photo Lithophane</a> &nbsp;·&nbsp; <a href="/guides/lithophane-printing-guide/" style="color:var(--muted);">Printing Guide</a> &nbsp;·&nbsp; <a href="mailto:hello@beescity.co.uk" style="color:var(--muted);">Contact</a></p>
   </footer>
+
+  <script>
+    async function loadPrice() {
+      try {
+        const res = await fetch('/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: `{ product(handle: "lithophane-frame") { variants(first:1) { nodes { price { amount currencyCode } } } } }` })
+        });
+        const data = await res.json();
+        const p = data?.data?.product?.variants?.nodes?.[0]?.price;
+        if (!p) return;
+        const fmt = new Intl.NumberFormat('en-GB', { style: 'currency', currency: p.currencyCode }).format(p.amount);
+        document.getElementById('price-hero').textContent = fmt;
+        document.getElementById('btn-hero').textContent = `Order Now — ${fmt}`;
+        document.getElementById('btn-cta').textContent = `Order Now — ${fmt}`;
+        document.getElementById('cta-sub-price').textContent = `${fmt} one-time — free shipping — made in the UK.`;
+      } catch(e) {}
+    }
+    loadPrice();
+
+    // ── Fetch discounted guide price by applying GUIDEDEAL to a temp cart ──
+    async function loadGuideUpsellPrice() {
+      try {
+        const res = await fetch('/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: `mutation {
+            cartCreate(input: {
+              lines: [{ merchandiseId: "gid://shopify/ProductVariant/57233873699199", quantity: 1 }]
+              discountCodes: ["GUIDEDEAL"]
+            }) {
+              cart {
+                lines(first:1) { nodes { cost { totalAmount { amount currencyCode } } } }
+                cost { subtotalAmount { amount currencyCode } }
+                discountCodes { code applicable }
+              }
+            }
+          }` })
+        });
+        const data = await res.json();
+        const cart = data?.data?.cartCreate?.cart;
+        const discountApplied = cart?.discountCodes?.[0]?.applicable;
+        const lineTotal = cart?.lines?.nodes?.[0]?.cost?.totalAmount;
+        if (!discountApplied || !lineTotal) return;
+        const fmt = new Intl.NumberFormat('en-GB', { style: 'currency', currency: lineTotal.currencyCode });
+        const discountedPrice = fmt.format(lineTotal.amount);
+        const originalRes = await fetch('/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: `{ product(handle: "lithophane-master-guide") { variants(first:1) { nodes { price { amount currencyCode } } } } }` })
+        });
+        const originalData = await originalRes.json();
+        const originalPrice = originalData?.data?.product?.variants?.nodes?.[0]?.price;
+        if (originalPrice) {
+          const saving = fmt.format(originalPrice.amount - lineTotal.amount);
+          document.querySelector('.upsell-price-new').textContent = discountedPrice;
+          document.querySelector('.upsell-price-old').textContent = fmt.format(originalPrice.amount);
+          document.querySelector('.upsell-save').textContent = `Save ${saving}`;
+          document.getElementById('upsell-yes').textContent = `Yes, add the guide for ${discountedPrice}`;
+        }
+      } catch(e) {}
+    }
+    loadGuideUpsellPrice();
+
+    // ── Upsell modal ──
+    const FRAME_CHECKOUT   = 'https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout';
+    const BUNDLE_CHECKOUT  = 'https://oh-bees-city.myshopify.com/cart/57468854108543:1,57233873699199:1?discount=GUIDEDEAL';
+    const overlay = document.getElementById('upsell-overlay');
+
+    function openUpsell(e) {
+      e.preventDefault();
+      overlay.classList.add('open');
+    }
+
+    document.getElementById('btn-hero').addEventListener('click', openUpsell);
+    document.getElementById('btn-cta').addEventListener('click', openUpsell);
+
+    document.getElementById('upsell-yes').addEventListener('click', () => {
+      window.location.href = BUNDLE_CHECKOUT;
+    });
+    document.getElementById('upsell-no').addEventListener('click', () => {
+      window.location.href = FRAME_CHECKOUT;
+    });
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    function observeGroup(sel) {
+      document.querySelectorAll(sel).forEach((el, i) => { el.classList.add('reveal'); if (i % 4 > 0) el.classList.add(`reveal-delay-${i % 4}`); revealObserver.observe(el); });
+    }
+    function observeEach(sel) {
+      document.querySelectorAll(sel).forEach(el => { el.classList.add('reveal'); revealObserver.observe(el); });
+    }
+    observeEach('.features-title, .how-title, .cta-title, .cta-sub');
+    observeGroup('.feature-card');
+    observeGroup('.step');
+  </script>
 
 </body>
 </html>

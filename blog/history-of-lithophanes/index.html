@@ -257,6 +257,13 @@
       .article-wrap { padding: 2.5rem 1rem 4rem; }
       .article-intro { font-size: 1rem; }
     }
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
   </style>
 </head>
 <body>
@@ -267,7 +274,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         Back to shop
       </a>
-      <div class="blog-nav-logo">Bees<span>City</span></div>
+      <a href="/start/" class="blog-nav-logo">Bees<span>City</span></a>
     </div>
   </nav>
 
@@ -384,6 +391,20 @@
     <div class="footer-logo">Bees<span>City</span></div>
     <p>© 2025 Bees City · Handmade in the UK · <a href="mailto:hello@beescity.co.uk" style="color:var(--muted);">hello@beescity.co.uk</a></p>
   </footer>
+
+  <script>
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    function observeGroup(sel) {
+      document.querySelectorAll(sel).forEach((el, i) => { el.classList.add('reveal'); if (i % 4 > 0) el.classList.add(`reveal-delay-${i % 4}`); revealObserver.observe(el); });
+    }
+    function observeEach(sel) {
+      document.querySelectorAll(sel).forEach(el => { el.classList.add('reveal'); revealObserver.observe(el); });
+    }
+    observeEach('.article-title, .article-intro, .pull-quote');
+    observeGroup('.timeline-item');
+  </script>
 
 </body>
 </html>
