@@ -3,14 +3,15 @@ export async function onRequestPost({ request, env }) {
     const country = request.headers.get('CF-IPCountry') || 'GB';
     const body = await request.text();
 
-    // Inject @inContext(country: XX) into the query so Shopify returns local currency
-    const localised = body.replace(
-      /"\s*query\s*(\{|[A-Za-z])/,
-      (match) => match.replace('query', `query @inContext(country: ${country})`)
-    ).replace(
-      /"\s*mutation\s*(\{|[A-Za-z])/,
-      (match) => match.replace('mutation', `mutation @inContext(country: ${country})`)
-    );
+    // Inject @inContext(country: XX) so Shopify returns local currency
+    const parsed = JSON.parse(body);
+    let q = parsed.query.trim();
+    if (q.startsWith('{')) {
+      q = `query @inContext(country: ${country}) ${q}`;
+    } else {
+      q = q.replace(/^(query|mutation)(\s*)/, `$1 @inContext(country: ${country})$2`);
+    }
+    parsed.query = q;
 
     const response = await fetch('https://oh-bees-city.myshopify.com/api/2026-01/graphql.json', {
       method: 'POST',
@@ -18,7 +19,7 @@ export async function onRequestPost({ request, env }) {
         'Content-Type': 'application/json',
         'X-Shopify-Storefront-Access-Token': env.SHOPIFY_TOKEN
       },
-      body: localised
+      body: JSON.stringify(parsed)
     });
 
     const data = await response.json();
