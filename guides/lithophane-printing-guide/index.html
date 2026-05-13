@@ -496,7 +496,7 @@
       </p>
       <div class="hero-cta-group">
         <a href="https://oh-bees-city.myshopify.com/cart/57233873699199:1?checkout" class="btn-amber">
-          Buy Now &nbsp;<span class="price">£5</span>
+          Buy Now &nbsp;<span class="price guide-price">£5</span>
         </a>
         <div class="hero-reassurance">
           <span class="guarantee"><span class="g-check">✓</span> Instant download</span>
@@ -619,7 +619,7 @@
 
       <div class="who-cta">
         <a href="https://oh-bees-city.myshopify.com/cart/57233873699199:1?checkout" class="btn-amber">
-          Get the Guide &nbsp;<span class="price">£5</span>
+          Get the Guide &nbsp;<span class="price guide-price">£5</span>
         </a>
       </div>
     </div>
@@ -630,7 +630,7 @@
     <div class="container">
       <div class="value-wrap">
         <span class="badge">One-time payment</span>
-        <div class="value-price"><sup>£</sup>5</div>
+        <div class="value-price" id="guide-value-price"><sup>£</sup>5</div>
         <p class="value-desc">Instant PDF download - no subscription, no upsells.</p>
         <ul class="value-list">
           <li><span class="g-check">✓</span> Complete step-by-step LithophaneMaker.com workflow</li>
@@ -641,7 +641,7 @@
           <li><span class="g-check">✓</span> Yours to keep and reference forever</li>
         </ul>
         <a href="https://oh-bees-city.myshopify.com/cart/57233873699199:1?checkout" class="btn-amber">
-          Buy Now &nbsp;<span class="price">£5</span>
+          Buy Now &nbsp;<span class="price guide-price">£5</span>
         </a>
       </div>
     </div>
@@ -697,9 +697,9 @@
   <section id="cta-bottom">
     <div class="container">
       <h2 class="section-title">Ready to print perfect lithophanes?</h2>
-      <p>Get the complete guide for a one-time payment of £5.</p>
+      <p>Get the complete guide for a one-time payment of <span class="guide-price">£5</span>.</p>
       <a href="https://oh-bees-city.myshopify.com/cart/57233873699199:1?checkout" class="btn-amber">
-        Buy Now &nbsp;<span class="price">£5</span>
+        Buy Now &nbsp;<span class="price guide-price">£5</span>
       </a>
     </div>
   </section>
@@ -741,6 +741,24 @@
     observeEach('.section-title, .section-sub');
     observeGroup('.card');
     observeGroup('.faq-item');
+
+    async function loadGuidePrice() {
+      try {
+        const res = await fetch('/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: `{ product(handle: "lithophane-master-guide") { variants(first:1) { nodes { price { amount currencyCode } } } } }` })
+        });
+        const data = await res.json();
+        const p = data?.data?.product?.variants?.nodes?.[0]?.price;
+        if (!p) return;
+        const fmt = new Intl.NumberFormat(navigator.language, { style: 'currency', currency: p.currencyCode }).format(p.amount);
+        document.querySelectorAll('.guide-price').forEach(el => el.textContent = fmt);
+        const vp = document.getElementById('guide-value-price');
+        if (vp) vp.innerHTML = fmt;
+      } catch(e) {}
+    }
+    loadGuidePrice();
   </script>
 
 </body>
