@@ -1090,6 +1090,8 @@
     }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', META_PIXEL);
     fbq('track', 'PageView');
+    const _fbclid = new URLSearchParams(location.search).get('fbclid');
+    if (_fbclid) sessionStorage.setItem('fbclid', _fbclid);
   }
 
   // Fire richer product events only after marketing consent
@@ -1661,7 +1663,8 @@
         currency: 'GBP',
         value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.00
       });
-      window.location.href = checkoutUrl;
+      const _clid = sessionStorage.getItem('fbclid');
+      window.location.href = _clid ? checkoutUrl + (checkoutUrl.includes('?') ? '&' : '?') + 'fbclid=' + _clid : checkoutUrl;
     }
   });
 
