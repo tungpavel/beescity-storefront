@@ -1,6 +1,6 @@
 export async function onRequestPost({ request, env }) {
   try {
-    const country = 'BR'; // DEBUG: hardcoded to test Brazil market
+    const country = request.headers.get('CF-IPCountry') || 'GB';
     const body = await request.text();
 
     // Inject @inContext(country: XX) so Shopify returns local currency
