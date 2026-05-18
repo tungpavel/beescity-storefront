@@ -1090,8 +1090,8 @@
     }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', META_PIXEL);
     fbq('track', 'PageView');
-    const _fbclid = new URLSearchParams(location.search).get('fbclid');
-    if (_fbclid) sessionStorage.setItem('fbclid', _fbclid);
+    const _sp = new URLSearchParams(location.search);
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = _sp.get(k); if (v) sessionStorage.setItem(k, v); });
   }
 
   // Fire richer product events only after marketing consent
@@ -1663,8 +1663,9 @@
         currency: 'GBP',
         value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.00
       });
-      const _clid = sessionStorage.getItem('fbclid');
-      window.location.href = _clid ? checkoutUrl + (checkoutUrl.includes('?') ? '&' : '?') + 'fbclid=' + _clid : checkoutUrl;
+      const _cu = new URL(checkoutUrl);
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) _cu.searchParams.set(k, v); });
+      window.location.href = _cu.toString();
     }
   });
 

@@ -765,11 +765,12 @@
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init','1404761640860998'); fbq('track','PageView');
-    const fbclid = new URLSearchParams(location.search).get('fbclid');
-    if (fbclid) sessionStorage.setItem('fbclid', fbclid);
-    const storedFbclid = sessionStorage.getItem('fbclid');
-    if (storedFbclid) document.querySelectorAll('a[href*="myshopify.com/cart"]').forEach(a => {
-      const u = new URL(a.href); u.searchParams.set('fbclid', storedFbclid); a.href = u.toString();
+    const _sp = new URLSearchParams(location.search);
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = _sp.get(k); if (v) sessionStorage.setItem(k, v); });
+    document.querySelectorAll('a[href*="myshopify.com/cart"]').forEach(a => {
+      const u = new URL(a.href);
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) u.searchParams.set(k, v); });
+      a.href = u.toString();
     });
   </script>
 

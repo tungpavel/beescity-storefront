@@ -329,7 +329,7 @@
     loadGuideUpsellPrice();
 
     // ── Upsell modal ──
-    const FRAME_CHECKOUT   = 'https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout';
+    const FRAME_CHECKOUT   = 'https://oh-bees-city.myshopify.com/cart/57468854108543:1';
     const BUNDLE_CHECKOUT  = 'https://oh-bees-city.myshopify.com/cart/57468854108543:1,57233873699199:1?discount=GUIDEDEAL';
     const overlay = document.getElementById('upsell-overlay');
 
@@ -341,13 +341,16 @@
     document.getElementById('btn-hero').addEventListener('click', openUpsell);
     document.getElementById('btn-cta').addEventListener('click', openUpsell);
 
+    function withTracking(base) {
+      const u = new URL(base);
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) u.searchParams.set(k, v); });
+      return u.toString();
+    }
     document.getElementById('upsell-yes').addEventListener('click', () => {
-      const clid = sessionStorage.getItem('fbclid');
-      window.location.href = clid ? BUNDLE_CHECKOUT + '&fbclid=' + clid : BUNDLE_CHECKOUT;
+      window.location.href = withTracking(BUNDLE_CHECKOUT);
     });
     document.getElementById('upsell-no').addEventListener('click', () => {
-      const clid = sessionStorage.getItem('fbclid');
-      window.location.href = clid ? FRAME_CHECKOUT + '&fbclid=' + clid : FRAME_CHECKOUT;
+      window.location.href = withTracking(FRAME_CHECKOUT);
     });
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) overlay.classList.remove('open');
@@ -371,11 +374,12 @@
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
     fbq('init','1404761640860998'); fbq('track','PageView');
-    const fbclid = new URLSearchParams(location.search).get('fbclid');
-    if (fbclid) sessionStorage.setItem('fbclid', fbclid);
-    const storedFbclid = sessionStorage.getItem('fbclid');
-    if (storedFbclid) document.querySelectorAll('a[href*="myshopify.com/cart"]').forEach(a => {
-      const u = new URL(a.href); u.searchParams.set('fbclid', storedFbclid); a.href = u.toString();
+    const _sp = new URLSearchParams(location.search);
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = _sp.get(k); if (v) sessionStorage.setItem(k, v); });
+    document.querySelectorAll('a[href*="myshopify.com/cart"]').forEach(a => {
+      const u = new URL(a.href);
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) u.searchParams.set(k, v); });
+      a.href = u.toString();
     });
   </script>
 
