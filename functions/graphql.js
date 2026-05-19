@@ -9,7 +9,7 @@ export async function onRequestPost({ request, env }) {
     if (q.startsWith('{')) {
       q = `query @inContext(country: ${country}) ${q}`;
     } else {
-      q = q.replace(/^(query|mutation)(\s*)/, `$1 @inContext(country: ${country})$2`);
+      q = q.replace('{', `@inContext(country: ${country}) {`);
     }
     parsed.query = q;
 
