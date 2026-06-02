@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lithophane Frame – BeesCity</title>
-  <meta name="description" content="Premium backlit lithophane frame. USB powered, warm white backlight. Made in the UK. £25 with free shipping." />
+  <meta name="description" content="Premium backlit lithophane frame. USB powered, warm white backlight. Made in the UK. Just £5." />
   <meta property="og:type" content="product" />
   <meta property="og:title" content="Lithophane Frame – BeesCity" />
-  <meta property="og:description" content="Premium backlit lithophane frame. USB powered, warm white backlight. Made in the UK. £25 with free shipping." />
+  <meta property="og:description" content="Premium backlit lithophane frame. USB powered, warm white backlight. Made in the UK. Just £5." />
   <meta property="og:image" content="https://pub-ad987d435fb34e1f9c2ebaf4458c8590.r2.dev/Frame_front.png" />
   <meta property="og:url" content="https://beescity.co.uk/frame-only/" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -21,8 +21,8 @@
       --bg:        #0B0B0B;
       --surface:   #141414;
       --surface2:  #1E1E1E;
-      --amber:     #F5A623;
-      --orange:    #FF6B35;
+      --amber:     #C4622D;
+      --orange:    #9B3D1C;
       --white:     #FFFFFF;
       --text:      #E8E8E8;
       --muted:     #888888;
@@ -31,7 +31,7 @@
       --radius-sm: 8px;
       --radius:    16px;
       --radius-lg: 28px;
-      --glow:      0 0 40px rgba(245,166,35,0.35), 0 0 80px rgba(245,166,35,0.15);
+      --glow:      0 0 40px rgba(196,98,45,0.35), 0 0 80px rgba(196,98,45,0.15);
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
@@ -155,12 +155,10 @@
       <h1 class="hero-title">The Lithophane Frame</h1>
       <p class="hero-sub">Already have a lithophane, or printing your own? Get the premium backlit frame that brings it to life.</p>
       <div class="hero-price-row">
-        <span class="hero-price" id="price-hero">£25.00</span>
+        <span class="hero-price" id="price-hero">£5.00</span>
       </div>
-      <p class="hero-shipping">✓ Free shipping</p>
-      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber" id="btn-hero">Order Now — £25.00</a>
+      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber" id="btn-hero">Order Now — £5.00</a>
       <div class="hero-guarantees">
-        <span class="guarantee"><span class="g-check">✓</span> Free shipping</span>
         <span class="guarantee"><span class="g-check">✓</span> Made in the UK</span>
         <span class="guarantee"><span class="g-check">✓</span> 30-day returns</span>
       </div>
@@ -234,8 +232,8 @@
   <section id="cta">
     <div class="container">
       <h2 class="cta-title">Ready to light up your lithophane?</h2>
-      <p class="cta-sub" id="cta-sub-price">£25.00 one-time — free shipping — made in the UK.</p>
-      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber" id="btn-cta">Order Now — £25.00</a>
+      <p class="cta-sub" id="cta-sub-price">£5.00 one-time — made in the UK.</p>
+      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber" id="btn-cta">Order Now — £5.00</a>
     </div>
   </section>
 
@@ -279,7 +277,7 @@
         document.getElementById('price-hero').textContent = fmt;
         document.getElementById('btn-hero').textContent = `Order Now — ${fmt}`;
         document.getElementById('btn-cta').textContent = `Order Now — ${fmt}`;
-        document.getElementById('cta-sub-price').textContent = `${fmt} one-time — free shipping — made in the UK.`;
+        document.getElementById('cta-sub-price').textContent = `${fmt} one-time — made in the UK.`;
       } catch(e) {}
     }
     loadPrice();
