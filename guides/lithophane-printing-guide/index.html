@@ -16,9 +16,9 @@
       --bg:        #0B0B0B;
       --surface:   #141414;
       --surface2:  #1E1E1E;
-      --amber:     #F5A623;
-      --amber-dk:  #D4881A;
-      --orange:    #FF6B35;
+      --amber:     #C4622D;
+      --amber-dk:  #9B3D1C;
+      --orange:    #D4784A;
       --white:     #FFFFFF;
       --text:      #E8E8E8;
       --muted:     #888888;
@@ -28,7 +28,7 @@
       --radius-sm: 8px;
       --radius:    16px;
       --radius-lg: 28px;
-      --glow:      0 0 40px rgba(245,166,35,0.35), 0 0 80px rgba(245,166,35,0.15);
+      --glow:      0 0 40px rgba(196,98,45,0.35), 0 0 80px rgba(196,98,45,0.15);
     }
 
     html { scroll-behavior: smooth; }
@@ -60,8 +60,8 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: rgba(245,166,35,0.12);
-      border: 1px solid rgba(245,166,35,0.3);
+      background: rgba(196,98,45,0.12);
+      border: 1px solid rgba(196,98,45,0.3);
       color: var(--amber);
       font-size: 0.78rem;
       font-weight: 600;
@@ -88,7 +88,7 @@
       transition: transform 0.2s, box-shadow 0.2s;
       text-decoration: none;
     }
-    .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,166,35,0.4); }
+    .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(196,98,45,0.4); }
     .btn-amber:active { transform: translateY(0); }
     .btn-amber .price { background: rgba(0,0,0,0.15); border-radius: 6px; padding: 0.1rem 0.5rem; }
 
@@ -141,7 +141,7 @@
     #hero {
       padding: 5rem 0 4.5rem;
       text-align: center;
-      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245,166,35,0.06) 0%, transparent 70%), var(--bg);
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(196,98,45,0.06) 0%, transparent 70%), var(--bg);
       position: relative;
       overflow: hidden;
     }
@@ -150,7 +150,7 @@
       position: absolute;
       top: -200px; right: -200px;
       width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(245,166,35,0.04) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(196,98,45,0.04) 0%, transparent 70%);
       pointer-events: none;
     }
     #hero::after {
@@ -158,7 +158,7 @@
       position: absolute;
       bottom: 0; left: 0; right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(245,166,35,0.2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(196,98,45,0.2), transparent);
     }
     .hero-eyebrow { margin-bottom: 1.5rem; }
     .hero-title {
@@ -249,7 +249,7 @@
       transition: border-color 0.3s, transform 0.3s;
     }
     .card:hover {
-      border-color: rgba(245,166,35,0.3);
+      border-color: rgba(196,98,45,0.3);
       transform: translateY(-4px);
     }
     .card-num {
@@ -293,7 +293,7 @@
       gap: 0.5rem;
       transition: border-color 0.3s;
     }
-    .who-card:hover { border-color: rgba(245,166,35,0.25); }
+    .who-card:hover { border-color: rgba(196,98,45,0.25); }
     .who-emoji { font-size: 1.8rem; line-height: 1; }
     .who-card strong { font-size: 0.92rem; font-weight: 600; color: var(--white); }
     .who-card span { font-size: 0.8rem; color: var(--muted); }
@@ -302,8 +302,8 @@
     /* ══════════════════════════════ VALUE BOX ══════════════════════════════ */
     #value { padding: 5rem 0; background: var(--bg); }
     .value-wrap {
-      background: rgba(245,166,35,0.04);
-      border: 1px solid rgba(245,166,35,0.18);
+      background: rgba(196,98,45,0.04);
+      border: 1px solid rgba(196,98,45,0.18);
       border-radius: var(--radius-lg);
       padding: 3rem 2rem;
       text-align: center;
@@ -388,7 +388,7 @@
     /* ══════════════════════════════ BOTTOM CTA ══════════════════════════════ */
     #cta-bottom {
       padding: 5rem 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(245,166,35,0.04) 0%, transparent 70%), var(--bg);
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(196,98,45,0.04) 0%, transparent 70%), var(--bg);
       text-align: center;
     }
     #cta-bottom .section-title { margin-bottom: 0.75rem; }
