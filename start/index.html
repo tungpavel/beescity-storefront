@@ -157,23 +157,12 @@
   <script>
     async function loadPrices() {
       try {
-        const res = await fetch('/graphql', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: `{
-            custom: product(handle: "3d-print") { variants(first:1) { nodes { price { amount currencyCode } } } }
-            frame:  product(handle: "lithophane-frame") { variants(first:1) { nodes { price { amount currencyCode } } } }
-            guide:  product(handle: "lithophane-master-guide") { variants(first:1) { nodes { price { amount currencyCode } } } }
-          }` })
-        });
+        const res = await fetch('/prices');
         const data = await res.json();
-        const fmt = (p) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: p.currencyCode }).format(p.amount);
-        const c = data?.data?.custom?.variants?.nodes?.[0]?.price;
-        const f = data?.data?.frame?.variants?.nodes?.[0]?.price;
-        const g = data?.data?.guide?.variants?.nodes?.[0]?.price;
-        if (c) document.getElementById('price-custom').textContent = fmt(c);
-        if (f) document.getElementById('price-frame').textContent = fmt(f);
-        if (g) document.getElementById('price-guide').textContent = fmt(g);
+        const fmt = (p) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: p.currency }).format(p.amount);
+        if (data.lithophane) document.getElementById('price-custom').textContent = fmt(data.lithophane);
+        if (data.frame) document.getElementById('price-frame').textContent = fmt(data.frame);
+        if (data.guide) document.getElementById('price-guide').textContent = fmt(data.guide);
       } catch(e) {}
     }
     loadPrices();

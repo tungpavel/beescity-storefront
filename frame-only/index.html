@@ -157,7 +157,7 @@
       <div class="hero-price-row">
         <span class="hero-price" id="price-hero">£5.00</span>
       </div>
-      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber" id="btn-hero">Order Now — £5.00</a>
+      <a href="#" class="btn-amber" id="btn-hero">Order Now — £5.00</a>
       <div class="hero-guarantees">
         <span class="guarantee"><span class="g-check">✓</span> Made in the UK</span>
         <span class="guarantee"><span class="g-check">✓</span> 30-day returns</span>
@@ -233,7 +233,7 @@
     <div class="container">
       <h2 class="cta-title">Ready to light up your lithophane?</h2>
       <p class="cta-sub" id="cta-sub-price">£5.00 one-time — made in the UK.</p>
-      <a href="https://oh-bees-city.myshopify.com/cart/57468854108543:1?checkout" class="btn-amber" id="btn-cta">Order Now — £5.00</a>
+      <a href="#" class="btn-amber" id="btn-cta">Order Now — £5.00</a>
     </div>
   </section>
 
@@ -263,72 +263,36 @@
   </footer>
 
   <script>
-    async function loadPrice() {
-      try {
-        const res = await fetch('/graphql', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: `{ product(handle: "lithophane-frame") { variants(first:1) { nodes { price { amount currencyCode } } } } }` })
-        });
-        const data = await res.json();
-        const p = data?.data?.product?.variants?.nodes?.[0]?.price;
-        if (!p) return;
-        const fmt = new Intl.NumberFormat('en-GB', { style: 'currency', currency: p.currencyCode }).format(p.amount);
-        document.getElementById('price-hero').textContent = fmt;
-        document.getElementById('btn-hero').textContent = `Order Now — ${fmt}`;
-        document.getElementById('btn-cta').textContent = `Order Now — ${fmt}`;
-        document.getElementById('cta-sub-price').textContent = `${fmt} one-time — made in the UK.`;
-      } catch(e) {}
-    }
-    loadPrice();
+    let framePrice = { amount: 5, currency: 'GBP' };
 
-    // ── Fetch discounted guide price by applying GUIDEDEAL to a temp cart ──
-    async function loadGuideUpsellPrice() {
+    async function loadPrices() {
       try {
-        const res = await fetch('/graphql', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: `mutation {
-            cartCreate(input: {
-              lines: [{ merchandiseId: "gid://shopify/ProductVariant/57233873699199", quantity: 1 }]
-              discountCodes: ["GUIDEDEAL"]
-            }) {
-              cart {
-                lines(first:1) { nodes { cost { totalAmount { amount currencyCode } } } }
-                cost { subtotalAmount { amount currencyCode } }
-                discountCodes { code applicable }
-              }
-            }
-          }` })
-        });
+        const res = await fetch('/prices');
         const data = await res.json();
-        const cart = data?.data?.cartCreate?.cart;
-        const discountApplied = cart?.discountCodes?.[0]?.applicable;
-        const lineTotal = cart?.lines?.nodes?.[0]?.cost?.totalAmount;
-        if (!discountApplied || !lineTotal) return;
-        const fmt = new Intl.NumberFormat('en-GB', { style: 'currency', currency: lineTotal.currencyCode });
-        const discountedPrice = fmt.format(lineTotal.amount);
-        const originalRes = await fetch('/graphql', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: `{ product(handle: "lithophane-master-guide") { variants(first:1) { nodes { price { amount currencyCode } } } } }` })
-        });
-        const originalData = await originalRes.json();
-        const originalPrice = originalData?.data?.product?.variants?.nodes?.[0]?.price;
-        if (originalPrice) {
-          const saving = fmt.format(originalPrice.amount - lineTotal.amount);
+
+        if (data.frame) {
+          framePrice = { amount: data.frame.amount, currency: data.frame.currency };
+          const fmt = new Intl.NumberFormat('en-GB', { style: 'currency', currency: framePrice.currency }).format(framePrice.amount);
+          document.getElementById('price-hero').textContent = fmt;
+          document.getElementById('btn-hero').textContent = `Order Now — ${fmt}`;
+          document.getElementById('btn-cta').textContent = `Order Now — ${fmt}`;
+          document.getElementById('cta-sub-price').textContent = `${fmt} one-time — made in the UK.`;
+        }
+
+        if (data.guide?.bundlePrice != null) {
+          const fmt = n => new Intl.NumberFormat('en-GB', { style: 'currency', currency: data.guide.currency }).format(n);
+          const discountedPrice = fmt(data.guide.bundlePrice);
+          const saving = fmt(data.guide.amount - data.guide.bundlePrice);
           document.querySelector('.upsell-price-new').textContent = discountedPrice;
-          document.querySelector('.upsell-price-old').textContent = fmt.format(originalPrice.amount);
+          document.querySelector('.upsell-price-old').textContent = fmt(data.guide.amount);
           document.querySelector('.upsell-save').textContent = `Save ${saving}`;
           document.getElementById('upsell-yes').textContent = `Yes, add the guide for ${discountedPrice}`;
         }
       } catch(e) {}
     }
-    loadGuideUpsellPrice();
+    loadPrices();
 
     // ── Upsell modal ──
-    const FRAME_CHECKOUT   = 'https://oh-bees-city.myshopify.com/cart/57468854108543:1';
-    const BUNDLE_CHECKOUT  = 'https://oh-bees-city.myshopify.com/cart/57468854108543:1,57233873699199:1?discount=GUIDEDEAL';
     const overlay = document.getElementById('upsell-overlay');
 
     function openUpsell(e) {
@@ -339,16 +303,27 @@
     document.getElementById('btn-hero').addEventListener('click', openUpsell);
     document.getElementById('btn-cta').addEventListener('click', openUpsell);
 
-    function withTracking(base) {
-      const u = new URL(base);
-      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) u.searchParams.set(k, v); });
-      return u.toString();
+    async function startCheckout(items, discountCode) {
+      try {
+        const res = await fetch('/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items, discountCode, attribution: getAttribution() })
+        });
+        const { url, error } = await res.json();
+        if (error || !url) { alert(error || 'Could not start checkout.'); return; }
+        window.location.href = url;
+      } catch(err) {
+        console.error(err);
+        alert('Could not start checkout.');
+      }
     }
+
     document.getElementById('upsell-yes').addEventListener('click', () => {
-      window.location.href = withTracking(BUNDLE_CHECKOUT);
+      startCheckout([{ product: 'frame' }, { product: 'guide' }], 'GUIDEDEAL');
     });
     document.getElementById('upsell-no').addEventListener('click', () => {
-      window.location.href = withTracking(FRAME_CHECKOUT);
+      startCheckout([{ product: 'frame' }]);
     });
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) overlay.classList.remove('open');
@@ -374,11 +349,11 @@
     fbq('init','1404761640860998'); fbq('track','PageView');
     const _sp = new URLSearchParams(location.search);
     ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = _sp.get(k); if (v) sessionStorage.setItem(k, v); });
-    document.querySelectorAll('a[href*="myshopify.com/cart"]').forEach(a => {
-      const u = new URL(a.href);
-      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) u.searchParams.set(k, v); });
-      a.href = u.toString();
-    });
+    function getAttribution() {
+      const out = {};
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) out[k] = v; });
+      return out;
+    }
   </script>
 
 </body>

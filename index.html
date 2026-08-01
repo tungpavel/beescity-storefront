@@ -1092,6 +1092,11 @@
     fbq('track', 'PageView');
     const _sp = new URLSearchParams(location.search);
     ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = _sp.get(k); if (v) sessionStorage.setItem(k, v); });
+    function getAttribution() {
+      const out = {};
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) out[k] = v; });
+      return out;
+    }
   }
 
   // Fire richer product events only after marketing consent
@@ -1334,11 +1339,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 <script>
-  const API              = '/graphql';
   const CLOUDFLARE_URL   = '/upload';
 
   // ── State ──
-  let cartId = null, checkoutUrl = null, firstVariantId = null;
+  let cartQuantity = 0, currentPrice = { amount: 29, currency: 'GBP' };
   let cropper = null, uploadedPhotoUrl = null;
 
   // ── Countdown — resets weekly, ends Sunday 23:59:59 ──
@@ -1360,37 +1364,18 @@
   }
   tick(); setInterval(tick, 1000);
 
-  // ── GraphQL helper ──
-  async function gql(query, variables = {}) {
-    const res = await fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, variables })
-    });
-    return res.json();
-  }
-
   // ── Load product ──
   async function loadProduct() {
-    const data = await gql(`query {
-      products(first:1) { nodes {
-        id title featuredImage { url altText }
-        priceRange { minVariantPrice { amount currencyCode } }
-        compareAtPriceRange { maxVariantPrice { amount currencyCode } }
-        variants(first:5) { nodes { id title availableForSale price { amount currencyCode } } }
-      }}
-    }`);
-
-    const p = data?.data?.products?.nodes?.[0];
+    const res = await fetch('/prices');
+    const data = await res.json();
+    const p = data?.lithophane;
     if (!p) return;
 
+    currentPrice = { amount: p.amount, currency: p.currency };
 
-    const variant = p.variants.nodes.find(v => v.availableForSale) ?? p.variants.nodes[0];
-    firstVariantId = variant?.id;
-
-    const sale = parseFloat(variant?.price?.amount ?? p.priceRange.minVariantPrice.amount);
-    const cur  = variant?.price?.currencyCode ?? 'GBP';
-    const orig = parseFloat(p.compareAtPriceRange?.maxVariantPrice?.amount ?? 0);
+    const sale = p.amount;
+    const cur  = p.currency;
+    const orig = p.compareAtAmount ?? 0;
     const fmt  = n => new Intl.NumberFormat('en-GB', { style:'currency', currency: cur }).format(n);
 
     document.getElementById('price-display').textContent  = fmt(sale);
@@ -1533,7 +1518,7 @@
       stickyCta.textContent = '🛒 Add to Cart';
 
       // Enable order button
-      document.getElementById('add-to-cart-btn').disabled = !firstVariantId;
+      document.getElementById('add-to-cart-btn').disabled = false;
       document.getElementById('add-to-cart-btn').textContent = 'Add to Cart';
 
     } catch (err) {
@@ -1550,102 +1535,51 @@
     }
   });
 
-  // ── Cart ──
-  const CART_FIELDS = `id checkoutUrl totalQuantity
-    cost { totalAmount { amount currencyCode } }
-    lines(first:50) { nodes { id quantity merchandise { ... on ProductVariant {
-      id title price { amount currencyCode } product { title featuredImage { url } }
-    }}}}`;
-
+  // ── Cart (single product, adjustable quantity) ──
   function fmt(amount, currency) {
     return new Intl.NumberFormat('en-GB', { style:'currency', currency }).format(amount);
   }
 
-  async function cartCreate(variantId, photoUrl) {
-    const res = await gql(`
-      mutation cartCreate($lines:[CartLineInput!], $attributes:[AttributeInput!]) {
-        cartCreate(input:{ lines:$lines, attributes:$attributes }) {
-          cart { ${CART_FIELDS} }
-          userErrors { message }
-        }
-      }
-    `, {
-      lines: [{ merchandiseId: variantId, quantity: 1 }],
-      attributes: photoUrl ? [{ key: 'Photo URL', value: photoUrl }] : []
-    });
-    return res.data.cartCreate;
-  }
-
-  async function cartLinesAdd(variantId) {
-    const res = await gql(`
-      mutation cartLinesAdd($cartId:ID!, $lines:[CartLineInput!]!) {
-        cartLinesAdd(cartId:$cartId, lines:$lines) { cart { ${CART_FIELDS} } }
-      }
-    `, { cartId, lines: [{ merchandiseId: variantId, quantity: 1 }] });
-    return res.data.cartLinesAdd;
-  }
-
-  async function cartLinesRemove(lineId) {
-    const res = await gql(`
-      mutation cartLinesRemove($cartId:ID!, $lineIds:[ID!]!) {
-        cartLinesRemove(cartId:$cartId, lineIds:$lineIds) { cart { ${CART_FIELDS} } }
-      }
-    `, { cartId, lineIds: [lineId] });
-    return res.data.cartLinesRemove;
-  }
-
-  function updateCartUI(cart) {
-    cartId = cart.id; checkoutUrl = cart.checkoutUrl;
-    document.getElementById('cart-count').textContent = cart.totalQuantity;
-    const t = cart.cost?.totalAmount;
-    document.getElementById('cart-total-amount').textContent = t ? fmt(t.amount, t.currencyCode) : '£0.00';
-    const lines = cart.lines.nodes;
+  function updateCartUI() {
+    document.getElementById('cart-count').textContent = cartQuantity;
+    const total = currentPrice.amount * cartQuantity;
+    document.getElementById('cart-total-amount').textContent = fmt(total, currentPrice.currency);
     const container = document.getElementById('cart-items');
     container.innerHTML = '';
-    if (!lines.length) {
+    if (!cartQuantity) {
       container.innerHTML = '<p id="cart-empty">Your cart is empty.</p>';
       document.getElementById('checkout-btn').disabled = true;
       return;
     }
     document.getElementById('checkout-btn').disabled = false;
-    lines.forEach(line => {
-      const v = line.merchandise;
-      const el = document.createElement('div');
-      el.className = 'cart-item';
-      el.innerHTML = `
-        ${v.product?.featuredImage?.url ? `<img src="${v.product.featuredImage.url}" alt="${v.product.title}" />` : ''}
-        <div class="ci-info">
-          <div class="ci-title">${v.product?.title ?? ''}</div>
-          ${v.title !== 'Default Title' ? `<div class="ci-variant">${v.title}</div>` : ''}
-          <div class="ci-price">${fmt(v.price.amount * line.quantity, v.price.currencyCode)} × ${line.quantity}</div>
-        </div>
-        <button class="ci-remove" data-id="${line.id}">&times;</button>
-      `;
-      el.querySelector('.ci-remove').addEventListener('click', async e => {
-        updateCartUI((await cartLinesRemove(e.currentTarget.dataset.id)).cart);
-      });
-      container.appendChild(el);
+    const el = document.createElement('div');
+    el.className = 'cart-item';
+    el.innerHTML = `
+      <div class="ci-info">
+        <div class="ci-title">Custom Lithophane</div>
+        <div class="ci-price">${fmt(currentPrice.amount * cartQuantity, currentPrice.currency)} × ${cartQuantity}</div>
+      </div>
+      <button class="ci-remove" id="cart-remove-btn">&times;</button>
+    `;
+    el.querySelector('#cart-remove-btn').addEventListener('click', () => {
+      cartQuantity = 0;
+      updateCartUI();
     });
+    container.appendChild(el);
   }
 
-  document.getElementById('add-to-cart-btn').addEventListener('click', async () => {
-    if (!firstVariantId) return;
+  document.getElementById('add-to-cart-btn').addEventListener('click', () => {
     const btn = document.getElementById('add-to-cart-btn');
-    btn.disabled = true; btn.textContent = 'Adding…';
-    try {
-      const result = cartId ? await cartLinesAdd(firstVariantId) : await cartCreate(firstVariantId, uploadedPhotoUrl);
-      if (result.userErrors?.length) { alert(result.userErrors.map(e => e.message).join('\n')); return; }
-      updateCartUI(result.cart);
-      Analytics.track('add_to_cart', { hasPhoto: !!uploadedPhotoUrl });
-      Consent.pixel('AddToCart', {
-        content_name: 'Custom Lithophane',
-        content_type: 'product',
-        currency: 'GBP',
-        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.00
-      });
-      openCart();
-    } catch(err) { console.error(err); alert('Could not add to cart. Is the server running?'); }
-    finally { btn.disabled = false; btn.textContent = 'Add to Cart'; }
+    cartQuantity += 1;
+    updateCartUI();
+    Analytics.track('add_to_cart', { hasPhoto: !!uploadedPhotoUrl });
+    Consent.pixel('AddToCart', {
+      content_name: 'Custom Lithophane',
+      content_type: 'product',
+      currency: currentPrice.currency,
+      value: currentPrice.amount
+    });
+    openCart();
   });
 
   // ── Cart drawer ──
@@ -1655,17 +1589,34 @@
   document.getElementById('cart-btn').addEventListener('click', openCart);
   document.getElementById('close-cart').addEventListener('click', closeCart);
   document.getElementById('cart-overlay').addEventListener('click', closeCart);
-  document.getElementById('checkout-btn').addEventListener('click', () => {
-    if (checkoutUrl) {
+  document.getElementById('checkout-btn').addEventListener('click', async () => {
+    if (!cartQuantity) return;
+    const btn = document.getElementById('checkout-btn');
+    btn.disabled = true; btn.textContent = 'Redirecting…';
+    try {
       Analytics.track('checkout_started');
       Consent.pixel('InitiateCheckout', {
         content_name: 'Custom Lithophane',
-        currency: 'GBP',
-        value: parseFloat(document.getElementById('hero-price')?.textContent?.replace(/[^0-9.]/g,'')) || 29.00
+        currency: currentPrice.currency,
+        value: currentPrice.amount * cartQuantity
       });
-      const _cu = new URL(checkoutUrl);
-      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) _cu.searchParams.set(k, v); });
-      window.location.href = _cu.toString();
+      const res = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [{ product: 'lithophane', quantity: cartQuantity }],
+          photoUrl: uploadedPhotoUrl,
+          attribution: getAttribution()
+        })
+      });
+      const { url, error } = await res.json();
+      if (error || !url) { alert(error || 'Could not start checkout.'); return; }
+      window.location.href = url;
+    } catch(err) {
+      console.error(err);
+      alert('Could not start checkout.');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Proceed to Checkout';
     }
   });
 
