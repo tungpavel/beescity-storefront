@@ -1092,7 +1092,7 @@
     fbq('track', 'PageView');
     const _sp = new URLSearchParams(location.search);
     ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = _sp.get(k); if (v) sessionStorage.setItem(k, v); });
-    function getAttribution() {
+    window.getAttribution = function getAttribution() {
       const out = {};
       ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(k => { const v = sessionStorage.getItem(k); if (v) out[k] = v; });
       return out;
