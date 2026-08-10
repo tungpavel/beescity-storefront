@@ -1,9 +1,10 @@
-// Full ISO 3166-1 alpha-2 list — Stripe Checkout's shipping_address_collection.allowed_countries
-// accepts any valid country code, there is no "worldwide" wildcard.
+// Stripe's authoritative shipping_address_collection.allowed_countries list
+// (Stripe returns this exact set in its validation error — not full ISO 3166-1,
+// e.g. it omits CX and includes the ZZ "rest of world" catch-all).
 export const ALL_COUNTRIES = [
   'AC','AD','AE','AF','AG','AI','AL','AM','AO','AQ','AR','AT','AU','AW','AX','AZ',
   'BA','BB','BD','BE','BF','BG','BH','BI','BJ','BL','BM','BN','BO','BQ','BR','BS','BT','BV','BW','BY','BZ',
-  'CA','CD','CF','CG','CH','CI','CK','CL','CM','CN','CO','CR','CV','CW','CX','CY','CZ',
+  'CA','CD','CF','CG','CH','CI','CK','CL','CM','CN','CO','CR','CV','CW','CY','CZ',
   'DE','DJ','DK','DM','DO','DZ',
   'EC','EE','EG','EH','ER','ES','ET',
   'FI','FJ','FK','FO','FR',
@@ -19,12 +20,12 @@ export const ALL_COUNTRIES = [
   'PA','PE','PF','PG','PH','PK','PL','PM','PN','PR','PS','PT','PY',
   'QA',
   'RE','RO','RS','RU','RW',
-  'SA','SB','SC','SE','SG','SH','SI','SJ','SK','SL','SM','SN','SO','SR','SS','ST','SV','SX','SZ',
+  'SA','SB','SC','SD','SE','SG','SH','SI','SJ','SK','SL','SM','SN','SO','SR','SS','ST','SV','SX','SZ',
   'TA','TC','TD','TF','TG','TH','TJ','TK','TL','TM','TN','TO','TR','TT','TV','TW','TZ',
   'UA','UG','US','UY','UZ',
   'VA','VC','VE','VG','VN','VU',
   'WF','WS',
   'XK',
   'YE','YT',
-  'ZA','ZM','ZW'
+  'ZA','ZM','ZW','ZZ'
 ];
