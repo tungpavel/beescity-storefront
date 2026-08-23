@@ -43,6 +43,15 @@ export async function onRequestPost({ request, env }) {
     if (needsShipping) {
       params.shipping_address_collection = { allowed_countries: ALL_COUNTRIES };
       params.phone_number_collection = { enabled: true };
+      // Shipping cost is picked once, up front, based on the customer's IP-detected
+      // country — Stripe Checkout has no way to switch the rate after the customer
+      // types their actual address, so this is a best-effort match, same tradeoff
+      // the old Shopify integration made for currency display.
+      const country = request.headers.get('cf-ipcountry') || 'GB';
+      const shippingRate = country === 'GB' ? env.STRIPE_SHIPPING_RATE_UK : env.STRIPE_SHIPPING_RATE_INTL;
+      if (shippingRate) {
+        params.shipping_options = [{ shipping_rate: shippingRate }];
+      }
     }
 
     if (body.attribution && typeof body.attribution === 'object') {
