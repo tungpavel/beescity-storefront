@@ -1,22 +1,7 @@
 import { getStripe } from './_stripe.js';
+import { upsertOrder } from './_supabase.js';
 
 const ATTRIBUTION_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid'];
-
-async function insertOrder(env, order) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/orders`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-      Prefer: 'return=minimal'
-    },
-    body: JSON.stringify(order)
-  });
-  if (!res.ok) {
-    console.error('[SUPABASE] insert failed', res.status, await res.text());
-  }
-}
 
 async function sendEmail(env, { to, subject, html }) {
   const res = await fetch('https://api.resend.com/emails', {
@@ -101,7 +86,7 @@ export async function onRequestPost({ request, env }) {
       ATTRIBUTION_KEYS.filter(k => session.metadata?.[k]).map(k => [k, session.metadata[k]])
     );
 
-    await insertOrder(env, {
+    await upsertOrder(env, {
       stripe_session_id: session.id,
       customer_email: session.customer_details?.email ?? null,
       customer_name: session.customer_details?.name ?? session.shipping_details?.name ?? null,

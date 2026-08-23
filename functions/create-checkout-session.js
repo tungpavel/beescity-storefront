@@ -1,5 +1,6 @@
 import { getStripe, priceIdFor } from './_stripe.js';
 import { ALL_COUNTRIES } from './_countries.js';
+import { upsertOrder } from './_supabase.js';
 
 const VALID_DISCOUNT_CODES = new Set(['GUIDEDEAL']);
 const ATTRIBUTION_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid'];
@@ -54,9 +55,14 @@ export async function onRequestPost({ request, env }) {
       }
     }
 
+    const attribution = {};
     if (body.attribution && typeof body.attribution === 'object') {
       for (const key of ATTRIBUTION_KEYS) {
-        if (body.attribution[key]) params.metadata[key] = String(body.attribution[key]).slice(0, 500);
+        if (body.attribution[key]) {
+          const value = String(body.attribution[key]).slice(0, 500);
+          params.metadata[key] = value;
+          attribution[key] = value;
+        }
       }
     }
 
@@ -68,6 +74,16 @@ export async function onRequestPost({ request, env }) {
 
     const stripe = getStripe(env);
     const session = await stripe.checkout.sessions.create(params);
+
+    await upsertOrder(env, {
+      stripe_session_id: session.id,
+      line_items: items.map(i => ({ product: i.product, quantity: i.quantity && i.quantity > 0 ? i.quantity : 1 })),
+      amount_total: session.amount_total,
+      currency: session.currency,
+      photo_url: body.photoUrl || null,
+      attribution,
+      status: 'pending'
+    });
 
     return Response.json({ url: session.url });
   } catch (err) {
