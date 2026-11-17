@@ -1,6 +1,22 @@
 import { getStripe } from './_stripe.js';
 
 const ATTRIBUTION_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid'];
+const STOCKED_PRODUCTS = new Set(['frame']);
+
+async function decrementStock(env, productKey, qty) {
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/rpc/decrement_stock`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`
+    },
+    body: JSON.stringify({ p_product_key: productKey, p_qty: qty })
+  });
+  if (!res.ok) {
+    console.error('[SUPABASE] decrement_stock failed', res.status, await res.text());
+  }
+}
 
 async function insertOrder(env, order) {
   const res = await fetch(`${env.SUPABASE_URL}/rest/v1/orders`, {
@@ -100,6 +116,13 @@ export async function onRequestPost({ request, env }) {
     const attribution = Object.fromEntries(
       ATTRIBUTION_KEYS.filter(k => session.metadata?.[k]).map(k => [k, session.metadata[k]])
     );
+
+    // Decrement stock for stocked products (zip productKeys with line_items — same insertion order)
+    for (let i = 0; i < productKeys.length; i++) {
+      if (!STOCKED_PRODUCTS.has(productKeys[i])) continue;
+      const qty = session.line_items.data[i]?.quantity || 1;
+      await decrementStock(env, productKeys[i], qty);
+    }
 
     await insertOrder(env, {
       stripe_session_id: session.id,

@@ -333,13 +333,27 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items, discountCode, attribution: getAttribution() })
         });
-        const { url, error } = await res.json();
-        if (error || !url) { alert(error || 'Could not start checkout.'); return; }
-        window.location.href = url;
+        const data = await res.json();
+        if (res.status === 409 || data.error === 'out_of_stock') {
+          markSoldOut();
+          return;
+        }
+        if (data.error || !data.url) { alert(data.error || 'Could not start checkout.'); return; }
+        window.location.href = data.url;
       } catch(err) {
         console.error(err);
         alert('Could not start checkout.');
       }
+    }
+
+    function markSoldOut() {
+      document.querySelectorAll('#btn-hero, #btn-cta').forEach(btn => {
+        btn.textContent = 'Sold Out';
+        btn.style.opacity = '0.5';
+        btn.style.pointerEvents = 'none';
+      });
+      const sub = document.getElementById('cta-sub-price');
+      if (sub) sub.textContent = 'Currently sold out — check back soon.';
     }
 
     document.getElementById('upsell-yes').addEventListener('click', () => {

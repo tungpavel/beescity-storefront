@@ -5,6 +5,18 @@ const VALID_DISCOUNT_CODES = new Set(['GUIDEDEAL']);
 const ATTRIBUTION_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid'];
 // The guide is a digital PDF (instant download) — only lithophane/frame are physically shipped.
 const PHYSICAL_PRODUCTS = new Set(['lithophane', 'frame']);
+// Products with limited physical stock tracked in Supabase.
+const STOCKED_PRODUCTS = new Set(['frame']);
+
+async function getStock(env, productKey) {
+  const res = await fetch(
+    `${env.SUPABASE_URL}/rest/v1/stock?product_key=eq.${productKey}&select=quantity`,
+    { headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}` } }
+  );
+  if (!res.ok) return null; // fail open if Supabase is unreachable
+  const rows = await res.json();
+  return rows[0]?.quantity ?? null;
+}
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -20,7 +32,14 @@ export async function onRequestPost({ request, env }) {
       if (!price) {
         return Response.json({ error: `Unknown product: ${item.product}` }, { status: 400 });
       }
-      line_items.push({ price, quantity: item.quantity && item.quantity > 0 ? item.quantity : 1 });
+      const qty = item.quantity && item.quantity > 0 ? item.quantity : 1;
+      if (STOCKED_PRODUCTS.has(item.product)) {
+        const stock = await getStock(env, item.product);
+        if (stock !== null && stock < qty) {
+          return Response.json({ error: 'out_of_stock', available: stock }, { status: 409 });
+        }
+      }
+      line_items.push({ price, quantity: qty });
     }
 
     const origin = new URL(request.url).origin;
