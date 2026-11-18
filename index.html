@@ -1685,5 +1685,38 @@
   // ── Init ──
   loadProduct();
 </script>
+
+<script>
+  // SOLD OUT — remove this block when stock is replenished
+  (function () {
+    const SOLD_OUT_MSG = 'Currently sold out — check back soon.';
+
+    // Hero CTA
+    const heroCtas = document.querySelector('.hero-ctas');
+    if (heroCtas) {
+      heroCtas.innerHTML = '<p style="font-weight:600;color:#c4622d;font-size:1.05rem;">Currently sold out — check back soon.</p>';
+    }
+
+    // Add to cart button
+    const addBtn = document.getElementById('add-to-cart-btn');
+    if (addBtn) { addBtn.textContent = 'Sold Out'; addBtn.disabled = true; }
+
+    // Sticky CTA
+    const stickyBtn = document.getElementById('sticky-cta');
+    if (stickyBtn) { stickyBtn.textContent = 'Sold Out'; stickyBtn.disabled = true; }
+
+    // Checkout button
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) { checkoutBtn.textContent = 'Sold Out'; checkoutBtn.disabled = true; }
+
+    // Price row note
+    const priceNote = document.querySelector('.price-under-btn');
+    if (priceNote) priceNote.innerHTML = `<span style="color:var(--muted,#888)">${SOLD_OUT_MSG}</span>`;
+
+    // Prevent photo upload from enabling add-to-cart
+    const pickBtn = document.getElementById('pick-btn');
+    if (pickBtn) { pickBtn.disabled = true; pickBtn.style.opacity = '0.5'; pickBtn.style.pointerEvents = 'none'; }
+  })();
+</script>
 </body>
 </html>

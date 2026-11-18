@@ -356,6 +356,8 @@
       if (sub) sub.textContent = 'Currently sold out — check back soon.';
     }
 
+    markSoldOut();
+
     document.getElementById('upsell-yes').addEventListener('click', () => {
       startCheckout([{ product: 'frame', quantity: frameQty }, { product: 'guide', quantity: 1 }], 'GUIDEDEAL');
     });
