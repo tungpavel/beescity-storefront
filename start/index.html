@@ -103,24 +103,24 @@
 
     <div class="cards">
 
-      <a href="/" class="card featured">
+      <a href="/" class="card featured" style="opacity:0.55;pointer-events:none;cursor:default;">
         <div class="card-left">
           <span class="card-icon">🖼️</span>
           <h3>Custom Photo Lithophane</h3>
         </div>
         <div class="card-right">
-          <span class="card-price" id="price-custom">£29.00</span>
+          <span class="card-price" id="price-custom" style="color:#c4622d;">Sold Out</span>
           <span class="card-arrow">→</span>
         </div>
       </a>
 
-      <a href="/frame-only/" class="card">
+      <a href="/frame-only/" class="card" style="opacity:0.55;pointer-events:none;cursor:default;">
         <div class="card-left">
           <span class="card-icon">💡</span>
           <h3>Lithophane Frame</h3>
         </div>
         <div class="card-right">
-          <span class="card-price" id="price-frame">£25.00</span>
+          <span class="card-price" id="price-frame" style="color:#c4622d;">Sold Out</span>
           <span class="card-arrow">→</span>
         </div>
       </a>
@@ -160,8 +160,7 @@
         const res = await fetch('/prices');
         const data = await res.json();
         const fmt = (p) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: p.currency }).format(p.amount);
-        if (data.lithophane) document.getElementById('price-custom').textContent = fmt(data.lithophane);
-        if (data.frame) document.getElementById('price-frame').textContent = fmt(data.frame);
+        // lithophane + frame sold out — do not overwrite Sold Out label
         if (data.guide) document.getElementById('price-guide').textContent = fmt(data.guide);
       } catch(e) {}
     }
